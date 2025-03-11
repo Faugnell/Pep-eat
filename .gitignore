@@ -1,0 +1,15 @@
+### NuxtJS ###
+# Generated dirs
+dist
+.nuxt
+.nuxt-*
+.output
+.gen
+
+# Node dependencies
+node_modules
+
+# System files
+*.log
+
+# End of https://www.toptal.com/developers/gitignore/api/nuxtjs
