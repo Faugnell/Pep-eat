@@ -84,6 +84,8 @@ Un autre avantage de Vue est sa documentation, bien plus claire et accessible qu
 
 ## 7. Diagramme de cas d'utilisation
 
+![diagramme de cas d'utilisation](./src/cas_utilisation.drawio.png) 
+
 ## 8. Diagramme de la base de données
 
 En allant sur le lien suivant, vous pourrez voir les différentes cardinalités de notre schéma.
