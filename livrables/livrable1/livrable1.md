@@ -33,7 +33,7 @@
 
 - **Dexes Victor :** UX/UI + Développeur fullstack
 - **Menanteau Melvin :** Lead dev + Développeur fullstack
-- **Mercier Charly :** Administrateur de base de données - Développeur fullstack
+- **Mercier Charly :** Chef de projet - Développeur fullstack
 - **Petit Victor :** DevOps + Développeur fullstack
 
 ## 2. Reformulation du besoin
