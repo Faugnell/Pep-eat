@@ -54,6 +54,8 @@ Lors du choix des technologies front-end pour le projet, nous avons hésité ent
 
 Après réflexion, nous avons choisi d’utiliser Vue.js avec Nuxt.js. Ce choix s’est imposé pour plusieurs raisons. Tout d’abord, cela nous permet de découvrir une nouvelle technologie en pleine évolution, offrant ainsi l’opportunité d’élargir nos compétences. Ensuite, Vue.js est moins flexible que React, ce qui impose un cadre plus structurant et garantit un code plus uniforme, facilitant la collaboration entre les membres de l’équipe. Enfin, Vue.js possède une syntaxe plus simple et intuitive, un atout majeur pour le membre de l’équipe qui débute en développement web, lui permettant ainsi de monter en compétences plus rapidement.
 
+<p align="center">À gauche le code React et à droite le code Vue</p>
+
 ![comparatif code Vue vs React](./src/compare_code_react_vue.png) 
 
 ### 5.1. Vue vs React - Moins de re-rendus inutiles  
