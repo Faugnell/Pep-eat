@@ -9,6 +9,8 @@
 - [1. Présentation de l'équipe et des rôles]
 - [2. Reformulation du besoin]
 - [3. Reformulation des points critiques et analyse des risques]
+  - [3.1 Reformulation des points critiques]
+  - [3.2 Analyse des risques (AMDEC)]
 - [4. Présentation de l'architecture]
 - [5. Choix des technologies] 
   - [5.1 Moins de re-rendus inutiles]
@@ -38,13 +40,22 @@
 
 ## 3. Reformulation des points critiques et analyse des risques
 
-| **ID** | **Composant**  | **Mode de défaillance** | **Effet de la défaillance** | **Sévérité (S)** | **Causes** | **Probabilité (P)** | **Détection (D)** | **Criticité (C = S * P * D)** | **Actions recommandées** |
-|--------|----------------|-------------------------|----------------------------|------------------|------------|---------------------|--------------------|--------------------------------|--------------------------|
-| 1      |                |                         |                            |                  |            |                     |                    |                                |                          |
-| 2      |                |                         |                            |                  |            |                     |                    |                                |                          |
-| 3      |                |                         |                            |                  |            |                     |                    |                                |                          |
-| 4      |                |                         |                            |                  |            |                     |                    |                                |                          |
-| 5      |                |                         |                            |                  |            |                     |                    |                                |                          |
+### 3.1. Reformulation des points critiques  
+
+### 3.2. Analyse des risques (AMDEC)
+
+||**Composant**|**Mode de défaillance**|**Effet de la défaillance**|**Fréquence (F)**|**Gravité (G)**|**Détectabilité (D)**|**Criticité (C = F * G * D)**|**Actions recommandées**|
+|--|--------------|-------------|-------------------------------------------|-------------------|-----------------|-----------------------|-------------------------|----------------------------------------|
+|1|Plateforme Middleware|Indisponibilité des services ou des composants|Inaccessibilité de la plateforme pour les utilisateurs|3|4|3|36|Mettre en place des mécanismes de monitoring des services|
+|2|API|Erreur dans l'intégration de composants|Application tierce non fonctionnelle ou incompatible|2|3|3|18|Tester en continu les API et documenter les versions pour garantir la compatibilité|
+|3|Base de données Relationnelle|Perte de données lors de l'écriture|Corruption de données critiques (commandes, informations clients)|2|4|2|16|Implémenter des sauvegardes régulières et une gestion des erreurs lors des écritures|
+|4|Microservices|Défaillance d'un microservice|Service spécifique indisponible, impact sur plusieurs fonctionnalités|3|4|2|24|Mettre en place une architecture résiliente avec une gestion des pannes des microservices|
+|5|Application Client|Problèmes d'interface utilisateur (UI/UX)|Mauvaise expérience utilisateur, baisse de satisfaction|2|3|3|18|Réaliser des tests utilisateurs et optimiser l'UI pour la rendre plus intuitive|
+|6|Sécurité (Authentification) |Failles de sécurité dans l'authentification|Accès non autorisé aux données des utilisateurs ou restaurateurs|2|4|2|16|Renforcer les politiques de sécurité (authentification forte, chiffrement des données)|
+|7|Livraison|Problèmes dans la gestion des livraisons|Retards, erreurs de livraison, mauvaise expérience client|3|3|3|27|Développer une fonctionnalité de suivi en temps réel et des alertes sur les livraisons|
+|8|Notifications|Notifications non envoyées ou mal configurées|Informations importantes non reçues par les utilisateurs|3|3|3|27|Améliorer le système de notification et effectuer des tests de réception|
+|9|Service Commercial|Erreur dans la gestion des commandes ou suivi des paiements |Perte de commandes, erreurs dans la facturation des clients|2|4|2|16|Auditer régulièrement le système de gestion des commandes et des paiements|
+|10|Développeur tiers|Mauvaise documentation des API|Difficulté pour les développeurs tiers à intégrer des composants|3|3|3|27|Améliorer et maintenir une documentation API complète et bien structurée|
 
 ## 4. Présentation de l'architecture
 
