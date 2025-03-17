@@ -59,6 +59,84 @@
 
 ## 4. Présentation de l'architecture
 
+### 4.1. Architecture logicielle
+
+Le développement de cette application web s'articulera autour d'une architecture en micro-services. Cette approche permet de découper l'application en plusieurs services indépendants, chacun ayant sa propre base de données et son propre serveur. Chaque micro-service sera responsable d'une fonctionnalité spécifique de l'application, ce qui facilite la maintenance, le déploiement et l'évolutivité du système. Les micro-services communiqueront entre eux via des API RESTful, garantissant une architecture décentralisée et scalable.
+
+Les différents micro-services que nous avons identifiés pour l'application Pep'eat sont les suivants :
+
+**Articles et des menus** :
+- Création d'un article
+- Modification d'un article
+- Suppression d'un article
+- Consultation des articles
+- Création d'un menu (ensemble d'articles)
+- Modification d'un menu
+- Suppression d'un menu
+- Consultation des menus
+- Ajout d'un article à un menu
+- Suppression d'un article d'un menu
+- Consultation des articles d'un menu
+- Consultation des menus d'un restaurant
+- Consultation des articles d'un restaurant
+
+**Authentification** :
+- Inscription et connexion des utilisateurs
+
+**Commandes** :
+- Création d'une commande
+- Passation d'une commande
+- Acceptation d'une commande
+- Refus d'une commande
+- Historique des commandes
+
+**Composants développeurs tiers** :
+- Création d'un composant
+- Modification d'un composant
+- Suppression d'un composant
+- Consultation des composants
+- Téléchargement d'un composant
+
+**Comptes** :
+- Création d'un compte
+- Modification des informations personnelles
+- Suppression du compte
+- Consultation du compte
+- Suspension du compte
+- Clé API associée au compte
+- Parainage d'un ami
+
+**Livraisons** :
+- Suivi des livraisons (état de la commande, localisation du livreur)
+- Historique des livraisons
+- Accepter une livraison
+- Refuser une livraison
+- Acquitter une livraison
+
+**Logs** :
+- Enregistrement des logs de l'application (connexion des utilisateurs, commandes effectuées, téléchargement de composants, erreurs, ...)
+- Consultation des logs
+
+**Notifications** :
+- Envoi de notifications aux utilisateurs (commandes, livraisons, promotions)
+
+**Paiements** :
+- Paiement en ligne
+- Historique des paiements
+
+**Restaurants** :
+- Création d'un restaurant
+- Modification des informations du restaurant
+- Suppression du restaurant
+- Consultation du restaurant
+
+**Statistiques** :
+- Consultation des statistiques de l'application (nombre de commandes, chiffre d'affaires, nombre d'utilisateurs, performance des serveurs, performances des micro-services, ...)
+
+### 4.2. Architecture réseau
+
+
+
 ## 5. Choix des technologies
 
 Lors du choix des technologies front-end pour le projet, nous avons hésité entre React et Vue.js, et donc entre les frameworks Next.js et Nuxt.js. Au sein de notre équipe de quatre personnes, trois sont actuellement développeurs web en alternance : deux travaillent quotidiennement avec React, tandis que le troisième utilise Vue.js. Le dernier membre de l’équipe, quant à lui, ne possède pas d’expérience en développement web.
