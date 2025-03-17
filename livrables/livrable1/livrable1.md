@@ -48,6 +48,10 @@ L’application repose sur une architecture en microservices permettant une modu
 
 ### 3.1. Reformulation des points critiques  
 
+L’un des principaux défis du projet repose sur la disponibilité et la fiabilité des services. Une indisponibilité de la plateforme middleware pourrait empêcher l’accès aux services pour tous les utilisateurs, entraînant une perte de commandes et une insatisfaction générale. De même, une défaillance d’un microservice pourrait impacter plusieurs fonctionnalités essentielles. Il est donc crucial de mettre en place des mécanismes de monitoring et une architecture résiliente, capable d’anticiper et de gérer ces pannes efficacement. De plus, des erreurs dans l’intégration des API ou une documentation incomplète compliqueraient l’intégration de solutions tierces, d’où la nécessité de tester en continu les interfaces et de maintenir une documentation détaillée et à jour.
+
+Un autre point critique concerne la gestion des données et la sécurité. Une perte de données lors des écritures pourrait corrompre des informations critiques comme les commandes ou les données clients, compromettant ainsi le bon fonctionnement de la plateforme. Il est impératif de mettre en place des sauvegardes régulières et une gestion rigoureuse des erreurs. En parallèle, des failles de sécurité dans l’authentification pourraient exposer des informations sensibles à des accès non autorisés. L’implémentation de protocoles de sécurité robustes (authentification forte, chiffrement des données) est indispensable. Enfin, pour assurer une expérience utilisateur optimale, il faudra veiller à la fluidité de l’interface, au bon fonctionnement des notifications et au suivi précis des livraisons afin de garantir un service fiable et efficace.
+
 ### 3.2. Analyse des risques (AMDEC)
 
 ||**Composant**|**Mode de défaillance**|**Effet de la défaillance**|**Fréquence (F)**|**Gravité (G)**|**Détectabilité (D)**|**Criticité (C = F * G * D)**|**Actions recommandées**|
@@ -164,11 +168,17 @@ Après réflexion, nous avons choisi d’utiliser Vue.js avec Nuxt.js. Ce choix 
 ### 5.3. Vue vs React - Documentation plus accessible
 Un autre avantage de Vue est sa documentation, bien plus claire et accessible que celle de React. Il est parfois difficile de trouver ce que l'on cherche dans la documentation de React, car les informations sont éparpillées. Avec Vue, tout est mieux structuré, ce qui facilite l'apprentissage et le développement. https://vuejs.org/
 
+### 5.4. Choix final de nos technologies
+
+Suite au comparatif fait précédemment, nous allons utiliser NuxtJS avec TypeScript. Pour la partie style nous utiliserons Tailwind CSS avec la bibliothèque Nuxt UI.
+
 ## 6. Maquette de l'application
 
 ## 7. Diagramme de cas d'utilisation
 
-![diagramme de cas d'utilisation](./src/cas_utilisation.drawio.png) 
+![diagramme de cas d'utilisation1](./src/CU_utilisateur_livreur.drawio.png)
+![diagramme de cas d'utilisation2](./src/CU_livreurs_restaurateurs.drawio.png) 
+![diagramme de cas d'utilisation3](./src/CU_dev_comm_tech.drawio.png) 
 
 ## 8. Diagramme de la base de données
 
@@ -183,6 +193,27 @@ https://dbdiagram.io/d/bdd_pepeat-67d15c0f75d75cc844ca22bc
 - Découpage du projet en phases
 - Diagramme de Gantt ou tableau Kanban
 - Répartition des tâches et estimations de charge de travail
+
+Priorité 1 :
+Comptes
+Article et menus
+Restaurants
+Authentification
+Commandes
+
+Priorité 2 :
+Livraisons
+
+Priorité 3 :
+Paiements
+Composants développeurs tiers
+
+Priorité 4 :
+Notifications
+Statistiques
+
+Priorité 5 :
+Logs
 
 ## 11. Questions à débattre (à voir ensemble)
 - Points à clarifier avec les encadrants ou clients
