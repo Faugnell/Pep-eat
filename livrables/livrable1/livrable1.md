@@ -38,6 +38,10 @@
 
 ## 2. Reformulation du besoin
 
+Pep’eat est une plateforme web de gestion de commandes et de livraisons de repas. L’application vise à offrir une expérience fluide et intuitive aux restaurateurs, livreurs et clients en garantissant une performance optimale et une accessibilité sur tous les types d’appareils.
+
+L’application repose sur une architecture en microservices permettant une modularité et une scalabilité optimales. Chaque service est dédié à un domaine spécifique, comme la gestion des restaurants, des commandes, des livraisons, des paiements et des notifications.
+
 ## 3. Reformulation des points critiques et analyse des risques
 
 ### 3.1. Reformulation des points critiques  
