@@ -6,28 +6,30 @@
 
 ## Sommaire
 
-- [1. Présentation de l'équipe et des rôles]
-- [2. Reformulation du besoin]
-- [3. Reformulation des points critiques et analyse des risques]
-  - [3.1 Reformulation des points critiques]
-  - [3.2 Analyse des risques (AMDEC)]
-- [4. Présentation de l'architecture]
-- [5. Choix des technologies] 
-  - [5.1 Moins de re-rendus inutiles]
-  - [5.2 Syntaxe plus simple et intuitive]
-  - [5.3 Documentation plus accessible]
-- [6. Maquette de l'application]
-- [7. Diagramme de cas d'utilisation]
-- [8. Diagramme de la base de données]
-- [9. Présentation du plan d’intégration et de déploiement continu] 
-- [10. Planification prévisionnelle]
-  - [10.1 Découpage du projet en phases]
-  - [10.2 Diagramme de Gantt ou tableau Kanban]
-  - [10.3 Répartition des tâches et estimations de charge de travail] 
-- [11. Questions à débattre]
-  - [11.1 Points à clarifier avec les encadrants ou clients] 
-  - [11.2 Alternatives technologiques possibles]
-  - [11.3 Éventuels ajustements du périmètre du projet]
+- 1. [Présentation de l'équipe et des rôles](#1-présentation-de-léquipe-et-des-rôles)
+- 2. [Reformulation du besoin](#2-reformulation-du-besoin)
+- 3. [Reformulation des points critiques et analyse des risques](#3-reformulation-des-points-critiques-et-analyse-des-risques)
+  - 3.1 [Reformulation des points critiques](#31-reformulation-des-points-critiques)
+  - 3.2 [Analyse des risques (AMDEC)](#32-analyse-des-risques-amdec)
+- 4. [Présentation de l'architecture](#4-présentation-de-larchitecture)
+  - 4.1 [Architecture logicielle](#41-architecture-logicielle)
+  - 4.2 [Architecture réseau](#42-architecture-réseau)
+- 5. [Choix des technologies](#5-choix-des-technologies)
+  - 5.1 [Moins de re-rendus inutiles](#51-vue-vs-react---moins-de-re-rend)
+  - 5.2 [Syntaxe plus simple et intuitive](#52-vue-vs-react---syntaxe-plus-simple-et-intuitive)
+  - 5.3 [Documentation plus accessible](#53-vue-vs-react---documentation-plus-accessible)
+- 6. [Maquette de l'application](#6-maquette-de-lapplication)
+- 7. [Diagramme de cas d'utilisation](#7-diagramme-de-cas-dutilisation)
+- 8. [Diagramme de la base de données](#8-diagramme-de-la-base-de-données)
+- 9. [Présentation du plan d’intégration et de déploiement continu]
+- 10. [Planification prévisionnelle](#10-planification-prévisionnelle-à-voir-ensemble)
+  - 10.1 [Découpage du projet en phases]
+  - 10.2 [Diagramme de Gantt ou tableau Kanban]
+  - 10.3 [Répartition des tâches et estimations de charge de travail] 
+- 11. [Questions à débattre](#11-questions-à-débattre-à-voir-ensemble)
+  - 11.1 [Points à clarifier avec les encadrants ou clients] 
+  - 11.2 [Alternatives technologiques possibles]
+  - 11.3 [Éventuels ajustements du périmètre du projet]
 
 ## 1. Présentation de l'équipe et des rôles
 
