@@ -141,7 +141,19 @@ Les différents micro-services que nous avons identifiés pour l'application Pep
 
 ### 4.2. Architecture réseau
 
+L'architecture réseau de l'application est majoritairement tournée autour de la conteneurisation des micro-services afin de permettre une scalabilité et une flexibilité optimales. Chaque micro-service sera déployé dans un conteneur Docker, ce qui facilitera la gestion des dépendances, des versions et des mises à jour. Les conteneurs seront orchestrés par Kubernetes, un outil de gestion d'orchestration de conteneurs open-source, qui permettra de gérer automatiquement le déploiement, la mise à l'échelle et la gestion des conteneurs.
+Également, un reverse proxy (Nginx) sera utilisé pour rediriger les requêtes des utilisateurs vers les différents micro-services en fonction de l'URL demandée.
+Enfin, les éléments autres que les micro-services (base de données, serveur pour le front-end, middleware, ...) seront déployés sur un cloud public (DigitalOcean) pour garantir une haute disponibilité (en cas de panne d'un serveur, un autre prendra le relais) et une performance optimale.
 
+Les principaux éléments composant l'architecture réseau de l'application sont les suivants :
+- **Proxy externe** : Un reverse proxy, tel que Nginx, sera utilisé pour rediriger les requêtes des utilisateurs vers les différents noeud de l'application selon la charge (load balancing).
+- **Serveur Front-end** et **Middleware** : La partie front-end de l'application sera réalisée grâce au frameworks [Nuxt.js](https://nuxt.com/) (utilisant lui même le framework [Vue.js](https://vuejs.org/)).
+Grâce au fait que nous utilisons Nuxt.js et que ce framework prend en charge le rendu côté serveur (SSR), il est possible d'implémenter directement le middleware dans l'application front-end. Cela permet de réduire le nombre de requêtes entre le front-end et le back-end, améliorant ainsi les performances de l'application.
+- **Proxy interne** : Un reverse proxy interne sera utilisé pour rediriger les requêtes vers les différents micro-services en fonction de l'URL demandée et de la charge (load-balancing).
+- **Micro-services** : Chaque micro-service sera déployé dans un conteneur Docker, orchestré par Kubernetes. Les micro-services communiqueront entre eux via des API RESTful. Ces API seront réalisées en utilisant le framework [Express.js](https://expressjs.com/) exécuté sur un serveur [Node.js](https://nodejs.org/).
+- **Base de données** : Chaque micro-service aura sa propre base de données. Les bases de données seront déployées sur un serveur de base de données PostgreSQL, qui sera également orchestré par Kubernetes. Les bases de données seront interconnectées pour permettre une cohérence des données entre les différents micro-services.
+
+![architecture réseau](./src/architecture_reseau.png)
 
 ## 5. Choix des technologies
 
