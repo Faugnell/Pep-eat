@@ -155,7 +155,7 @@ Les principaux éléments composant l'architecture réseau de l'application sont
 Grâce au fait que nous utilisons Nuxt.js et que ce framework prend en charge le rendu côté serveur (SSR), il est possible d'implémenter directement le middleware dans l'application front-end. Cela permet de réduire le nombre de requêtes entre le front-end et le back-end, améliorant ainsi les performances de l'application.
 - **Proxy interne** : Un reverse proxy interne sera utilisé pour rediriger les requêtes vers les différents micro-services en fonction de l'URL demandée et de la charge (load-balancing).
 - **Micro-services** : Chaque micro-service sera déployé dans un conteneur Docker, orchestré par Kubernetes. Les micro-services communiqueront entre eux via des API RESTful. Ces API seront réalisées en utilisant le framework [Express.js](https://expressjs.com/) exécuté sur un serveur [Node.js](https://nodejs.org/).
-- **Base de données** : Chaque micro-service aura sa propre base de données. Les bases de données seront déployées sur un serveur de base de données PostgreSQL, qui sera également orchestré par Kubernetes. Les bases de données seront interconnectées pour permettre une cohérence des données entre les différents micro-services.
+- **Base de données** : Chaque micro-service aura sa propre base de données. Les bases de données seront déployées sur un serveur de base de données PostgreSQL. Les bases de données seront interconnectées pour permettre une cohérence des données entre les différents micro-services.
 
 ![architecture réseau](./src/architecture_reseau.png)
 
