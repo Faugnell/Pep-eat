@@ -202,30 +202,42 @@ https://dbdiagram.io/d/bdd_pepeat-67d15c0f75d75cc844ca22bc
 ## 9. Présentation du plan d’intégration et de déploiement continu
 
 ## 10. Planification prévisionnelle (à voir ensemble)
-- Découpage du projet en phases
-- Diagramme de Gantt ou tableau Kanban
-- Répartition des tâches et estimations de charge de travail
 
-Priorité 1 :
-Comptes
-Article et menus
-Restaurants
-Authentification
-Commandes
+### 10.1. Découpage du projet en phases
 
-Priorité 2 :
-Livraisons
+Le projet se déroule sur cinq semaines, les deux premières étaient pleinement dédiées à la mise en place de l'architecture, la création des maquettes, la modélisation et l'organisation des données et des microservices. Et les trois dernières semaines sont dédiées au développement.
+Pour la partie développement, nous avons déterminé des étapes prioritaires et d'autres moins prioritaires voire optionnelles. Nous avons découpé les features en cinq niveaux de priorité, "Priorité 1" étant ce qu'il faut développer en premier.
 
-Priorité 3 :
-Paiements
-Composants développeurs tiers
+**Priorité 1 :**
+- Comptes
+- Article et menus
+- Restaurants
+- Authentification
+- Commandes
 
-Priorité 4 :
-Notifications
-Statistiques
+**Priorité 2 :**
+- Livraisons
 
-Priorité 5 :
-Logs
+**Priorité 3 :**
+- Paiements
+- Composants développeurs tiers
+
+**Priorité 4 :**
+- Notifications
+- Statistiques
+
+**Priorité 5 :**
+- Logs
+
+Nous avons seulement trois semaines pour fournir un code propre et fonctionnel pour ces différentes fonctionnalités. En déterminant des priorités, ça nous garantit d'avoir une application fonctionnelle à la fin, même si nous n'avons pas le temps de finir les tâches des priorités moins importantes.
+
+### 10.2. Notre organisation
+
+Nous avons fait le choix de faire un tableau kanban avec des issues dans notre Github directement.
+
+![kanban Github](./src/compare_code_react_vue.png) 
+
+### 10.3. Répartition des tâches et estimations de charge de travail
 
 ## 11. Questions à débattre (à voir ensemble)
 - Points à clarifier avec les encadrants ou clients
