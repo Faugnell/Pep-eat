@@ -15,21 +15,18 @@
   - 4.1 [Architecture logicielle](#41-architecture-logicielle)
   - 4.2 [Architecture réseau](#42-architecture-réseau)
 - 5. [Choix des technologies](#5-choix-des-technologies)
-  - 5.1 [Moins de re-rendus inutiles](#51-vue-vs-react---moins-de-re-rend)
+  - 5.1 [Moins de re-rendus inutiles](#51-vue-vs-react---moins-de-re-rendus-inutiles)
   - 5.2 [Syntaxe plus simple et intuitive](#52-vue-vs-react---syntaxe-plus-simple-et-intuitive)
   - 5.3 [Documentation plus accessible](#53-vue-vs-react---documentation-plus-accessible)
 - 6. [Maquette de l'application](#6-maquette-de-lapplication)
 - 7. [Diagramme de cas d'utilisation](#7-diagramme-de-cas-dutilisation)
 - 8. [Diagramme de la base de données](#8-diagramme-de-la-base-de-données)
-- 9. [Présentation du plan d’intégration et de déploiement continu]
+- 9. [Présentation du plan d’intégration et de déploiement continu](#9-présentation-du-plan-dintégration-et-de-déploiement-continu)
 - 10. [Planification prévisionnelle](#10-planification-prévisionnelle-à-voir-ensemble)
-  - 10.1 [Découpage du projet en phases]
-  - 10.2 [Diagramme de Gantt ou tableau Kanban]
-  - 10.3 [Répartition des tâches et estimations de charge de travail] 
+  - 10.1 [Découpage du projet en phases](#101-découpage-du-projet-en-phases)
+  - 10.2 [Notre organisation](#102-notre-organisation)
+  - 10.3 [Répartition des tâches et estimations de charge de travail](#103-répartition-des-tâches-et-estimations-de-charge-de-travail)
 - 11. [Questions à débattre](#11-questions-à-débattre-à-voir-ensemble)
-  - 11.1 [Points à clarifier avec les encadrants ou clients] 
-  - 11.2 [Alternatives technologiques possibles]
-  - 11.3 [Éventuels ajustements du périmètre du projet]
 
 ## 1. Présentation de l'équipe et des rôles
 
@@ -233,11 +230,15 @@ Nous avons seulement trois semaines pour fournir un code propre et fonctionnel p
 
 ### 10.2. Notre organisation
 
-Nous avons fait le choix de faire un tableau kanban avec des issues dans notre Github directement.
+Nous avons fait le choix de faire un tableau kanban avec des issues dans notre Github directement. Nous allons développer nos fonctionnalités issues par issues. Chaque branche que nous allons créer dans Github portera le nom de l'issue afin que nous ne puissions pas empiéter sur les tickets des autres membres du groupe.
 
-![kanban Github](./src/compare_code_react_vue.png) 
+![kanban Github](./src/kanban_git.png) 
 
 ### 10.3. Répartition des tâches et estimations de charge de travail
+
+En plus de l'utilisation du tableau kanban sur Github, nous avons confectionné un diagramme de Gantt dans le but de déterminer le temps attribué à chaque tâche.
+
+*Image Gantt Victor*
 
 ## 11. Questions à débattre (à voir ensemble)
 - Points à clarifier avec les encadrants ou clients
