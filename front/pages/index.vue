@@ -1,4 +1,5 @@
 <script setup>
+import HeaderPepeat from "~/components/common/HeaderPepeat";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -22,8 +23,8 @@
 
 <template>
     <div>
-        <h1 class="bg-red-500 w-full">Home</h1>
-        <div class="flex flex-col w-1/4 gap-4">
+        <HeaderPepeat/>
+        <h1>Home</h1><div class="flex flex-col w-1/4 gap-4">
             <div class="grid grid-cols-3 gap-4">
                 <UButton>Primary</UButton>
                 <UButton variant="soft">Primary soft</UButton>
