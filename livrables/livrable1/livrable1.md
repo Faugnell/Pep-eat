@@ -203,7 +203,13 @@ Il s'agissait de notre première version de base de données. Cependant nous avo
 
 ## 9. Présentation du plan d’intégration et de déploiement continu
 
-*ajouter la partie de Melvin*
+Pour le déploiement de notre application, nous avons choisi d'utiliser Docker et Kubernetes. Docker permet de créer des conteneurs pour chaque micro-service, ce qui facilite le déploiement et la gestion des dépendances. Kubernetes, quant à lui, est un outil d'orchestration de conteneurs qui permet de gérer automatiquement le déploiement, la mise à l'échelle et la gestion des conteneurs. On souhaiterait héberger notre application sur DigitalOcean, un cloud public qui offre une haute disponibilité et une performance optimale.
+
+Pour la partie CI, nous hésitons encore entre GitHub Action et Travis CI. GitHub Action est intégré à GitHub, ce qui facilite l'intégration avec notre dépôt Git. Cependant, Travis CI est nous permetterait de pouvoir effectuer des tests en local si jamais l'application venait à ne pas être hébergée sur Digital Ocean.
+
+Pour le déploiement continu, nous prévoyons de :
+- **Test unitaires et tests d'intégration** : Pour chaque push sur le dépot Git, quelle que soit la branche, les tests unitaires et les tests d'intégration seront lancés automatiquement. Si un test échoue, un rapport d'erreur sera envoyé à l'équipe de développement.
+- **Déploiement** : Si la branche sur laquelle le push a été effectué est la branche `main` (exemple : merge d'une pull request), le déploiement sera automatiquement effectué suite à la validation des tests (les tests seront donc effectués deux fois, une fois sur la branche de la pull request et une fois sur la `main`). Si le déploiement échoue, un rapport d'erreur sera envoyé à l'équipe de développement.
 
 ## 10. Planification prévisionnelle
 
