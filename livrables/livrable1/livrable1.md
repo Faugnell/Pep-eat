@@ -15,21 +15,21 @@
   - 4.1 [Architecture logicielle](#41-architecture-logicielle)
   - 4.2 [Architecture réseau](#42-architecture-réseau)
 - 5. [Choix des technologies](#5-choix-des-technologies)
-  - 5.1 [Moins de re-rendus inutiles](#51-vue-vs-react---moins-de-re-rend)
+  - 5.1 [Moins de re-rendus inutiles](#51-vue-vs-react---moins-de-re-rendus-inutiles)
   - 5.2 [Syntaxe plus simple et intuitive](#52-vue-vs-react---syntaxe-plus-simple-et-intuitive)
   - 5.3 [Documentation plus accessible](#53-vue-vs-react---documentation-plus-accessible)
 - 6. [Maquette de l'application](#6-maquette-de-lapplication)
 - 7. [Diagramme de cas d'utilisation](#7-diagramme-de-cas-dutilisation)
 - 8. [Diagramme de la base de données](#8-diagramme-de-la-base-de-données)
-- 9. [Présentation du plan d’intégration et de déploiement continu]
-- 10. [Planification prévisionnelle](#10-planification-prévisionnelle-à-voir-ensemble)
-  - 10.1 [Découpage du projet en phases]
-  - 10.2 [Diagramme de Gantt ou tableau Kanban]
-  - 10.3 [Répartition des tâches et estimations de charge de travail] 
-- 11. [Questions à débattre](#11-questions-à-débattre-à-voir-ensemble)
-  - 11.1 [Points à clarifier avec les encadrants ou clients] 
-  - 11.2 [Alternatives technologiques possibles]
-  - 11.3 [Éventuels ajustements du périmètre du projet]
+- 9. [Présentation du plan d’intégration et de déploiement continu](#9-présentation-du-plan-dintégration-et-de-déploiement-continu)
+- 10. [Planification prévisionnelle](#10-planification-prévisionnelle)
+  - 10.1 [Découpage du projet en phases](#101-découpage-du-projet-en-phases)
+  - 10.2 [Notre organisation](#102-notre-organisation)
+  - 10.3 [Répartition des tâches et estimations de charge de travail](#103-répartition-des-tâches-et-estimations-de-charge-de-travail)
+- 11. [Questions à débattre](#11-questions-à-débattre)
+  - 11.1 [Ajustement de base de données](#111-ajustement-de-base-de-données)
+  - 11.2 [Utilisation de Kafka](#112-utilisation-de-kafka)
+  - 11.3 [Alternative de technologies](#113-alternative-de-technologies)
 
 ## 1. Présentation de l'équipe et des rôles
 
@@ -199,35 +199,77 @@ https://dbdiagram.io/d/bdd_pepeat-67d15c0f75d75cc844ca22bc
 
 ![diagramme de la BDD](./src/diagramme_bdd.png) 
 
+Il s'agissait de notre première version de base de données. Cependant nous avons découvert les microservices et nous nous sommes rendu compte que ce schéma n'est pas applicable à ce type d'architecture. Il sera donc amené à être modifié. Étant donné que le prosit n°4 se concentre sur les bases de données, il est donc plus judicieux d'attendre avant de refaire le schéma.
+
 ## 9. Présentation du plan d’intégration et de déploiement continu
 
-## 10. Planification prévisionnelle (à voir ensemble)
-- Découpage du projet en phases
-- Diagramme de Gantt ou tableau Kanban
-- Répartition des tâches et estimations de charge de travail
+Pour le déploiement de notre application, nous avons choisi d'utiliser Docker et Kubernetes. Docker permet de créer des conteneurs pour chaque micro-service, ce qui facilite le déploiement et la gestion des dépendances. Kubernetes, quant à lui, est un outil d'orchestration de conteneurs qui permet de gérer automatiquement le déploiement, la mise à l'échelle et la gestion des conteneurs. On souhaiterait héberger notre application sur DigitalOcean, un cloud public qui offre une haute disponibilité et une performance optimale.
 
-Priorité 1 :
-Comptes
-Article et menus
-Restaurants
-Authentification
-Commandes
+Pour la partie CI, nous hésitons encore entre GitHub Action et Travis CI. GitHub Action est intégré à GitHub, ce qui facilite l'intégration avec notre dépôt Git. Cependant, Travis CI est nous permetterait de pouvoir effectuer des tests en local si jamais l'application venait à ne pas être hébergée sur Digital Ocean.
 
-Priorité 2 :
-Livraisons
+Pour le déploiement continu, nous prévoyons de :
+- **Test unitaires et tests d'intégration** : Pour chaque push sur le dépot Git, quelle que soit la branche, les tests unitaires et les tests d'intégration seront lancés automatiquement. Si un test échoue, un rapport d'erreur sera envoyé à l'équipe de développement.
+- **Déploiement** : Si la branche sur laquelle le push a été effectué est la branche `main` (exemple : merge d'une pull request), le déploiement sera automatiquement effectué suite à la validation des tests (les tests seront donc effectués deux fois, une fois sur la branche de la pull request et une fois sur la `main`). Si le déploiement échoue, un rapport d'erreur sera envoyé à l'équipe de développement.
 
-Priorité 3 :
-Paiements
-Composants développeurs tiers
+## 10. Planification prévisionnelle
 
-Priorité 4 :
-Notifications
-Statistiques
+### 10.1. Découpage du projet en phases
 
-Priorité 5 :
-Logs
+Le projet se déroule sur cinq semaines, les deux premières étaient pleinement dédiées à la mise en place de l'architecture, la création des maquettes, la modélisation et l'organisation des données et des microservices. Et les trois dernières semaines sont dédiées au développement.
+Pour la partie développement, nous avons déterminé des étapes prioritaires et d'autres moins prioritaires voire optionnelles. Nous avons découpé les features en cinq niveaux de priorité, "Priorité 1" étant ce qu'il faut développer en premier.
 
-## 11. Questions à débattre (à voir ensemble)
-- Points à clarifier avec les encadrants ou clients
-- Alternatives technologiques possibles
-- Éventuels ajustements du périmètre du projet
+**Priorité 1 :**
+- Comptes
+- Article et menus
+- Restaurants
+- Authentification
+- Commandes
+
+**Priorité 2 :**
+- Livraisons
+
+**Priorité 3 :**
+- Paiements
+- Composants développeurs tiers
+
+**Priorité 4 :**
+- Notifications
+- Statistiques
+
+**Priorité 5 :**
+- Logs
+
+Nous avons seulement trois semaines pour fournir un code propre et fonctionnel pour ces différentes fonctionnalités. En déterminant des priorités, ça nous garantit d'avoir une application fonctionnelle à la fin, même si nous n'avons pas le temps de finir les tâches des priorités moins importantes. Dans un premier temps, nous nous occuperons de l'aspect visuel de l'application car nous manquons d'éléments pour le backend, nous débloquerons ces éléments avec l'avancée des prosit. S'occuper de l'aspect visuel nous permet de ne pas prendre de retard et d'avoir un premier aperçu de l'application.
+
+### 10.2. Notre organisation
+
+Nous avons fait le choix de faire un tableau kanban avec des issues dans notre Github directement. Nous allons développer nos fonctionnalités issues par issues. Chaque branche que nous allons créer dans Github portera le nom de l'issue afin que nous ne puissions pas empiéter sur les tickets des autres membres du groupe.
+
+![kanban Github](./src/kanban_git.png) 
+
+### 10.3. Répartition des tâches et estimations de charge de travail
+
+En plus de l'utilisation du tableau kanban sur Github, nous avons confectionné un diagramme de Gantt dans le but de déterminer le temps attribué à chaque tâche.
+
+*Image Gantt Victor*
+
+## 11. Questions à débattre
+
+Au point où nous en sommes dans le projet, nous n'avons pas pu déterminer avec précision tous les éléments dont nous avons besoin pour le projet. C'est donc pour cela qu'il reste tout de même quelques questions à débattre que nous allons voir dans cette partie.
+
+### 11.1. Ajustement de base de données
+
+Comme présenté précédemment, notre schéma de base de données n'est pas réellement acceptable pour une architecture microservices. C'est donc un aspect à approfondir lors des prochains prosit. Dans un premier temps il nous faudrait déterminer si nous allons utiliser du SQL ou du NoSQL, à savoir que PostgreSQL propose les deux options. Et ensuite, il nous faudra refaire le schéma pour avoir une architecture scalable.
+
+### 11.2. Utilisation de Kafka
+
+Nous réfléchissons à l'utilisation de Kafka au sein de notre application en tant qu'écouteur d'évènement. Un Event Listener Kafka en Node.js est souvent utilisé dans les microservices pour écouter des événements inter-services et le traitement d’événements en temps réel (exemple : logs, analytics, notifications).
+
+Voici un exemple concret :
+- Le service de commandes publie un événement lorsqu’une nouvelle commande est passée.
+- Un service de livraison écoute ce topic Kafka et réceptionne la commande.
+
+### 11.3. Alternative de technologies
+
+Comme présenté dans la partie [Choix des technologies](#5-choix-des-technologies), nous utilisons Vue plutôt que React. Dans cette partie, nous avons expliqué les différentes raisons qui font que nous utilisons Vue plutôt que React. Nous aurions pu aussi utiliser Angular, mais le framework est moins complet et moins pratique que Vue et React, ce qui justifie notre choix. 
+En termes de backend, nous aurions aussi pu utiliser du Java ou du C#, mais cela aurait rendu le développement plus complexe et ça aurait impliqué un plus gros coût d'hébergement.
