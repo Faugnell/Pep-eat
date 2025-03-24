@@ -185,6 +185,21 @@ Un autre avantage de Vue est sa documentation, bien plus claire et accessible qu
 Suite au comparatif fait précédemment, nous allons utiliser NuxtJS avec TypeScript. Pour la partie style nous utiliserons Tailwind CSS avec la bibliothèque Nuxt UI.
 
 ## 6. Maquette de l'application
+Dans l'optique de donner une identité à notre application, nous avons d'abord réfléchi à un logo simple et réutilisable au travers de notre application :
+![Logotype](./src/pepeat-logotype.png)
+Aussi, pour solidifier cette identité, nous avons besoin de trois 3 couleurs principales avec des variantes pour chacune, nous sommes donc partis sur du vert comme couleur principale, du violet les accentuations et du orange pour les "call to action".
+![ColorPalette](./src/pepeat-color-palette.png)
+On a alors coté client les maquettes suivantes pour la page d'accueil et la page principale de l'application une fois connecté.
+#### Page d'accueil :
+![Page d'accueil](./src/pepeat-mockup-homepage.png)
+#### Interface après connexion :
+![Page d'accueil](./src/pepeat-mockup-mainpage.png)
+Côté restaurateur, l'interface est plus sobre listant les options de manière lisible.
+Pour les livreurs, l'application suivra ce côté simpliste et épuré.
+#### Page restaurateurs
+![Page restaurateur](./src/pepeat-mockup-restaurants-management.png)
+#### Page d'option pour un restaurant
+![Page d'option restaurant](./src/pepeat-mockup-restaurants-options.png)
 
 ## 7. Diagramme de cas d'utilisation
 
