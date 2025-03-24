@@ -1,4 +1,6 @@
 <script setup lang='ts'>
+import Connexion from '~/components/authentification/Connexion.vue'
+import Inscription from '~/components/authentification/Inscription.vue'
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -36,7 +38,7 @@ const itemsHeader = ref([
   ],
 ]);
 
-const isConnected = ref<boolean>(true)
+const isConnected = ref<boolean>(false)
 
 const user = ref({firstName:'Victor'})
 
@@ -57,7 +59,7 @@ onMounted(async () => {
 
 <template>
     <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
-        <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/pepeat-logo.png"/>
+        <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg"/>
         <template v-if="isConnected">
           <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..." class="w-[50vh] min-w-50"/>
         </template>
@@ -69,11 +71,21 @@ onMounted(async () => {
             <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
         </UDropdownMenu>
         <div v-else class="h-[80%] object-contain mx-[1%]">
+          <!-- Inscription -->
           <UModal title="Inscription">
             <UButton label="Inscription" color="neutral" variant="link" />
+            <template #body>
+              <Inscription />
+            </template>
           </UModal>
-          <UModal title="Connexion">
-            <UButton label="Connexion" color="primary" variant="solid" />
+          <!-- Connexion -->
+          <UModal title="Se connecter à Pep'Eat">
+              <UButton label="Connexion" color="primary" />
+
+              <template #body>
+                  <!-- Email -->
+                  <Connexion />
+              </template>
           </UModal>
         </div>
     </div>
