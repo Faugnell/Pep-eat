@@ -88,24 +88,11 @@ onMounted(async () => {
             <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
         </UDropdownMenu>
         <div v-else class="h-[80%] object-contain mx-[1%]">
-          <UButton label="Inscription" color="neutral" variant="link" />
+          <UModal title="Inscription">
+            <UButton label="Inscription" color="neutral" variant="link" />
+          </UModal>
           <UModal title="Connexion">
             <UButton label="Connexion" color="primary" variant="solid" />
-            <template #body>
-              <UForm :schema="schema" :state="state" class="space-y-4">
-                <UFormField label="Email" name="email">
-                  <UInput v-model="state.email" />
-                </UFormField>
-
-                <UFormField label="Password" name="password">
-                  <UInput v-model="state.password" type="password" />
-                </UFormField>
-
-                <UButton type="submit">
-                  Submit
-                </UButton>
-              </UForm>
-            </template>
           </UModal>
         </div>
     </div>
