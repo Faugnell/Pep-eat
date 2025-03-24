@@ -8,6 +8,10 @@
 
 - 1. [Présentation de l'équipe et des rôles](#1-présentation-de-léquipe-et-des-rôles)
 - 2. [Reformulation du besoin](#2-reformulation-du-besoin)
+  - 2.1 [Contexte du projet](#21-contexte-du-projet)
+  - 2.2 [Objectifs fonctionnels](#22-objectifs-fonctionnels)
+  - 2.3 [Contraintes et exigences techniques](#23-contraintes-et-exigences-techniques)
+  - 2.4 [Justification du choix de l’architecture](#24-justification-du-choix-de-larchitecture)
 - 3. [Reformulation des points critiques et analyse des risques](#3-reformulation-des-points-critiques-et-analyse-des-risques)
   - 3.1 [Reformulation des points critiques](#31-reformulation-des-points-critiques)
   - 3.2 [Analyse des risques (AMDEC)](#32-analyse-des-risques-amdec)
@@ -38,11 +42,53 @@
 - **Mercier Charly :** Chef de projet - Développeur fullstack
 - **Petit Victor :** DevOps + Développeur fullstack
 
-## 2. Reformulation du besoin
+## 2. Reformulation du besoin  
 
-Pep’eat est une plateforme web de gestion de commandes et de livraisons de repas. L’application vise à offrir une expérience fluide et intuitive aux restaurateurs, livreurs et clients en garantissant une performance optimale et une accessibilité sur tous les types d’appareils.
+### 2.1. Contexte du projet  
+Pep’eat est une plateforme web de gestion de commandes et de livraisons de repas destinée aux restaurateurs, livreurs et clients. L’objectif est de proposer une expérience utilisateur fluide, performante et accessible sur tous types d’appareils (ordinateurs, tablettes, smartphones). La plateforme devra répondre aux exigences des trois principaux acteurs :  
 
-L’application repose sur une architecture en microservices permettant une modularité et une scalabilité optimales. Chaque service est dédié à un domaine spécifique, comme la gestion des restaurants, des commandes, des livraisons, des paiements et des notifications.
+- **Les restaurateurs** : gestion des menus, suivi des commandes en temps réel, interaction avec les livreurs.  
+- **Les livreurs** : réception et acceptation des commandes, suivi des livraisons, validation des livraisons effectuées.  
+- **Les clients** : consultation des restaurants, commande et paiement en ligne, suivi de la livraison, réception de notifications sur l’état de leur commande.  
+
+Pour assurer un service optimal, Pep’eat doit garantir une haute disponibilité, une gestion efficace des flux de commandes et une communication fluide entre tous les acteurs.  
+
+### 2.2. Objectifs fonctionnels  
+L’application doit intégrer plusieurs fonctionnalités essentielles :  
+
+- **Gestion des restaurants** : ajout, modification, suppression des informations relatives aux établissements.  
+- **Gestion des menus et articles** : création, mise à jour et suppression des menus et plats proposés.  
+- **Gestion des commandes** : création, traitement et suivi des commandes en temps réel.  
+- **Suivi des livraisons** : géolocalisation des livreurs et mise à jour de l’état des livraisons.  
+- **Paiement en ligne** : intégration d’un système sécurisé de paiement numérique.  
+- **Système de notifications** : informer en temps réel les utilisateurs de l’état de leurs commandes et livraisons.  
+- **Statistiques et reporting** : suivi des performances des restaurants et des livreurs via un tableau de bord.  
+
+### 2.3. Contraintes et exigences techniques  
+L’application repose sur une **architecture en microservices**, permettant modularité et évolutivité. Cette approche garantit :  
+
+- Une **meilleure scalabilité**, en permettant de faire évoluer chaque module indépendamment.  
+- Une **fiabilité accrue**, en isolant les défaillances à un seul service sans affecter l’ensemble du système.  
+- Une **meilleure gestion des charges**, notamment lors de pics d’activité.  
+
+Les microservices devront communiquer via des **API RESTful**, et une solution de **message broker** tel que Kafka pourra être mise en place pour assurer un échange fluide et performant entre les services.  
+
+En termes d’infrastructure, plusieurs contraintes sont à prendre en compte :  
+
+- **Disponibilité et résilience** : l’architecture doit permettre une tolérance aux pannes et garantir un temps de réponse minimal.  
+- **Sécurité des données** : mise en place d’un chiffrement des échanges, authentification forte et protection contre les attaques (DDoS, injection SQL, etc.).  
+- **Stockage et gestion des données** : nécessité d’une base de données performante et optimisée (ex : PostgreSQL, MongoDB, etc.).  
+- **Interopérabilité** : l’application doit être facilement intégrable avec des services tiers (passerelles de paiement, solutions de gestion des stocks, etc.).  
+
+### 2.4. Justification du choix de l’architecture  
+Compte tenu des besoins et contraintes identifiés, l’**architecture microservices** est privilégiée pour :  
+
+1. **Assurer la modularité et l’évolutivité** : chaque service est indépendant, ce qui facilite les mises à jour et ajouts de nouvelles fonctionnalités.  
+2. **Optimiser les performances** : répartition de la charge de travail sur plusieurs services distincts.  
+3. **Renforcer la sécurité et la résilience** : possibilité d’isoler les pannes et d’améliorer la gestion des erreurs.  
+4. **Faciliter l’intégration avec des services externes** : via des API bien documentées et standardisées.  
+
+Cette approche sera complétée par un **système de monitoring avancé** pour assurer un suivi en temps réel des performances et prévenir les dysfonctionnements.  
 
 ## 3. Reformulation des points critiques et analyse des risques
 
