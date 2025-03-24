@@ -1,11 +1,4 @@
 <script setup lang='ts'>
-const {
-} = defineProps({
-});
-
-import * as v from 'valibot'
-import type { FormSubmitEvent } from '@nuxt/ui'
-
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -43,21 +36,9 @@ const itemsHeader = ref([
   ],
 ]);
 
-const isConnected = ref<boolean>(false)
+const isConnected = ref<boolean>(true)
 
 const user = ref({firstName:'Victor'})
-
-const schema = v.object({
-  email: v.pipe(v.string(), v.email('Invalid email')),
-  password: v.pipe(v.string(), v.minLength(8, 'Must be at least 8 characters'))
-})
-
-type Schema = v.InferOutput<typeof schema>
-
-const state = reactive({
-  email: '',
-  password: ''
-})
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
@@ -78,7 +59,7 @@ onMounted(async () => {
     <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
         <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/pepeat-logo.png"/>
         <template v-if="isConnected">
-          <UInput placeholder="Search..." />
+          <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..." class="w-[50vh] min-w-50"/>
         </template>
         <UDropdownMenu v-if="isConnected" class="h-[80%] object-contain mx-[1%]"
             :items="itemsHeader"
@@ -99,4 +80,5 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+
 </style>
