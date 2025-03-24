@@ -1,5 +1,10 @@
 <script setup lang='ts'>
 const {
+  imageUrl,
+  badgeText,
+  badgeClass,
+  title,
+  price,
 } = defineProps({
   imageUrl: {
     type: String,
@@ -10,8 +15,8 @@ const {
     default: 'A',
   },
   badgeClass: {
-  type: String,
-  default: 'bg-green-200 text-green-800'
+    type: String,
+    default: 'bg-green-200 text-green-800',
   },
   title: {
     type: String,
