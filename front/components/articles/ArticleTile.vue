@@ -1,6 +1,30 @@
-<script setup>
-import HeaderPepeat from "~/components/common/HeaderPepeat";
-import FooterPepeat from "~/components/common/FooterPepeat";
+<script setup lang='ts'>
+const {
+} = defineProps({
+  imageUrl: {
+    type: String,
+    required: true,
+  },
+  badgeText: {
+    type: String,
+    default: 'A',
+  },
+  badgeClass: {
+  type: String,
+  default: 'bg-green-200 text-green-800'
+  },
+  title: {
+    type: String,
+    required: true,
+    default: 'Plat 1',
+  },
+  price: {
+    type: String,
+    required: true,
+    default: '20',
+  },
+})
+
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -20,24 +44,25 @@ import FooterPepeat from "~/components/common/FooterPepeat";
 /* -------------------------------------------------------------------------
 ---------------------------- LIFECYCLE HOOKS -------------------------------
 ------------------------------------------------------------------------- */
+onMounted(async () => {
+});
 </script>
 
 <template>
-    <div class="flex flex-col min-h-screen">
-        <HeaderPepeat/>
-        <div class="bg-fixed-background flex-1 w-full bg-cover bg-center">
-            <div class="absolute bottom-30 left-20">
-                <div class="text-white" >
-                    <NuxtImg src="/icons/white.png" width="250"/>
-                    <h2>La pépite du fast-food healthy !</h2>
+    <UCard class="drop-shadow-[0_1px_1px_rgba(0,0,0,0.20)] w-[50vh] rounded-none"
+        :ui="{body: 'p-0 sm:p-6'}">
+        <NuxtImg src="https://picsum.photos/800/500?random=1" fit="cover" />
+        <template #footer>
+            <div class="flex flex-row">
+                <div class="flex basis-5/6 gap-2">
+                    <UBadge class="font-bold rounded-full" :class="badgeClass">{{ badgeText }}</UBadge>
+                    <p>{{ title }}</p>
                 </div>
+                <div class="basis-1/6">{{ price }} €</div>
             </div>
-        </div>
-    </div>
+        </template>
+    </UCard>
 </template>
 
 <style scoped>
-.bg-fixed-background {
-  background-image: url('bg-homepage.png');
-}
 </style>

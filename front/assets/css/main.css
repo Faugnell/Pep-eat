@@ -1,8 +1,14 @@
 @import "tailwindcss" theme(static);
 @import "@nuxt/ui";
-
 @theme static {
     --color-goldenrod-500: oklch(0.88 0.15 88);
     --color-trueviolet-500: oklch(0.64 0.16 291);
     --color-tacao-500: oklch(0.79 0.10 66);
+}
+
+html,
+body,
+#__nuxt {
+    width: 100%;
+    height: 100vh;
 }

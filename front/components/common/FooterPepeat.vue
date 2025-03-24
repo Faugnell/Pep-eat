@@ -27,7 +27,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex justify-around items-center w-full bg-white h-[7vh] min-h-10 fixed bottom-0">
+    <div class="flex justify-around items-center w-full bg-white h-[7vh] min-h-10 sticky mb-2">
         <div class="grid grid-cols-3 justify-items-center gap-x-4">
             <ULink to="">© Droits d'auteur</ULink>
             <ULink to="">Conditions d’utilisation</ULink>
