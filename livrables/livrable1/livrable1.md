@@ -251,7 +251,7 @@ Nous avons fait le choix de faire un tableau kanban avec des issues dans notre G
 
 En plus de l'utilisation du tableau kanban sur Github, nous avons confectionné un diagramme de Gantt dans le but de déterminer le temps attribué à chaque tâche.
 
-![Gant Github](./src/roadmap.png) 
+![Gant Github](./src/Roadmap.png) 
 
 ## 11. Questions à débattre
 
