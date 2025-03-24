@@ -76,7 +76,7 @@ const restaurants = [
             :items="restaurants"
             :ui="{ item: 'basis-1/3', prev: '', next: '' }" class="mx-auto">
                 <div class="px-2 py-1">
-                    <UCard class="drop-shadow-sm">
+                    <UCard class="drop-shadow-sm rounded-[5px]">
                         <NuxtImg
                         :src="restaurant"
                         fit="cover"
