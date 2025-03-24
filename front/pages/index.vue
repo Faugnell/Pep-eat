@@ -1,5 +1,6 @@
 <script setup>
 import HeaderPepeat from "~/components/common/HeaderPepeat";
+import FooterPepeat from "~/components/common/FooterPepeat";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -24,7 +25,8 @@ import HeaderPepeat from "~/components/common/HeaderPepeat";
 <template>
     <div>
         <HeaderPepeat/>
-        <h1>Home</h1><div class="flex flex-col w-1/4 gap-4">
+        <h1>Home</h1>
+        <div class="flex flex-col w-1/4 gap-4">
             <div class="grid grid-cols-3 gap-4">
                 <UButton>Primary</UButton>
                 <UButton variant="soft">Primary soft</UButton>
@@ -61,5 +63,6 @@ import HeaderPepeat from "~/components/common/HeaderPepeat";
                 <UButton color="info" variant="outline">Info outline</UButton>
             </div>
         </div>
+        <FooterPepeat/>
     </div>
 </template>
