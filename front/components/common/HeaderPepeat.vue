@@ -38,7 +38,7 @@ const itemsHeader = ref([
   ],
 ]);
 
-const isConnected = ref<boolean>(false)
+const isConnected = ref<boolean>(true)
 
 const user = ref({firstName:'Victor'})
 
@@ -70,7 +70,7 @@ onMounted(async () => {
             }">
             <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
         </UDropdownMenu>
-        <div v-else class="h-[80%] object-contain mx-[1%]">
+        <div v-else class="h-[80%] object-contain mx-[1%] items-center">
           <!-- Inscription -->
           <UModal title="Inscription">
             <UButton label="Inscription" color="neutral" variant="link" />
@@ -92,5 +92,4 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 </style>
