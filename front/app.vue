@@ -8,9 +8,3 @@ const appConfig = useAppConfig()
         <NuxtPage />
     </UApp>
 </template>
- 
-<style>
-html, body {
-  background-color: white;
-}
-</style>
