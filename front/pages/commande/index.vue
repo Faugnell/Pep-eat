@@ -1,56 +1,78 @@
 <script setup lang="ts">
 import HeaderPepeat from "~/components/common/HeaderPepeat.vue";
 
-type Items = {
-    title: "Adresse" | "Expédition" | "Finalisation";
+type Tabs = {
+    title: "Récapitulatif" | "Adresse" | "Paiement" | "Finalisation";
     description: string;
     icon?: string;
 }
 
-const items: Items[] = [
-    { title: "Adresse", description: "Ajouter votre adresse", icon: "i-lucide-house" },
-    { title: "Expédition", description: "Choisisser votre méthode d'expédition", icon: "i-lucide-truck" },
-    { title: "Finalisation", description: "Confirmer votre commande" }
+const tabs: Tabs[] = [
+    { title: "Récapitulatif", description: "Récapitulatif de la commande", icon: "i-lucide-shopping-cart" },
+    { title: "Adresse", description: "Confirmer votre adresse", icon: "i-lucide-house" },
+    { title: "Paiement", description: "Renseigner vos informations de paiement", icon: "i-lucide-credit-card" },
+    { title: "Finalisation", description: "Validation de votre commande", icon: "i-lucide-check" }
+]
+
+const numCard: Ref<string> = ref('');
+const dateExpiration = ref(''); // format MM/AA
+const cryptogramme: Ref<string> = ref('');
+const numDeVoie: Ref<number | undefined> = ref();
+const nomDeVoie: Ref<string> = ref('');
+const codePostal: Ref<number | undefined> = ref();
+
+// TESTS
+const items: { item: string, price: number }[] = [
+    { item: "Coca", price: 1.99 },
+    { item: "Tacos XL", price: 9.99 },
+    { item: "Nuggets", price: 4.99 },
+    { item: "Glace", price: 3.99 },
 ]
 </script>
 
 <template>
     <HeaderPepeat />
 
-    <UStepper ref="stepper" :items="items" class="w-full">
+    <UStepper ref="stepper" :items="tabs" class="w-full">
         <template #content="{ item }">
             <div class="flex justify-center">
                 <UCard class="w-4/5">
-                    <template v-if="item?.title === 'Adresse'">
-                        <p>Adresse</p>
+                    <!-- Page de récapitulatif de commande -->
+                    <template v-if="item?.title === 'Récapitulatif'">
+                        <p class="text-lg font-semibold">récap</p>
                     </template>
 
-                    <template v-else-if="item?.title === 'Expédition'">
-                        <p>Expédition</p>
+                    <!-- Page de validation d'adresse -->
+                    <template v-else-if="item?.title === 'Adresse'">
+                        <UFormField class="w-full mb-4" label="Numéro de voie">
+                            <UInput v-model="numDeVoie" type="text" class="w-1/2" />
+                        </UFormField>
+                        <UFormField class="w-full mb-4" label="Nom de la voie">
+                            <UInput v-model="nomDeVoie" type="text" class="w-1/2" />
+                        </UFormField>
+                        <UFormField class="w-full mb-4" label="Code postal">
+                            <UInput v-model="codePostal" type="text" class="w-1/2" />
+                        </UFormField>
+                    </template>
+
+                    <!-- Page de validation d'info de paiement -->
+                    <template v-else-if="item?.title === 'Paiement'">
+                        <UFormField class="w-full mb-4" label="Numéro de la carte">
+                            <UInput v-model="numCard" type="password" class="w-1/2" />
+                        </UFormField>
+                        <UFormField class="w-full mb-4" label="Date d'expiration">
+                            <UInput v-model="dateExpiration" type="text" class="w-1/2" />
+                        </UFormField>
+                        <UFormField class="w-full mb-4" label="Cryptogramme visuel">
+                            <UInput v-model="cryptogramme" type="password" class="w-1/2" />
+                        </UFormField>
                     </template>
 
                     <!-- Page de finalisation -->
                     <template v-else-if="item?.title === 'Finalisation'">
-                        <p>Panier</p>
-
-                        <UCard>
-                            <USeparator class="my-4" />
-
-                        </UCard>
-
-                        <!-- Footer pour payer -->
-                        <div class="fixed bottom-0 left-0 w-full bg-gray-50 p-4 shadow-lg flex flex-col items-center">
-                            <p class="text-lg font-semibold text-left w-[60%] mb-4">Total de la commande : x€ </p>
-
-                            <div class="flex flex-col items-center w-[60%] space-y-3">
-                                <UTextarea :rows="8" placeholder="Ajouter une note (ex: pas d'oignon)" class="w-full" />
-
-                                <div class="flex justify-between w-full">
-                                    <UButton class="w-1/2 mr-2" color="primary">Continuer les achats</UButton>
-                                    <UButton class="w-1/2 ml-2" color="primary">Valider la commande</UButton>
-                                </div>
-                            </div>
-                        </div>
+                        <img id="logo" alt="logo" src="../../public/check-finalisation.png" class="w-48 h-48" />
+                        <UButton>Retourner à l'accueil</UButton>
+                        <UButton>Suivre la commande</UButton>
                     </template>
                 </UCard>
             </div>
