@@ -37,6 +37,22 @@ const selectedRestaurant = ref(null);
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
+async function a() {
+    console.log(await $fetch(`http://localhost:3101/restaurants/get`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            retry: 3,
+            retryDelay: 1000,
+        }).then((response) => {
+            if (response.ok) {
+                return response.data;
+            } else {
+                throw new Error('Error while fetching restaurants');
+            }
+        }));
+}
 
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
@@ -51,6 +67,7 @@ onMounted(async () => {
 
 <template>
     <HeaderPepeat/>
+    <UButton @click="a">Fetch restaurants</UButton>
     <div class="flex flex-col p-4 w-full gap-4">
         <p class="text-black text-4xl font-bold">Gérer mes restaurants</p>
 
