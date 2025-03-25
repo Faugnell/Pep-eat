@@ -1,8 +1,16 @@
-# name: Run test
+name: Run test
 
-# on:
-#   push:
-#     branches:
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: my-step
+        run: echo "Hello World"
 
 #   workflow_dispatch:
 
