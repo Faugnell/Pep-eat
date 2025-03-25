@@ -27,8 +27,8 @@ import FooterPepeat from "~/components/common/FooterPepeat";
         <HeaderPepeat/>
         <div class="bg-[url(/bg-homepage.png)] flex-1 w-full bg-cover bg-center">
             <div class="absolute bottom-30 left-20">
-                <div class="flex flex-col gap-5" >
-                    <NuxtImg src="/icons/white.png" width="250"/>
+                <div class="flex flex-col gap-5">
+                    <NuxtImg src="/icons/white.svg" width="355"/>
                     <p class="text-white text-5xl">La pépite du fast-food healthy !</p>
                 </div>
             </div>

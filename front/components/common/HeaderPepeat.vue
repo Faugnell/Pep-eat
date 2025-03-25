@@ -79,17 +79,17 @@ onMounted(async () => {
             }">
             <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
         </UDropdownMenu>
-        <div v-else class="h-[80%] object-contain mx-[1%] items-center">
+        <div v-else class="flex gap-5 mr-3">
           <!-- Inscription -->
           <UModal title="Inscription">
-            <UButton label="Inscription" color="neutral" variant="link" />
+            <UButton label="Inscription" color="neutral" size="md" class="text-xl" variant="link" />
             <template #body>
               <Inscription />
             </template>
           </UModal>
           <!-- Connexion -->
           <UModal title="Se connecter à Pep'Eat">
-              <UButton label="Connexion" color="primary" />
+              <UButton label="Connexion" color="primary" size="md" class="text-xl rounded-full" />
 
               <template #body>
                   <!-- Email -->
