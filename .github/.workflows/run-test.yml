@@ -1,0 +1,19 @@
+name: Run test
+
+on:
+  push:
+    branches:
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  
+
+
+
+
+  # call-workflow-passing-data:
+  #   uses: pepeat/front/.github/workflows/deploy-app.yml@main
