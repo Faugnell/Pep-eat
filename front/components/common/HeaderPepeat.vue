@@ -42,7 +42,7 @@ const itemsHeader = ref([
   ],
 ]);
 
-const isConnected = ref<boolean>(true)
+const isConnected = ref<boolean>(false)
 
 const user = ref({firstName:'Victor'})
 
