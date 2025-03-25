@@ -1,4 +1,7 @@
 <script setup lang='ts'>
+import HeaderPepeat from "~/components/common/HeaderPepeat.vue";
+import FooterPepeat from "~/components/common/FooterPepeat.vue";
+import ArticleTile from "~/components/articles/ArticleTile.vue";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -21,4 +24,11 @@
 </script>
 
 <template>
+    <div class="flex flex-col min-h-screen">
+        <HeaderPepeat/>
+        <div class="flex-grow">
+            <ArticleTile/>
+        </div>
+        <FooterPepeat/>
+    </div>
 </template>
