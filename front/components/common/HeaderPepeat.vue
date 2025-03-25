@@ -82,14 +82,14 @@ onMounted(async () => {
         <div v-else class="flex gap-5 mr-3">
           <!-- Inscription -->
           <UModal title="Inscription">
-            <UButton label="Inscription" color="neutral" size="md" class="text-xl" variant="link" />
+            <UButton label="Inscription" color="neutral" size="md" class="text-xl cursor-pointer" variant="link" />
             <template #body>
               <Inscription />
             </template>
           </UModal>
           <!-- Connexion -->
           <UModal title="Se connecter à Pep'Eat">
-              <UButton label="Connexion" color="primary" size="md" class="text-xl rounded-full" />
+              <UButton label="Connexion" color="primary" size="md" class="text-xl rounded-full cursor-pointer" />
 
               <template #body>
                   <!-- Email -->
