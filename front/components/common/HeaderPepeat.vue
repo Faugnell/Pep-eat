@@ -42,6 +42,11 @@ const itemsHeader = ref([
   ],
 ]);
 
+const router = useRouter()
+const goHome = () => {
+  router.push('/')
+}
+
 const isConnected = ref<boolean>(false)
 
 const user = ref({firstName:'Victor'})
@@ -63,7 +68,7 @@ onMounted(async () => {
 
 <template>
     <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
-        <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg"/>
+        <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg" @click="goHome"/>
         <template v-if="isConnected">
           <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..." class="w-[50vh] min-w-50"/>
         </template>

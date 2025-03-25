@@ -29,12 +29,12 @@ onMounted(async () => {
 <template>
     <div class="flex justify-around items-center w-full bg-white h-[7vh] min-h-10 sticky mb-2">
         <div class="grid grid-cols-3 justify-items-center gap-x-4">
-            <ULink to="">© Droits d'auteur</ULink>
-            <ULink to="">Conditions d’utilisation</ULink>
-            <ULink to="">Politique de confidentialité</ULink>
-            <ULink to="">Propriété du site</ULink>
-            <ULink to="">Conditions générales de vente</ULink>
-            <ULink to="">Cookies</ULink>
+            <NuxtLink to="/legal/copyright">© Droits d'auteur</NuxtLink>
+            <NuxtLink to="/legal/terms">Conditions d’utilisation</NuxtLink>
+            <NuxtLink to="/legal/privacy-policy">Politique de confidentialité</NuxtLink>
+            <NuxtLink to="/legal/ownership">Propriété du site</NuxtLink>
+            <NuxtLink to="/legal/cgv">Conditions générales de vente</NuxtLink>
+            <NuxtLink to="/legal/cookies">Cookies</NuxtLink>
         </div>
         <div class="flex justify-center gap-4">
             <!-- Facebook -->
