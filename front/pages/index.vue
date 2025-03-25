@@ -68,7 +68,7 @@ const connected = ref(true);
     <!--* ==================================        CONNECTED       =================================     *-->
     <!--* ===========================================================================================     *-->
 
-    <div v-else class="flex flex-col px-24">
+    <div v-else class="flex flex-col px-8 md:px-24">
         <!--* ===== Categorie ===== *-->
         <div class="flex w-full justify-center">
             <UCarousel
@@ -81,14 +81,14 @@ const connected = ref(true);
             prev-icon="i-material-symbols-light:arrow-back-ios-new"
             next-icon="i-material-symbols-light:arrow-forward-ios"
 
-            :ui="{ item: 'md:basis-1/10 basis-1/3' }"
+            :ui="{ item: 'lg:basis-1/10 md:basis-1/6 basis-1/3' }"
             class="max-w mx-auto">
                 <NuxtImg :src="categorie" width="320" height="320" class="rounded-sm" />
             </UCarousel>
         </div>
         <!--* ===== Offres ===== *-->
         <div class="flex flex-col w-full">
-            <h2 class="font-semibold text-2xl py-2">Offres prés de chez vous</h2>
+            <h2 class="font-semibold text-2xl py-2">Les plus populaires 😋</h2>
         </div>
         <div class="flex w-full justify-center">
             <UCarousel
@@ -100,13 +100,13 @@ const connected = ref(true);
             prev-icon="i-material-symbols-light:arrow-back-ios-new"
             next-icon="i-material-symbols-light:arrow-forward-ios"
             
-            :ui="{ item: 'md:basis-1/3' }"
-            class="max-w mx-auto">
+            :ui="{ item: 'basis-auto md:basis-1/3' }"
+            class="max-w-9/10 mx-auto">
                 <UCard
                 :ui="{ body: 'p-2 sm:p-2 w-full grow' }"
                 class="mx-2 my-1 drop-shadow-sm rounded-sm flex-col justify-center">
                 <div class="flex justify-center">
-                    <NuxtImg :src="restaurant" fit="cover" sizes="100px md:500px" class="rounded-sm grow" />
+                    <NuxtImg :src="restaurant" fit="cover" class="rounded-sm grow" />
                 </div>
                     <template #footer>
                         <div class="flex">
