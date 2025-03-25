@@ -27,6 +27,10 @@ const itemsHeader = ref([
     {
       label: 'Développeur',
       icon: 'i-ic-baseline-computer'
+    },
+    {
+      label: 'Commercial',
+      icon: 'i-uil-briefcase-alt'
     }
   ],
   [
