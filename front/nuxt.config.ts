@@ -8,7 +8,13 @@ export default defineNuxtConfig({
 			title: 'Pep\'eat',
 			htmlAttrs: {
 				lang: 'fr'
-			}
+			},
+			link: [
+				{
+					rel: 'stylesheet',
+					href: 'https://fonts.googleapis.com/css2?family=Zain&display=swap'
+				}
+			]
 		}
 	},
 	css: [
