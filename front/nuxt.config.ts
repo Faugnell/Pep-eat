@@ -2,16 +2,19 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-	modules: [
-		'@nuxt/icon',
-		'@nuxt/ui'
-	],
+	modules: ['@nuxt/icon', '@nuxt/ui', '@nuxt/image'],
 	app: {
 		head: {
 			title: 'Pep\'eat',
 			htmlAttrs: {
 				lang: 'fr'
-			}
+			},
+			link: [
+				{
+					rel: 'stylesheet',
+					href: 'https://fonts.googleapis.com/css2?family=Zain&display=swap'
+				}
+			]
 		}
 	},
 	css: [
