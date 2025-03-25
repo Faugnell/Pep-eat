@@ -25,19 +25,13 @@ import FooterPepeat from "~/components/common/FooterPepeat";
 <template>
     <div class="flex flex-col min-h-screen">
         <HeaderPepeat/>
-        <div class="bg-fixed-background flex-1 w-full bg-cover bg-center">
+        <div class="bg-[url(/bg-homepage.png)] flex-1 w-full bg-cover bg-center">
             <div class="absolute bottom-30 left-20">
-                <div class="text-white" >
+                <div class="flex flex-col gap-5" >
                     <NuxtImg src="/icons/white.png" width="250"/>
-                    <h2>La pépite du fast-food healthy !</h2>
+                    <p class="text-white text-5xl">La pépite du fast-food healthy !</p>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-.bg-fixed-background {
-  background-image: url('bg-homepage.png');
-}
-</style>
