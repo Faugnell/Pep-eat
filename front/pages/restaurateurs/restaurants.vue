@@ -32,12 +32,6 @@ const {
         })
 );
 
-const items = ref([
-    {
-        label: 'Gérer mes restaurants'
-    },
-]);
-
 const selectedRestaurant = ref(null);
 
 /* -------------------------------------------------------------------------
