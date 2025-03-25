@@ -1,0 +1,27 @@
+name: Run test
+
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: my-step
+        run: echo "Hello World"
+
+#   workflow_dispatch:
+
+# permissions:
+#   contents: read
+
+# jobs:
+  
+
+
+
+
+  # call-workflow-passing-data:
+  #   uses: pepeat/front/.github/workflows/deploy-app.yml@main
