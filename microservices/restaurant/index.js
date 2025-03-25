@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 const port = 3101;
+const { MongoClient } = require('mongodb');
+
+const uri = "mongodb+srv://doadmin:T047v2J9G1CVP8j3@pepeat-mongo-db-ac667bc3.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=pepeat-mongo-db";
+const client = new MongoClient(uri);
 
 app.use(express.json());
 
@@ -17,14 +21,24 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/restaurants/get', (req, res) => {
-    setTimeout(() => {
+app.get('/restaurants/get', async (req, res) => {
+    try {
+        const database = client.db('pepeat');
+        const restaurants = database.collection('restaurants');
+
+        const query = {};
+        const result = await restaurants.find(query).toArray();
+
         res.send({
             code: 200,
             ok: true,
-            message: 'Micro-service gérant les restaurants'
-        });
-    }, 1000);
+            message: 'Liste des restaurants',
+            data: result
+        })
+    } catch (error) {
+        console.error(error);
+        // TODO: Gérer les erreurs dans les logs
+    }
 });
 
 app.listen(port, () => {
