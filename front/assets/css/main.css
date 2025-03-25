@@ -1,5 +1,5 @@
-@import "tailwindcss" theme(static);
 @import url('https://fonts.googleapis.com/css2?family=Zain&display=swap');
+@import "tailwindcss" theme(static);
 @import "@nuxt/ui";
 @theme static {
     --color-trueviolet-500: oklch(0.64 0.16 291);

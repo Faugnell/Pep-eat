@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 			htmlAttrs: {
 				lang: 'fr'
 			},
+			viewport: 'width=device-width, initial-scale=1.0',
 			link: [
 				{
 					rel: 'stylesheet',
