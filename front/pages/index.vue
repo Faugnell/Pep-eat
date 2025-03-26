@@ -1,6 +1,7 @@
 <script setup>
 import HeaderPepeat from "~/components/common/HeaderPepeat";
 import FooterPepeat from "~/components/common/FooterPepeat";
+import RestaurantTile from "~/components/articles/RestaurantTile.vue";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -68,87 +69,36 @@ const connected = ref(true);
     <!--* ==================================        CONNECTED       =================================     *-->
     <!--* ===========================================================================================     *-->
 
-    <div v-else class="flex flex-col px-8 md:px-24">
+    <div v-else class="flex flex-col px-8">
         <!--* ===== Categorie ===== *-->
         <div class="flex w-full justify-center">
-            <UCarousel
-            v-slot="{ item: categorie }"
-            :items="categories"
-
-            arrows
-            :next="{ variant: 'ghost' }"
-            :prev="{ variant: 'ghost' }"
-            prev-icon="i-material-symbols-light:arrow-back-ios-new"
-            next-icon="i-material-symbols-light:arrow-forward-ios"
-
-            :ui="{ item: 'lg:basis-1/10 md:basis-1/6 basis-1/3' }"
-            class="max-w mx-auto">
+            <UCarousel v-slot="{ item: categorie }" :items="categories" arrows :next="{ variant: 'ghost' }"
+                :prev="{ variant: 'ghost' }" prev-icon="i-material-symbols-light:arrow-back-ios-new"
+                next-icon="i-material-symbols-light:arrow-forward-ios"
+                :ui="{ item: 'lg:basis-1/10 md:basis-1/6 basis-1/3' }" class="max-w-9/10 mx-auto">
                 <NuxtImg :src="categorie" width="320" height="320" class="rounded-sm" />
             </UCarousel>
         </div>
-        <!--* ===== Offres ===== *-->
+        <!--* ===== Populaires ===== *-->
         <div class="flex flex-col w-full">
             <h2 class="font-semibold text-2xl py-2">Les plus populaires 😋</h2>
         </div>
         <div class="flex w-full justify-center">
-            <UCarousel
-            v-slot="{ item: restaurant }"
-            :items="restaurants"
-
-            arrows :next="{ variant: 'ghost' }"
-            :prev="{ variant: 'ghost' }"
-            prev-icon="i-material-symbols-light:arrow-back-ios-new"
-            next-icon="i-material-symbols-light:arrow-forward-ios"
-            
-            :ui="{ item: 'basis-auto md:basis-1/3' }"
-            class="max-w-9/10 mx-auto">
-                <UCard
-                :ui="{ body: 'p-2 sm:p-2 w-full grow' }"
-                class="mx-2 my-1 drop-shadow-sm rounded-sm flex-col justify-center">
-                <div class="flex justify-center">
-                    <NuxtImg :src="restaurant" fit="cover" class="rounded-sm grow" />
-                </div>
-                    <template #footer>
-                        <div class="flex">
-                            <h3>Miam miam</h3>
-                            <div class="flex ml-auto">
-                                <div class="flex flex-col justify-center">
-                                    <h3>4.1</h3>
-                                </div>
-                                <div class="flex flex-col justify-center">
-                                    <UIcon name="i-material-symbols-light:star" size="25" />
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </UCard>
+            <UCarousel v-slot="{ item: restaurant }" :items="restaurants" arrows :next="{ variant: 'ghost' }"
+                :prev="{ variant: 'ghost' }" prev-icon="i-material-symbols-light:arrow-back-ios-new"
+                next-icon="i-material-symbols-light:arrow-forward-ios" :ui="{ item: 'basis-auto md:basis-1/3' }"
+                class="max-w-9/10 mx-auto">
+                <RestaurantTile restaurant-name="Miam miam" :image-url="restaurant" rating="4.5" />
             </UCarousel>
         </div>
+        <!--* ===== Proche ===== *-->
         <div class="flex flex-col w-full">
-            <h2 class="font-semibold text-2xl py-2">Les plus populaires</h2>
+            <h2 class="font-semibold text-2xl py-2">Proches de chez vous 🚀​</h2>
         </div>
-        <div class="flex w-full justify-center">
-            <div class="flex flex-wrap px-2 py-1">
-                <UCard
-                v-for="restaurant in restaurants"
-                :ui="{ body: 'p-0 sm:p-2' }"
-                class="drop-shadow-sm rounded-sm basis-1 md:basis-1/3">
-                    <NuxtImg :src="restaurant" fit="cover" width="500" height="325" class="rounded-sm" />
-                    <div class="flex w-full">
-                        <h3>Miam miam</h3>
-                        <div class="flex ml-auto">
-                            <div class="flex flex-col justify-center">
-                                <h3>4.1</h3>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <UIcon name="i-material-symbols-light:star" size="25" />
-                            </div>
-                        </div>
-                    </div>
-                </UCard>
-            </div>
+        <div class="w-full grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 px-2 py-1">
+            <RestaurantTile v-for="restaurant in restaurants" restaurant-name="Miam miam" :image-url="restaurant" rating="4.5" />
         </div>
-        <FooterPepeat/>
+        <FooterPepeat />
     </div>
 </template>
 
