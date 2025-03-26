@@ -28,7 +28,7 @@ async function fetchRestaurants() {
             icon: 'i-heroicons-check-circle'
         });
 
-        restaurants.value = await response.json();
+        restaurants.value = response.data;
     } else {
         useToast().add({
             title: 'Error while fetching restaurants !',
