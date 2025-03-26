@@ -27,6 +27,10 @@ const itemsHeader = ref([
     {
       label: 'Développeur',
       icon: 'i-ic-baseline-computer'
+    },
+    {
+      label: 'Commercial',
+      icon: 'i-uil-briefcase-alt'
     }
   ],
   [
@@ -38,7 +42,12 @@ const itemsHeader = ref([
   ],
 ]);
 
-const isConnected = ref<boolean>(true)
+const router = useRouter()
+const goHome = () => {
+  router.push('/')
+}
+
+const isConnected = ref<boolean>(false)
 
 const user = ref({firstName:'Victor'})
 
@@ -59,7 +68,7 @@ onMounted(async () => {
 
 <template>
     <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
-        <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg"/>
+        <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg" @click="goHome"/>
         <template v-if="isConnected">
           <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..." class="w-[50vh] min-w-50"/>
         </template>
@@ -70,17 +79,17 @@ onMounted(async () => {
             }">
             <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
         </UDropdownMenu>
-        <div v-else class="h-[80%] object-contain mx-[1%] items-center">
+        <div v-else class="flex gap-5 mr-3">
           <!-- Inscription -->
           <UModal title="Inscription">
-            <UButton label="Inscription" color="neutral" variant="link" />
+            <UButton label="Inscription" color="neutral" size="md" class="text-xl" variant="link" />
             <template #body>
               <Inscription />
             </template>
           </UModal>
           <!-- Connexion -->
           <UModal title="Se connecter à Pep'Eat">
-              <UButton label="Connexion" color="primary" />
+              <UButton label="Connexion" color="primary" size="md" class="text-xl rounded-full" />
 
               <template #body>
                   <!-- Email -->
