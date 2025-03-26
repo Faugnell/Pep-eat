@@ -36,19 +36,19 @@ function findAll() {
     
 }
 
-function find(id) {
+function find(id:number) {
     
 }
 
-function create(newCommand) {
+function create(newCommand:any) {
 
 }
 
-function update(id, updatedCommand) {
+function update(id:number, updatedCommand:any) {
 
 }
 
-function remove(id) {
+function remove(id:any) {
 
 }
 
