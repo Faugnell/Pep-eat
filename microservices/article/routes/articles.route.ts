@@ -5,6 +5,9 @@ const articlesController = require("../controllers/articles.controller");
  
 // Tous les articles
 router.get("/", articlesController.list);
+
+// Articles par restaurant
+router.get("/restaurant/:restaurantId", articlesController.listByRestaurant);
  
 // Détails d'un article
 router.get("/:id", articlesController.read);

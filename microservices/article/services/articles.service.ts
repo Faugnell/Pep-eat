@@ -5,10 +5,11 @@ export async function findAll() {
   return await Article.find();
 }
 
-export async function findArticleRestaurant() {
-  return await Article.find();
+export async function findByRestaurant(restaurantId: string) {
+  return await Article.find({ restaurant_id: restaurantId });
 }
 
 module.exports = {
-    findAll
+    findAll,
+    findByRestaurant
 };
