@@ -20,30 +20,38 @@ async function find(id:string) {
   }
 }
 
-function create(newCommand:any) {
+async function create(newCommand:any) {
  
   const newCommande = new Commande({
-    "_id": {
-      "$oid": "67e31ff4224030298c111dad"
-    },
-    "user_id": "6601143d8f1b4c001f23a1b2",
-    "restaurant_id": "6601144e8f1b4c001f23a1b3",
-    "plat_ids": [
-      "6601145f8f1b4c001f23a1b4",
-      "6601146d8f1b4c001f23a1b5"
-    ],
-    "date": "2024-03-25T12:30:00Z",
-    "status": "en cours",
-    "note": "Livraison rapide demandée"
+    "user_id": newCommand.user_id,
+    "restaurant_id": newCommand.restaurant_id,
+    "plat_ids": newCommand.plat_ids,
+    "date": newCommand.date,
+    "status": newCommand.status,
+    "note": newCommand.note
   })
+  try {
+    let output = await newCommande.save()
+    return output
+  } catch (err){
+    console.log("Erreur lors de la création de la commande:", err)
+    return err
+  }
+  
 }
 
 function update(id:number, updatedCommand:any) {
 
 }
 
-function remove(id:any) {
-
+async function remove(id:any) {
+  try {
+    const commandes = await Commande.deleteOne({_id: id});
+    return commandes;
+  } catch (err) {
+    console.log("Erreur lors de la récupération des commandes :", err);
+    return err
+  }
 }
 
 module.exports = {
