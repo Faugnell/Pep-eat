@@ -8,15 +8,16 @@ const {
 } = defineProps({
   imageUrl: {
     type: String,
-    required: true,
+    required: false,
+    default: 'https://via.placeholder.com/800x500',
   },
   badgeText: {
     type: String,
-    default: 'A',
+    default: 'N/A',
   },
   badgeClass: {
     type: String,
-    default: 'bg-green-200 text-green-800',
+    default: 'bg-grey-200',
   },
   title: {
     type: String,

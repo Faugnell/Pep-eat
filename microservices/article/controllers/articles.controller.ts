@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-const articlesService = require('../services/articles');
+const articlesService = require('../services/articles.service');
 
 export async function list(req: Request, res: Response) {
   try {

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 const express = require('express');
 const router = express.Router();
 
-const articlesRoutes = require("./articles");
+const articlesRoutes = require("./articles.route");
 
 router.use("/articles", articlesRoutes);
 
