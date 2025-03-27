@@ -8,7 +8,10 @@ router.get("/", articlesController.list);
 
 // Articles par restaurant
 router.get("/restaurant/:restaurantId", articlesController.listByRestaurant);
- 
+
+// Articles par catégorie
+router.get("/:category", articlesController.listByCategory);
+
 // Détails d'un article
 router.get("/:id", articlesController.read);
  

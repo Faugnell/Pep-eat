@@ -19,10 +19,15 @@ interface Article {
 
 const articles = ref<Article[]>([])
 const restaurantId = ref("67e284a2224030298c111d98")
+const category = ref("Pizza")
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
+function clearArticles() {
+  articles.value = []
+}
+
 async function fetchArticles() {
   try {
     const response = await $fetch<Article[]>('http://localhost:3103/articles/')
@@ -62,6 +67,26 @@ async function fetchArticlesByRestaurant() {
     console.error('Error while fetching articles by restaurant', error)
   }
 }
+
+async function fetchArticlesByCategory() {
+  try {
+    const response = await $fetch<Article[]>(`http://localhost:3103/articles/${category.value}`)
+    articles.value = response
+
+    useToast().add({
+      title: 'Articles de la catégorie chargés !',
+      color: 'primary',
+      icon: 'i-heroicons-building-storefront',
+    })
+  } catch (error) {
+    useToast().add({
+      title: 'Erreur lors du chargement des articles de la catégorie !',
+      color: 'error',
+      icon: 'i-heroicons-x-mark',
+    })
+    console.error('Error while fetching articles by category', error)
+  }
+}
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
 ------------------------------------------------------------------------- */
@@ -78,6 +103,8 @@ async function fetchArticlesByRestaurant() {
         <div class="flex gap-4 mb-4">
           <UButton @click="fetchArticles">Tous les articles</UButton>
           <UButton @click="fetchArticlesByRestaurant">Articles du restaurant</UButton>
+          <UButton @click="fetchArticlesByCategory">Articles de la categorie</UButton>
+          <UButton @click="clearArticles">Vider la page</UButton>
         </div>
         <div class="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           <ArticleTile
@@ -86,7 +113,7 @@ async function fetchArticlesByRestaurant() {
             :title="article.name"
             :nutriscore="article.nutriscore"
             :price="article.price.toFixed(2)"
-            :badgeText="article.category"
+            :badgeText="article.nutriscore"
           />
         </div>
       </div>

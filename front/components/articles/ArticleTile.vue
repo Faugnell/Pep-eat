@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 const {
   imageUrl,
-  nutriscore,
+  badgeText,
   title,
   price,
 } = defineProps({
@@ -10,7 +10,7 @@ const {
     required: false,
     default: 'https://via.placeholder.com/800x500',
   },
-  nutriscore: {
+  badgeText: {
     type: String,
     default: '',
   },
@@ -34,13 +34,13 @@ const {
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-// Texte du badge (valide A-E ou N/A)
+// Nutriscore ou N/A
 const computedBadgeText = computed(() => {
   const validScores = ['A', 'B', 'C', 'D', 'E']
-  return validScores.includes(nutriscore?.toUpperCase()) ? nutriscore.toUpperCase() : 'N/A'
+  return validScores.includes(badgeText?.toUpperCase()) ? badgeText.toUpperCase() : 'N/A'
 })
 
-// Couleur du badge en fonction du nutriscore
+// Classe dynamique
 const computedBadgeClass = computed(() => {
   switch (computedBadgeText.value) {
     case 'A':
