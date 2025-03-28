@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { isValidMongoId } from '../utils/functions'
+import mongoose from 'mongoose';
 
 const commandesService = require('../services/commandes');
 
@@ -8,7 +9,16 @@ const commandesService = require('../services/commandes');
 // * ==================================================
 
 async function list(req: Request, res: Response) {
-  const commandes = await commandesService.findAll();
+  let filters = req.body !== undefined ? req.body : {}
+
+  Object.keys(filters).forEach(filter => {
+    if(filter.includes("id")){
+      const filterValueAsId =  new mongoose.Types.ObjectId(filters[filter])
+      filters = {...filters, [filter]: filterValueAsId}
+    }
+  });
+
+  const commandes = await commandesService.findAll(filters);
   res.status(200).json({
     code: 200,
     ok: true,

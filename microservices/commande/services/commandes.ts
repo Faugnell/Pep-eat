@@ -1,13 +1,12 @@
 import { commandeType } from "../models/commandes";
-
 const Commande = require("../models/commandes")
 
 // * ==================================================
 // * ==================   READ ALL   ==================
 // * ==================================================
-async function findAll() {
+async function findAll(filter:Object) {
   try {
-    const commandes:[commandeType] = await Commande.find({});
+    const commandes:[commandeType] = await Commande.find(filter);
     return commandes;
   } catch (err) {
     console.log("Erreur lors de la récupération des commandes :", err);
@@ -69,7 +68,7 @@ async function update(id:string, updatedCommand:commandeType) {
 // * ===================   DELETE   ===================
 // * ==================================================
 
-async function remove(id:any) {
+async function remove(id:string) {
   try {
     const commandes = await Commande.deleteOne({_id: id});
     return commandes;
