@@ -18,10 +18,11 @@ async function findAll() {
 // * ==================================================
 // * ====================   READ   ====================
 // * ==================================================
+
 async function find(id:string) {
   try {
-    const commandes:commandeType = await Commande.find({_id: id});
-    return commandes;
+    const commande:commandeType = await Commande.findOne({_id: id});
+    return commande;
   } catch (err) {
     console.log("Erreur lors de la récupération des commandes :", err);
     return err
@@ -31,6 +32,7 @@ async function find(id:string) {
 // * ==================================================
 // * ===================   CREATE   ===================
 // * ==================================================
+
 async function create(newCommand:commandeType) {
   const newCommande = new Commande({
     "user_id": newCommand.user_id,
@@ -52,6 +54,7 @@ async function create(newCommand:commandeType) {
 // * ==================================================
 // * ===================   UPDATE   ===================
 // * ==================================================
+
 async function update(id:string, updatedCommand:commandeType) {
   try {
     const docs = await Commande.findOneAndUpdate({_id:id}, updatedCommand)
@@ -65,6 +68,7 @@ async function update(id:string, updatedCommand:commandeType) {
 // * ==================================================
 // * ===================   DELETE   ===================
 // * ==================================================
+
 async function remove(id:any) {
   try {
     const commandes = await Commande.deleteOne({_id: id});
