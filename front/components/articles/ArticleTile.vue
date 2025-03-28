@@ -26,7 +26,6 @@ const {
   },
 })
 
-
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -77,10 +76,12 @@ onMounted(async () => {
     class="drop-shadow-[0_1px_1px_rgba(0,0,0,0.20)] w-[50vh] rounded-none"
     :ui="{ body: 'p-0 sm:p-6' }"
   >
-    <NuxtImg src="https://picsum.photos/800/500?random=1" fit="cover" />
+  <div class="flex justify-center">
+    <NuxtImg class="grow" src="https://picsum.photos/800/500?random=1" fit="cover" />
+  </div>
     <template #footer>
-      <div class="flex flex-row">
-        <div class="flex basis-5/6 gap-2 items-center">
+      <div class="flex gap-2 flex-row">
+        <div class="flex basis-5/6 items-center">
           <UBadge class="font-bold rounded-full" :class="computedBadgeClass">
             {{ computedBadgeText }}
           </UBadge>
