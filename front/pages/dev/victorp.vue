@@ -29,6 +29,48 @@ const nutriscore = ref('')
 const available = ref(true)
 const isSubmitting = ref(false)
 
+const nutriscoreOptions = ref([
+  { label: 'A', value: 'A' },
+  { label: 'B', value: 'B' },
+  { label: 'C', value: 'C' },
+  { label: 'D', value: 'D' },
+  { label: 'E', value: 'E' }
+])
+
+const foodCategoryOptions = ref([
+  { label: 'Alcool', value: 'alcohol' },
+  { label: 'Américain', value: 'american' },
+  { label: 'Asiatique', value: 'asian' },
+  { label: 'Barbecue', value: 'bbq' },
+  { label: 'Bubble Tea', value: 'bubble_tea' },
+  { label: 'Burgers', value: 'burgers' },
+  { label: 'Chinois', value: 'chinese' },
+  { label: 'Comfort Food', value: 'comfort' },
+  { label: 'Snacking', value: 'convenience' },
+  { label: 'Fast food', value: 'fast_food' },
+  { label: 'Français', value: 'french' },
+  { label: 'Épicerie', value: 'grocery' },
+  { label: 'Halal', value: 'halal' },
+  { label: 'Hawaïen', value: 'hawaiian' },
+  { label: 'Healthy', value: 'healthy' },
+  { label: 'Glaces', value: 'ice_cream' },
+  { label: 'Indien', value: 'indian' },
+  { label: 'Italien', value: 'italian' },
+  { label: 'Japonais', value: 'japanese' },
+  { label: 'Coréen', value: 'korean' },
+  { label: 'Mexicain', value: 'mexican' },
+  { label: 'Pizza', value: 'pizza' },
+  { label: 'Plat à emporter', value: 'takeout' },
+  { label: 'Poké', value: 'poke' },
+  { label: 'Sandwich', value: 'sandwich' },
+  { label: 'Fruits de mer', value: 'seafood' },
+  { label: 'Spécialités', value: 'specialty' },
+  { label: 'Street Food', value: 'street_food' },
+  { label: 'Sushi', value: 'sushi' },
+  { label: 'Thaï', value: 'thai' },
+  { label: 'Vietnamien', value: 'vietnamese' },
+  { label: 'Poulet frit', value: 'wings' },
+])
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
@@ -152,7 +194,7 @@ async function handleSubmit() {
 <template>
     <div class="flex flex-col min-h-screen">
       <HeaderPepeat />
-      <div class="flex-grow p-6">
+      <div class="grid flex-grow p-6 justify-center">
         <!-- Formulaire -->
         <div class="p-6 bg-gray-50 border rounded mb-6 max-w-xl">
           <h1 class="text-xl font-semibold mb-4">Créer un article</h1>
@@ -163,13 +205,13 @@ async function handleSubmit() {
             <USelect
               v-model="category"
               label="Catégorie"
-              :option="['Pizza', 'Burger', 'Salade', 'Dessert', 'Boisson']"
+              :items="foodCategoryOptions"
               placeholder="Choisir une catégorie"
               required />
             <USelect
               v-model="nutriscore"
               label="Nutri-Score"
-              :options="['A', 'B', 'C', 'D', 'E']"
+              :items="nutriscoreOptions"
               placeholder="Choisir un score"
             />
             <div class="flex flex-col gap-2">
