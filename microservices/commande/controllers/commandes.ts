@@ -30,7 +30,9 @@ async function create(req: Request, res: Response) {
   res.status(200).json({ message: newCommande._id })
 }
 
-function update(req: Request, res: Response) {
+async function update(req: Request, res: Response) {
+  const updatedCommande = await commandesService.update(req.params.id, req.body)
+  res.status(200).json({message: updatedCommande})
 }
 
 async function remove(req: Request, res: Response) {
