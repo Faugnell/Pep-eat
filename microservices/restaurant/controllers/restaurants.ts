@@ -35,6 +35,11 @@ export async function find(req:Request, res:Response) {
  * @throws {Error} - Erreur lors de la création du restaurant
  */
 export async function create(req:Request, res:Response) {
+	// TODO: Supprimer la ligne ci-dessous
+	if (req.body.id_proprietaire === undefined) {
+		req.body.id_proprietaire = '660c1a1e2f5a5b1a4b8e4c21';
+	}
+
 	try {
 		const restaurant = await Restaurant.findOne({ siret: req.body.siret });
 
