@@ -62,8 +62,22 @@ function validate() {
     return errors;
 }
 
+function handleImageUpdate(event: Event) {
+    const fileReader = new FileReader();
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (!file) return;
+
+    fileReader.onloadend = () => {
+        selectedRestaurant.value.updatedImage = fileReader.result as string;
+        selectedRestaurant.value.image = fileReader.result as string; // Mettre à jour l'image du restaurant
+    };
+
+    /* Lire le fichier en tant que Data URL (base64) */
+    fileReader.readAsDataURL(file);
+}
+
 async function updateRestaurant() {
-    console.log('updateRestaurant called');
 
     if (!selectedRestaurant.value) return;
 
@@ -78,10 +92,32 @@ async function updateRestaurant() {
         sponsorise: selectedRestaurant.value.sponsorise
     };
 
-    console.log(body);
-
     if (selectedRestaurant.value._id) {
         /* Mise à jour d'un restaurant existant */
+
+        /* Si l'image du restaurant a été modifiée, on l'envoie au serveur */
+        if (selectedRestaurant.value.updatedImage) {
+            const formData = new FormData();
+            formData.append('buffer', selectedRestaurant.value.image);
+
+            const imageResponse = await $fetch(`http://localhost:3107/medias/${selectedRestaurant.value.id_media ?? ''}`, {
+                method: selectedRestaurant.value.id_media ? 'PUT' : 'POST', // PUT si l'image existe déjà, sinon POST
+                body: formData
+            });
+
+            if (imageResponse.ok) {
+                selectedRestaurant.value.id_media = imageResponse.data._id; // Mettre à jour l'ID de l'image dans le restaurant
+                body.id_media = imageResponse.data._id; // Ajouter l'ID de l'image au corps de la requête
+                delete selectedRestaurant.value.updatedImage; // Supprimer le champ updatedImage du restaurant
+            } else {
+                useToast().add({
+                    title: 'Erreur',
+                    description: 'Une erreur est survenue lors de la mise à jour de l\'image.',
+                    color: 'error'
+                });
+            }
+        }
+
         const response = await $fetch(`http://localhost:3101/restaurants/${selectedRestaurant.value._id}`, {
             method: 'PUT',
             body,
@@ -137,6 +173,9 @@ async function updateRestaurant() {
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
 ------------------------------------------------------------------------- */
+watch(selectedRestaurant, (newValue) => {
+    console.log(newValue, newValue.image);
+});
 
 /* -------------------------------------------------------------------------
 ---------------------------- LIFECYCLE HOOKS -------------------------------
@@ -150,13 +189,13 @@ async function updateRestaurant() {
             <template #restaurant="{ item }">
                 <div class="flex flex-row justify-between items-center mb-4">
                     <p class="text-black text-4xl font-bold mb-2">Gérer mes restaurants</p>
-                    <UButton color="primary" variant="outline"  icon="i-material-symbols-add-2-rounded" :ui="{base: 'text-lg'}" @click="selectedRestaurant = {}">Ajouter un restaurant</UButton>
+                    <UButton color="primary" variant="outline"  icon="i-material-symbols-add-2-rounded" :ui="{base: 'text-lg'}" @click="selectedRestaurant = {insertion: true}">Ajouter un restaurant</UButton>
                 </div>
 
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col gap-4 w-full">
                         <div v-for="restaurant in listeRestaurants" :key="restaurant.nom">
-                            <Restaurants :id="restaurant._id" :nom="restaurant.nom" :adresse="restaurant.adresse" @click="selectedRestaurant = restaurant"/>
+                            <Restaurants :id="restaurant._id" :nom="restaurant.nom" :adresse="restaurant.adresse" :image="restaurant.image" @click="selectedRestaurant = restaurant"/>
                         </div>
                     </div>
                     <div v-if="selectedRestaurant" class="w-3/5">
@@ -168,8 +207,8 @@ async function updateRestaurant() {
                                 </div>
                             </template>
 
-                            <div class="grid grid-cols-2 gap-4">
-                                <UForm class="flex flex-col gap-2 items-center" :validate="validate">
+                            <UForm class="grid grid-cols-2 gap-4" :validate="validate" enctype="multipart/form-data">
+                                <div class="flex flex-col gap-2 items-center">
                                     <UFormField label="Nom" class="w-full" name="nom">
                                         <UInput v-model="selectedRestaurant.nom" type="text" class="w-full"/>
                                     </UFormField>
@@ -195,12 +234,17 @@ async function updateRestaurant() {
                                         <UCheckbox v-model="selectedRestaurant.sponsorise" class="w-full"/>
                                     </UFormField>
                                     <UButton color="primary" type="submit" @click="updateRestaurant">Enregistrer</UButton>
-                                </UForm>
-                                <div class="flex flex-col gap-4 items-center">
-                                    <NuxtImg :src="`/restaurants/thumbnails/${selectedRestaurant._id}.png`" fit="cover" class="aspect-square rounded-md"/>
-                                    <UButton color="neutral" variant="outline" icon="i-heroicons-camera">Modifier l'image</UButton>
                                 </div>
-                            </div>
+                                <div v-if="!selectedRestaurant?.insertion" class="flex flex-col gap-4 items-center">
+                                    <NuxtImg :src="`data:image/png;base64,${selectedRestaurant.image}`" fit="cover" class="aspect-square rounded-md"/>
+                                    <img :src="`data:image/png;base64,${selectedRestaurant.image}`" alt="restaurant" class="aspect-square rounded-md"/>
+                                    <UInput type="file" id="image" name="image" accept="image/*" @change="handleImageUpdate" label="test"/>
+                                    <label for="image" class="cursor-pointer">
+                                        <UButton color="primary" variant="outline" icon="i-heroicons-camera">Modifier l'image</UButton>
+                                    </label>
+                                </div>
+                            </UForm>
+                            <pre class="scroll-auto">{{ selectedRestaurant.image }}</pre>
                         </UCard>
                     </div>
                 </div>
