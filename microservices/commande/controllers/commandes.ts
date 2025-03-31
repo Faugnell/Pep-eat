@@ -73,15 +73,25 @@ async function create(req: Request, res: Response) {
     "restaurant_id": req.body.restaurant_id,
     "plat_ids": req.body.plat_ids,
     "date": req.body.date,
+    "price": req.body.price,
+    "promotions": req.body.promotions,
     "status": req.body.status,
     "note": req.body.note
   })
-  res.status(200).json({
-    code: 200,
-    ok: true,
-    message: `${newCommande._id} créée avec succés !`,
-    data: newCommande,
-  });
+  if(newCommande._id){
+    res.status(200).json({
+      code: 200,
+      ok: true,
+      message: `${newCommande._id} créée avec succés !`,
+      data: newCommande,
+    });
+  } else {
+    res.status(400).json({
+      code: 400,
+      ok: false,
+      error: newCommande.errors,
+    });
+  }
 }
 
 // * ==================================================
