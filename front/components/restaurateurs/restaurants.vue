@@ -43,7 +43,7 @@ onMounted(async () => {
 
 <template>
     <div class="flex flex-row shadow-[0_0_4px_rgba(0,0,0,0.2)] gap-3">
-        <NuxtImg :src="`/restaurants/thumbnails/${id}.png`" fit="cover" alt="restaurant" class="w-20 h-20 rounded-md"/>
+        <NuxtImg :src="`/restaurants/thumbnails/${id}.png`" fit="cover" alt="restaurant" class="w-20 h-20 rounded-lg"/>
         <div class="flex flex-col gap-1">
             <p class="font-bold text-2xl">{{ nom }}</p>
             <p>{{ adresse }}</p>
