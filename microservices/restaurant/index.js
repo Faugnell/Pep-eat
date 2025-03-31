@@ -1,10 +1,13 @@
-const express = require('express');
-const app = express();
-const port = 3101;
-const { MongoClient } = require('mongodb');
+import 'dotenv/config'
+import mongoose from 'mongoose';
+import express from 'express';
 
-const uri = "mongodb+srv://doadmin:T047v2J9G1CVP8j3@pepeat-mongo-db-ac667bc3.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=pepeat-mongo-db";
-const client = new MongoClient(uri);
+const router = express.Router();
+const app = express();
+
+import {
+    getRestaurants
+} from './controllers/restaurant.js';
 
 app.use(express.json());
 
@@ -21,26 +24,21 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/restaurants/get', async (req, res) => {
+app.get('/', getRestaurants);
+
+async function main() {
+    // Attendre la connexion à la base de données avant de lancer le serveur
     try {
-        const database = client.db('pepeat');
-        const restaurants = database.collection('restaurants');
-
-        const query = {};
-        const result = await restaurants.find(query).toArray();
-
-        res.send({
-            code: 200,
-            ok: true,
-            message: 'Liste des restaurants',
-            data: result
-        })
+        await mongoose.connect(process.env.MONGO_CONNECTION_STRING);
     } catch (error) {
+        console.error('Erreur lors de la connexion à la base de données');
         console.error(error);
-        // TODO: Gérer les erreurs dans les logs
+        process.exit(1);
     }
-});
 
-app.listen(port, () => {
-    console.log(`Lancement de du micro-service gérant les restaurants sur le port : ${port}`);
-});
+    app.listen(process.env.PORT, () => {
+        console.log(`Lancement de du micro-service gérant les restaurants sur le port : ${process.env.PORT}`);
+    });
+}
+
+main();
