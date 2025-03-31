@@ -1,43 +1,75 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { ApiResponse, FormFieldRegistration } from './types';
 
-type FormField = {
-    label: string;
-    model: string;
-    type: string;
-    placeholder: string;
-};
-
-const lastName: Ref<string> = ref('');
-const firstName: Ref<string> = ref('');
+const last_name: Ref<string> = ref('');
+const first_name: Ref<string> = ref('');
+const role: Ref<string> = ref('');
+const city: Ref<string> = ref('');
+const postal_code: Ref<string> = ref('');
 const address: Ref<string> = ref('');
 const email: Ref<string> = ref('');
+const phone: Ref<string> = ref('');
 const password: Ref<string> = ref('');
-const role: Ref<string> = ref('');
-const referralCode: Ref<string> = ref('');
+const referral_link: Ref<string> = ref('');
 
-const roleOptions: string[] = ['Client', 'Livreur', 'Restaurateur'];
-const isSubmitted: Ref<boolean> = ref(false);
+const roleOptions: string[] = ['client', 'livreur', 'restaurateur'];
 
-// Liste des champs du formulaire avec leurs propriétés
-const formFields: Ref<FormField[]> = ref([
-    { label: 'Nom', model: lastName, type: 'text', placeholder: 'Votre nom' },
-    { label: 'Prénom', model: firstName, type: 'text', placeholder: 'Votre prénom' },
+const formFields: Ref<FormFieldRegistration[]> = ref([
+    { label: 'Nom', model: last_name, type: 'text', placeholder: 'Votre nom' },
+    { label: 'Prénom', model: first_name, type: 'text', placeholder: 'Votre prénom' },
+    { label: 'Ville', model: city, type: 'text', placeholder: 'Votre ville' },
+    { label: 'Code postal', model: postal_code, type: 'text', placeholder: 'Votre code postal' },
     { label: 'Adresse de domicile', model: address, type: 'text', placeholder: '1 rue de Paris' },
     { label: 'Adresse email', model: email, type: 'email', placeholder: 'example.ex@example.fr' },
+    { label: 'Téléphone', model: phone, type: 'text', placeholder: '+33 6 66 66 66 66' },
     { label: 'Mot de passe', model: password, type: 'password', placeholder: 'Mot de passe' },
 ]);
 
-// Validation de l'inscription si tous les champs obligatoires sont remplis
-const handleRegister = (): void => {
+const isSubmitted: Ref<boolean> = ref(false);
+const errorMessage = ref<string | null>(null);
+
+const handleSubmit = async (): Promise<void> => {
     isSubmitted.value = true;
+    errorMessage.value = null;
 
-    if (!lastName.value || !firstName.value || !address.value || !email.value || !password.value || !role.value) return;
+    // Vérifie que tous les champs obligatoires sont remplis
+    if (!last_name.value || !first_name.value || !role.value || !city.value || !postal_code.value || !address.value || !email.value || !phone.value || !password.value) {
+        return;
+    }
 
-    console.log(
-        'Inscription : ',
-        `Nom: ${lastName.value}, Prénom: ${firstName.value}, Adresse: ${address.value}, Email: ${email.value}, Mot de passe: ${password.value}, Rôle: ${role.value}, Code de parrainage: ${referralCode.value || 'Aucun'}`
-    );
+    const userData = {
+        last_name: last_name.value,
+        first_name: first_name.value,
+        role: role.value,
+        city: city.value,
+        postal_code: postal_code.value,
+        address: address.value,
+        email: email.value,
+        phone: phone.value,
+        password: password.value,
+        referral_link: referral_link.value || null
+    };
+
+    try {
+        const response = await fetch("http://localhost:3104/registration", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData)
+        });
+
+        const data: ApiResponse = await response.json();
+
+        if (!response.ok) {
+            errorMessage.value = data.message;
+            return;
+        }
+
+        // Ferme la modale et actualise la page
+        window.location.reload();
+    } catch (error) {
+        errorMessage.value = "Erreur lors de la connexion.";
+    }
 };
 </script>
 
@@ -65,8 +97,20 @@ const handleRegister = (): void => {
         </template>
     </UFormField>
 
+    <!-- Ville et code postal sur la même ligne -->
+    <div class="flex space-x-4 mb-4">
+        <div v-for="(field, index) in formFields.slice(2, 4)" :key="index" class="w-1/2">
+            <UFormField :label="field.label" required>
+                <UInput v-model="field.model" :type="field.type" :placeholder="field.placeholder" class="w-full" />
+                <template #hint>
+                    <p v-if="isSubmitted && !field.model" class="text-red-500 text-sm">Champ obligatoire</p>
+                </template>
+            </UFormField>
+        </div>
+    </div>
+
     <!-- Champs restants -->
-    <div v-for="(field, index) in formFields.slice(2)" :key="index" class="w-full mb-4">
+    <div v-for="(field, index) in formFields.slice(4)" :key="index" class="w-full mb-4">
         <UFormField :label="field.label" required>
             <UInput v-model="field.model" :type="field.type" :placeholder="field.placeholder" class="w-full" />
             <template #hint>
@@ -74,17 +118,17 @@ const handleRegister = (): void => {
             </template>
         </UFormField>
     </div>
-
     <USeparator class="my-4" />
 
     <!-- Code de parrainage (optionnel) -->
     <UFormField class="w-full mb-4" label="Code de parrainage">
-        <UInput v-model="referralCode" type="text" placeholder="Code de parrainage (optionnel)" class="w-full" />
+        <UInput v-model="referral_link" type="text" placeholder="Code de parrainage (optionnel)" class="w-full" />
     </UFormField>
 
-    <USeparator class="my-4" />
+    <p v-if="errorMessage" class="text-red-500 text-sm text-center mt-2">{{ errorMessage }}</p>
 
+    <USeparator class="my-4" />
     <div class="w-full flex justify-center">
-        <UButton label="S'inscrire" color="primary" @click="handleRegister" class="w-1/3 py-2" />
+        <UButton label="S'inscrire" color="primary" @click="handleSubmit" class="w-1/3 py-2" />
     </div>
 </template>
