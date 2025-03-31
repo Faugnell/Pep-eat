@@ -35,7 +35,7 @@ const restaurants = [
     'https://picsum.photos/500/300?random=6',
 ]
 
-const connected = ref(true);
+const connected = ref(false);
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
@@ -58,8 +58,8 @@ const connected = ref(true);
         <div class="bg-fixed-background flex-1 w-full bg-cover bg-center">
             <div class="absolute bottom-30 left-20">
                 <div class="text-white">
-                    <NuxtImg src="/icons/white.png" width="250" />
-                    <h2>La pépite du fast-food healthy !</h2>
+                    <NuxtImg src="/icons/white.png" width="400" />
+                    <h2 class="mt-4 text-6xl">La pépite du fast-food healthy !</h2>
                 </div>
             </div>
         </div>
