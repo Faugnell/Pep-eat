@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
 require('dotenv').config({ path: './secret/.env' })
-const mongoose = require('mongoose');
 const db = require("./utils/db")
 
 const express = require('express');
@@ -25,12 +24,6 @@ app.use("/", routes)
 app.use(express.json());
 
 async function main() {
-    // try {
-    //     await mongoose.connect(process.env.MONGO_CONNECTION_STRING)
-    // } catch(err) {
-    //     console.log(err)
-    // }
-    // Attendre la connexion à la base de données avant de lancer le serveur
     app.listen(process.env.PORT, () => {
         console.log(`Lancement de du micro-service gérant les commandes sur le port : ${process.env.PORT}`);
     })
