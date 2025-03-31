@@ -258,7 +258,6 @@ async function updateRestaurant() {
                 1,
                 selectedRestaurant.value
             );
-            selectedRestaurant.value = null;
 
             useToast().add({
                 title: 'Restaurant mis à jour',
@@ -282,6 +281,10 @@ async function updateRestaurant() {
         });
 
         if (response.ok) {
+            listeRestaurants.value.push(response.data);
+
+            selectedRestaurant.value = response.data;
+
             useToast().add({
                 title: 'Restaurant créé',
                 description: 'Le restaurant a été créé avec succès.'
@@ -373,15 +376,10 @@ watch(
                                     <UButton color="primary" type="submit" @click="updateRestaurant">Enregistrer</UButton>
                                 </div>
                                 <div v-if="!selectedRestaurant?.insertion" class="flex flex-col gap-4 items-center">
-                                    <NuxtImg :src="`data:image/png;base64,${selectedRestaurant.image}`" fit="cover" class="aspect-square rounded-md"/>
-                                    <img :src="`data:image/png;base64,${selectedRestaurant.image}`" alt="restaurant" class="aspect-square rounded-md"/>
-                                    <UInput type="file" id="image" name="image" accept="image/*" @change="handleImageUpdate" label="test"/>
-                                    <label for="image" class="cursor-pointer">
-                                        <UButton color="primary" variant="outline" icon="i-heroicons-camera">Modifier l'image</UButton>
-                                    </label>
+                                    <NuxtImg :src="selectedRestaurant.image" fit="cover" class="aspect-square rounded-md"/>
+                                    <UInput type="file" id="image" name="image" accept="image/*" @change="handleImageUpdate" placeholder="Modifier l'image"/>
                                 </div>
                             </UForm>
-                            <pre class="scroll-auto">{{ selectedRestaurant.image }}</pre>
                         </UCard>
                     </div>
                 </div>
