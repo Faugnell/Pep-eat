@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { isValidMongoId } from '../utils/functions'
-import mongoose from 'mongoose';
 
 const commandesService = require('../services/commandes');
 
@@ -9,16 +8,21 @@ const commandesService = require('../services/commandes');
 // * ==================================================
 
 async function list(req: Request, res: Response) {
-  let filters = req.body !== undefined ? req.body : {}
-
-  Object.keys(filters).forEach(filter => {
-    if(filter.includes("id")){
-      const filterValueAsId =  new mongoose.Types.ObjectId(filters[filter])
-      filters = {...filters, [filter]: filterValueAsId}
-    }
+  const commandes = await commandesService.findAll();
+  res.status(200).json({
+    code: 200,
+    ok: true,
+    message: `${commandes.length} trouvée(s) !`,
+    data: commandes,
   });
+}
 
-  const commandes = await commandesService.findAll(filters);
+// * ==================================================
+// * =================   READ USERS   =================
+// * ==================================================
+
+async function listForUser(req: Request, res: Response) {
+  const commandes = await commandesService.findForUser(req.params.id);
   res.status(200).json({
     code: 200,
     ok: true,
@@ -38,7 +42,7 @@ async function read(req: Request, res: Response) {
       res.status(200).json({
         code: 200,
         ok: true,
-        message: `Aucune commande trouvée !\n ${commande}`,
+        message: `Aucune commande trouvée avec l'id: ${req.params.id} !`,
         data: {},
       });
     } else {
@@ -135,6 +139,7 @@ async function remove(req: Request, res: Response) {
 
 module.exports = {
   list,
+  listForUser,
   read,
   create,
   update,
