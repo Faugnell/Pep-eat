@@ -10,7 +10,7 @@ import FooterPepeat from "~/components/common/FooterPepeat";
 ------------------------------------------------------------------------- */
 const router = useRouter()
 
-const user_id = "6601143d8f1b4c001f23a1b2"
+const user_id = "67e6a0dc966cad123f40d4b2"
 
 let loading = ref<Boolean>(true)
 
@@ -36,10 +36,10 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
     </div>
     <div v-else class="flex flex-col px-8 min-h-screen">
         <div class="flex justify-center">
-            <div class="flex flex-col px-2.5 py-2.5 w-7/10 border-1 rounded-sm border-gray-300">
+            <div v-if="data.data.length !==0" class="flex flex-col px-2.5 py-2.5 w-7/10 border-1 rounded-sm border-gray-300">
                 <template  v-for="(commande, index) in data.data">
                     <USeparator v-if="index !== 0"/>
-                    <nuxt-link :to="`/utilisateurs/livraison/${commande._id}`">
+                    <NuxtLink :to="`commandes/${commande._id}`">
                         <div class="group flex justify-between p-2.5 hover:bg-gray-500/10 transition-all hover:cursor-pointer active:bg-gray-500/5 rounded-lg">
                             <div class="flex w-full flex-col justify-center">
                                 <div class="flex w-full justify-between">
@@ -50,7 +50,7 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
                                         <div class="flex pl-3 flex-col">
                                             <p class="text-lg">{{commande.restaurant_data.nom}}</p>
                                             <p class="text-sm">{{commande.status}}</p>
-                                            <p class="text-md">27,30€ • {{new Date(commande.date).toLocaleString()}}</p>
+                                            <p class="text-md">{{`${commande.price['$numberDecimal'].replace('.',',')}€ • ${new Date(commande.date).toLocaleString()}`}}</p>
                                         </div>
                                     </div>
                                     <div class="flex justify-right">
@@ -61,8 +61,14 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
                                 </div>
                             </div>
                         </div>
-                    </nuxt-link>
+                    </NuxtLink>
                 </template>
+            </div>
+            <div v-else class="flex flex-col py-5 w-6/10">
+                <h1 class="text-2xl w-full text-center">Aucune commande</h1>
+                <USeparator class="py-5"/>
+                <p class="text-lg text-center">Faite votre première commande sur Pep'eat et régalez-vous !</p>
+                <p class="text-md text-center">Accéder à notre large catalogue de restaurant en <NuxtLink class="text-primary-500" to="/">cliquant ici ! <UIcon name="i-ic:round-launch" size="10"/></NuxtLink></p>
             </div>
         </div>
     </div>

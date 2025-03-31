@@ -17,7 +17,8 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
     },
     {
       label: 'Mes commandes',
-      icon: 'i-material-symbols-light:shopping-bag-speed-outline'
+      icon: 'i-material-symbols-light:shopping-bag-speed-outline',
+      to: '/utilisateur/commandes'
     },
     {
       label: 'Restaurant',
