@@ -2,19 +2,19 @@ const router = require('express').Router();
 
 const restaurantsController = require("../controllers/restaurants");
 
-// Tous les artistes
+// Récupérer tous les restaurants
 router.get("/", restaurantsController.find);
 
-// Détails d'un artiste
+// Récupérer un restaurant spécifique
 router.get("/:id", restaurantsController.find);
 
-// Créer un artiste
+// Créer un restaurant
 router.post("/", restaurantsController.create);
 
-// Modifier un artiste
+// Modifier un restaurant
 router.put("/:id", restaurantsController.update);
 
-// Supprimer un artiste
+// Supprimer un restaurant
 router.delete("/:id", restaurantsController.remove);
 
 module.exports = router;

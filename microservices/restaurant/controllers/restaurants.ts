@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { buildSuccessResponse, buildErrorResponse } from '../utils/responseBuilder';
 
@@ -13,7 +14,59 @@ export async function find(req:Request, res:Response) {
 	const id = req.params.id;
 
 	try {
-		const restaurants = id ? await Restaurant.find({_id: id}) : await Restaurant.find({});
+		const restaurants =
+			/* Si un identifiant est fourni, on récupère le restaurant correspondant */
+			await Restaurant.aggregate([
+				{
+					$match: {
+						$or: [
+							{ _id: new mongoose.Types.ObjectId(id) }, /* Si l'identifiant est fourni, récupérer le restaurant correspondant */
+							{ _id: { $exists: true } } /* Sinon, récupérer tous les restaurants */
+						  ]
+					}
+				},
+				{
+					$lookup: {
+						from: "users",
+						localField: "id_proprietaire",
+						foreignField: "_id",
+						as: "proprietaire"
+					}
+				},
+				{
+					$unwind: {
+						path: "$proprietaire",
+						preserveNullAndEmptyArrays: true /* Conserve le restaurant même si le propriétaire n'existe pas */
+					}
+				},
+				{
+					$lookup: {
+						from: "medias",
+						localField: "id_media",
+						foreignField: "_id",
+						as: "media"
+					}
+				},
+				{
+					$unwind: {
+						path: "$media",
+						preserveNullAndEmptyArrays: true /* Conserve le restaurant même si le média n'existe pas */
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							/* Conserve le restaurant et ajoute le propriétaire et le média (garder uniquement l'image) */
+							$mergeObjects: ["$$ROOT", { image: "$media.buffer" }]
+						}
+					}
+				},
+				{
+					$project: {
+						media: 0 /* Supprime le champ media de la réponse créé lors de la jointure et maintenant inutile */
+					}
+				}
+			]);
 
 		res.status(200).send(buildSuccessResponse(restaurants, 200, "Restaurants récupérés avec succès"));
 	} catch (err) {

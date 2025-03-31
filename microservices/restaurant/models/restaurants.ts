@@ -43,6 +43,11 @@ module.exports = mongoose.model('Restaurant', new mongoose.Schema({
         type: Boolean,
         required: false,
         default: false
+    },
+    id_media: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'Media'
     }
 }, {
     versionKey: false,
