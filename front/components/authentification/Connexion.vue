@@ -1,51 +1,76 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { ApiResponse, FormFieldLogin } from './types';
 
-type Field = {
-    name: string;
-    label: string;
-    value: string;
-    type: 'email' | 'password';
-    placeholder: string;
-}
+const email = ref<string>('');
+const password = ref<string>('');
 
-const fields = ref<Field[]>([
-    { name: 'email', label: 'Adresse email', value: '', type: 'email', placeholder: 'example.ex@example.fr' },
-    { name: 'password', label: 'Mot de passe', value: '', type: 'password', placeholder: 'Mot de passe' },
+const formFields = ref<FormFieldLogin[]>([
+    { label: 'Adresse email', model: email, type: 'email', placeholder: 'example.ex@example.fr' },
+    { label: 'Mot de passe', model: password, type: 'password', placeholder: 'Mot de passe' },
 ]);
 
 const isSubmitted = ref<boolean>(false);
+const errorMessage = ref<string | null>(null);
 
-// Permet de se connecter si tous les champs sont remplis
-const handleLogIn = (): void => {
+const handleLogIn = async (): Promise<void> => {
     isSubmitted.value = true;
-    
-    if (fields.value.some(field => !field.value)) return;
+    errorMessage.value = null;
 
-    console.log('Connexion : ', fields.value.map(field => `${field.name}: ${field.value}`).join(', '));
+    if (!email.value || !password.value) {
+        return;
+    }
+
+    const loginData = {
+        email: email.value,
+        password: password.value
+    };
+
+    try {
+        const response = await fetch("http://localhost:3104/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(loginData)
+        });
+
+        const data: ApiResponse = await response.json();
+
+        if (!response.ok) {
+            errorMessage.value = data.message;
+            return;
+        }
+
+        // Stockage du token JWT
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+
+        // Ferme la modale et actualise la page
+        window.location.reload();
+    } catch (error) {
+        errorMessage.value = "Erreur lors de la connexion.";
+    }
 };
 </script>
 
 <template>
-    <!-- Email -->
-    <UFormField v-model="fields[0].value" :label="fields[0].label" class="mb-4" required>
-        <UInput v-model="fields[0].value" :type="fields[0].type" :placeholder="fields[0].placeholder" class="w-full" />
-            <template #hint>
-                <p v-if="isSubmitted && !fields[0].value" class="text-red-500 text-sm">Champ obligatoire</p>
-            </template>
-        </UFormField>
+    <div class="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
+        <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
-    <!-- Mot de passe -->
-        <UFormField v-model="fields[1].value" :label=fields[1].label required>
-            <UInput v-model="fields[1].value" :type="fields[1].type" :placeholder="fields[1].placeholder" class="w-full" />
-            <template #hint>
-                <p v-if="isSubmitted && !fields[1].value" class="text-red-500 text-sm">Champ obligatoire</p>
-            </template>
-        </UFormField>
+        <!-- Champs du formulaire -->
+        <div v-for="(field, index) in formFields" :key="index" class="w-full mb-4">
+            <UFormField :label="field.label" required>
+                <UInput v-model="field.model" :type="field.type" :placeholder="field.placeholder" class="w-full" />
+                <template #hint>
+                    <p v-if="isSubmitted && !field.model" class="text-red-500 text-sm">Champ obligatoire</p>
+                </template>
+            </UFormField>
+        </div>
+
+        <p v-if="errorMessage" class="text-red-500 text-sm text-center mt-2">{{ errorMessage }}</p>
 
         <USeparator class="my-4" />
-
         <div class="w-full flex justify-center">
-            <UButton label="Se connecter" color="primary" @click="handleLogIn" class="w-1/3" />
+            <UButton label="Se connecter" color="primary" @click="handleLogIn" class="w-1/3 text-center" />
         </div>
+    </div>
 </template>
