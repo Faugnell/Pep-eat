@@ -1,5 +1,15 @@
+import { Types } from 'mongoose'
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
+export type commandeType = {
+  user_id: Types.ObjectId,
+  restaurant_id: Types.ObjectId,
+  plat_ids: [Types.ObjectId,],
+  date: Date,
+  status: 'en cours'|'livrée'|'annulée',
+  note: String,
+}
 
 const commandeSchema = new Schema({
   user_id: {
@@ -32,6 +42,6 @@ const commandeSchema = new Schema({
     type: String,
     trim: true
   }
-});
+}, {versionKey: false});
 
 module.exports = mongoose.model('Commande', commandeSchema);
