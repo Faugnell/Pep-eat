@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { ApiResponse, FormFieldLogin } from './types';
+import type { ApiResponse, FormFieldLogin, Data } from './types';
 import { useUserStore } from '~/stores/userStore';
 
 const {
@@ -38,7 +38,7 @@ const handleLogIn = async (): Promise<void> => {
             body: JSON.stringify(loginData)
         });
 
-        const data: ApiResponse = await response.json();
+        const data: ApiResponse<Data> = await response.json();
 
         if (response.ok) {
             // Stockage du token JWT
