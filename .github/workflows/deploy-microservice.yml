@@ -1,4 +1,4 @@
-name: Deploy Applications
+name: Deploy microservices
 
 on:
   push:
