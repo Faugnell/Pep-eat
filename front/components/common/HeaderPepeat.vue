@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+import type { DropdownMenuItem } from '@nuxt/ui';
 import Connexion from '~/components/authentification/Connexion.vue'
 import Inscription from '~/components/authentification/Inscription.vue'
 /* -------------------------------------------------------------------------
@@ -8,11 +9,16 @@ import Inscription from '~/components/authentification/Inscription.vue'
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const itemsHeader = ref([
+const itemsHeader = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Profil',
       icon: 'i-lucide-user'
+    },
+    {
+      label: 'Mes commandes',
+      icon: 'i-material-symbols-light:shopping-bag-speed-outline',
+      to: '/utilisateur/commandes'
     },
     {
       label: 'Restaurant',
@@ -37,7 +43,7 @@ const itemsHeader = ref([
     {
       label: 'Déconnexion',
       icon: 'i-basil-logout-outline',
-      color: 'red'
+      color: 'tertiary'
     }
   ],
 ]);
@@ -47,7 +53,7 @@ const goHome = () => {
   router.push('/')
 }
 
-const isConnected = ref<boolean>(false)
+const isConnected = ref<boolean>(true)
 
 const user = ref({firstName:'Victor'})
 

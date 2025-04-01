@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { isValidMongoId } from '../utils/functions'
-import mongoose from 'mongoose';
 
 const commandesService = require('../services/commandes');
 
@@ -9,16 +8,21 @@ const commandesService = require('../services/commandes');
 // * ==================================================
 
 async function list(req: Request, res: Response) {
-  let filters = req.body !== undefined ? req.body : {}
-
-  Object.keys(filters).forEach(filter => {
-    if(filter.includes("id")){
-      const filterValueAsId =  new mongoose.Types.ObjectId(filters[filter])
-      filters = {...filters, [filter]: filterValueAsId}
-    }
+  const commandes = await commandesService.findAll();
+  res.status(200).json({
+    code: 200,
+    ok: true,
+    message: `${commandes.length} trouvée(s) !`,
+    data: commandes,
   });
+}
 
-  const commandes = await commandesService.findAll(filters);
+// * ==================================================
+// * =================   READ USERS   =================
+// * ==================================================
+
+async function listForUser(req: Request, res: Response) {
+  const commandes = await commandesService.findForUser(req.params.id);
   res.status(200).json({
     code: 200,
     ok: true,
@@ -38,7 +42,7 @@ async function read(req: Request, res: Response) {
       res.status(200).json({
         code: 200,
         ok: true,
-        message: `Aucune commande trouvée !\n ${commande}`,
+        message: `Aucune commande trouvée avec l'id: ${req.params.id} !`,
         data: {},
       });
     } else {
@@ -69,15 +73,25 @@ async function create(req: Request, res: Response) {
     "restaurant_id": req.body.restaurant_id,
     "plat_ids": req.body.plat_ids,
     "date": req.body.date,
+    "price": req.body.price,
+    "promotions": req.body.promotions,
     "status": req.body.status,
     "note": req.body.note
   })
-  res.status(200).json({
-    code: 200,
-    ok: true,
-    message: `${newCommande._id} créée avec succés !`,
-    data: newCommande,
-  });
+  if(newCommande._id){
+    res.status(200).json({
+      code: 200,
+      ok: true,
+      message: `${newCommande._id} créée avec succés !`,
+      data: newCommande,
+    });
+  } else {
+    res.status(400).json({
+      code: 400,
+      ok: false,
+      error: newCommande.errors,
+    });
+  }
 }
 
 // * ==================================================
@@ -135,6 +149,7 @@ async function remove(req: Request, res: Response) {
 
 module.exports = {
   list,
+  listForUser,
   read,
   create,
   update,
