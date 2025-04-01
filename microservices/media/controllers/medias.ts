@@ -11,12 +11,13 @@ const Media = require("../models/medias");
  */
 export async function find(req:Request, res:Response) {
 	const id = req.params.id;
-
+	
 	try {
-		const media = Media.findById(id);
+		const media = await Media.findById(id);
 
 		res.status(200).send(buildSuccessResponse(media, 200, "Média récupéré avec succès"));
 	} catch (err) {
+		console.log(err);
 		res.status(500).send(buildErrorResponse(err, 500, "Erreur lors de la récupération du média"));
 	}
 }
