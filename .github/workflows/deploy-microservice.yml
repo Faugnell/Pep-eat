@@ -40,7 +40,7 @@ jobs:
         sed -i 's|<IMAGE>|registry.digitalocean.com/pepeat-registry/${{ matrix.app }}:'${TAG}'|' microservices/k8s-configs/${{ matrix.app }}-deployment.yml
 
     - name: Save DigitalOcean kubeconfig
-      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-bleatz
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 cluster-pepeat
 
     - name: Deploy to DigitalOcean Kubernetes
       run: kubectl apply -f microservices/k8s-configs/${{ matrix.app }}-deployment.yml
