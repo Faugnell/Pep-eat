@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-restaurant
+  labels:
+    app: microservice-restaurant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-restaurant
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: microservice-restaurant
+    spec:
+      containers:
+      - name: microservice-restaurant
+        image: <IMAGE>
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            cpu: 100m
