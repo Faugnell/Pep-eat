@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [media]
+        app: [media, restaurant]
 
     steps:
     - name: Checkout code
