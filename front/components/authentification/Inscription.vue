@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { ApiResponse, FormFieldRegistration } from './types';
+import { useUserStore } from '~/stores/userStore';
+
+const {
+    setUserInfo
+} = useUserStore();
 
 const last_name: Ref<string> = ref('');
 const first_name: Ref<string> = ref('');
@@ -60,14 +65,34 @@ const handleSubmit = async (): Promise<void> => {
 
         const data: ApiResponse = await response.json();
 
-        if (!response.ok) {
-            errorMessage.value = data.message;
+        if (response.ok) {
+            // Stockage du token JWT
+            localStorage.setItem("user", JSON.stringify(data.data));
+
+            setUserInfo(
+                {
+                    id: data.data._id,
+                    firstName: data.data.first_name,
+                    lastName: data.data.last_name,
+                    role: data.data.role,
+                    city: data.data.city,
+                    postalCode: data.data.postal_code,
+                    address: data.data.address,
+                    email: data.data.email,
+                    phone: data.data.phone
+                }
+            );
+        } else {
+            useToast().add({
+                title: "Erreur lors de l'inscription",
+                description: data.message,
+                color: "error"
+            });
+
             return;
         }
-
-        // Ferme la modale et actualise la page
-        window.location.reload();
     } catch (error) {
+        console.error(error);
         errorMessage.value = "Erreur lors de la connexion.";
     }
 };

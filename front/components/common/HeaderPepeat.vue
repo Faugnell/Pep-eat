@@ -2,9 +2,16 @@
 import type { DropdownMenuItem } from '@nuxt/ui';
 import Connexion from '~/components/authentification/Connexion.vue'
 import Inscription from '~/components/authentification/Inscription.vue'
+import { useUserStore } from '~/stores/userStore';
+
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
+const {
+    getFirstName,
+    isConnected,
+    disconnectUser
+} = useUserStore();
 
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
@@ -43,7 +50,12 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
     {
       label: 'Déconnexion',
       icon: 'i-basil-logout-outline',
-      color: 'tertiary'
+      color: 'tertiary',
+      onSelect: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        disconnectUser();
+      }
     }
   ],
 ]);
@@ -53,9 +65,8 @@ const goHome = () => {
   router.push('/')
 }
 
-const isConnected = ref<boolean>(true)
-
-const user = ref({firstName:'Victor'})
+const userConnected = computed<boolean>(() => isConnected());
+const userFirstName = computed<string>(() => getFirstName());
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
@@ -75,15 +86,13 @@ onMounted(async () => {
 <template>
     <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
         <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg" @click="goHome"/>
-        <template v-if="isConnected">
-          <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..." class="w-[50vh] min-w-50"/>
-        </template>
-        <UDropdownMenu v-if="isConnected" class="h-[80%] object-contain mx-[1%]"
+        <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..." class="w-[50vh] min-w-50"/>
+        <UDropdownMenu v-if="userConnected" class="h-[80%] object-contain mx-[1%]"
             :items="itemsHeader"
             :ui="{
                 content: 'w-48'
             }">
-            <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
+            <UButton :label="userFirstName" icon="i-lucide-user" color="neutral" variant="link" size="xl" :ui="{ base: 'text-xl' }" />
         </UDropdownMenu>
         <div v-else class="flex gap-5 mr-3">
           <!-- Inscription -->
