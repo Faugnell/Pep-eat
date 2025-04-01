@@ -4,7 +4,7 @@ import Connexion from '~/components/authentification/Connexion.vue'
 import Inscription from '~/components/authentification/Inscription.vue'
 import { useUserStore } from '~/stores/userStore';
 import PanierSlideover from '../panier/PanierSlideover.vue';
-import { usePanierStore } from '#imports';
+import { usePanierStore } from '~/stores/panierStore';
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------

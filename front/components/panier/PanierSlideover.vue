@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 const emit = defineEmits<{ close: [boolean] }>();
-import { usePanierStore } from '#imports';
+import { usePanierStore } from '~/stores/panierStore';
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
