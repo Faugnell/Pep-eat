@@ -53,9 +53,7 @@ const handleLogIn = async (): Promise<void> => {
 </script>
 
 <template>
-    <div class="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
-        <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
-
+    <div class="max-w-md mx-auto p-4">
         <!-- Champs du formulaire -->
         <div v-for="(field, index) in formFields" :key="index" class="w-full mb-4">
             <UFormField :label="field.label" required>
