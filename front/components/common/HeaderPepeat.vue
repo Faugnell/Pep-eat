@@ -56,7 +56,7 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
     {
       label: 'Déconnexion',
       icon: 'i-basil-logout-outline',
-      color: 'tertiary',
+      color: 'error',
       onSelect: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
