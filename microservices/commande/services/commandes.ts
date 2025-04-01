@@ -18,6 +18,14 @@ async function findAll() {
         },
       },
       {
+        $lookup: {
+          from: "articles",
+          localField: "plat_ids",
+          foreignField: "_id",
+          as: "plat_data"
+        },
+      },
+      {
         $unwind: {
           path: "$restaurant_data",
           preserveNullAndEmptyArrays: true
@@ -49,6 +57,14 @@ async function findForUser(filter: string) {
           localField: "restaurant_id",
           foreignField: "_id",
           as: "restaurant_data"
+        },
+      },
+      {
+        $lookup: {
+          from: "articles",
+          localField: "plat_ids",
+          foreignField: "_id",
+          as: "plat_data"
         },
       },
       {
@@ -86,6 +102,14 @@ async function find(id: string) {
         },
       },
       {
+        $lookup: {
+          from: "articles",
+          localField: "plat_ids",
+          foreignField: "_id",
+          as: "plat_data"
+        },
+      },
+      {
         $unwind: {
           path: "$restaurant_data",
           preserveNullAndEmptyArrays: true
@@ -109,6 +133,8 @@ async function create(newCommand: commandeType) {
     "restaurant_id": newCommand.restaurant_id,
     "plat_ids": newCommand.plat_ids,
     "date": newCommand.date,
+    "price": newCommand.price,
+    "promotions": newCommand.promotions,
     "status": newCommand.status,
     "note": newCommand.note
   })
