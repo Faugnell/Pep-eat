@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@main
 
     - name: Build container image
-      working-directory: ${{ format('microservice/{0}', matrix.app) }}
+      working-directory: ${{ format('microservices/{0}', matrix.app) }}
       run: docker build -t registry.digitalocean.com/pepeat-registry/${{ matrix.app }}:$(echo $GITHUB_SHA | head -c7) .
 
     - name: Install doctl
