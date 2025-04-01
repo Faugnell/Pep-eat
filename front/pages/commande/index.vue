@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Router } from "vue-router";
-import HeaderPepeat from "~/components/common/HeaderPepeat.vue";
 import type { StepperItem } from '@nuxt/ui'
 
 const tabs: StepperItem[] = [
@@ -48,7 +47,6 @@ const completePayment = () => {
 </script>
 
 <template>
-    <HeaderPepeat />
     <div class="w-full flex justify-center mt-6">
         <UStepper ref="stepper" :items="tabs" class="w-4/5 xl:w-3/5">
 

@@ -1,6 +1,4 @@
 <script setup>
-import HeaderPepeat from "~/components/common/HeaderPepeat";
-import FooterPepeat from "~/components/common/FooterPepeat";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -26,11 +24,7 @@ import FooterPepeat from "~/components/common/FooterPepeat";
     <!--* ===========================================================================================     *-->
     <!--* ==================================     NOT CONNECTED     ==================================     *-->
     <!--* ===========================================================================================     *-->
-    <HeaderPepeat />
-    <div class="flex flex-col min-h-screen">
-    </div>  
-    <FooterPepeat />
-
+    <div class="flex flex-col min-h-screen"></div>  
 </template>
 
 

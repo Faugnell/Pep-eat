@@ -5,6 +5,8 @@ const appConfig = useAppConfig()
 <template>
     <UApp :toaster="appConfig.toaster">
         <NuxtRouteAnnouncer />
-        <NuxtPage />
+        <NuxtLayout>
+            <NuxtPage />
+        </NuxtLayout>
     </UApp>
 </template>
