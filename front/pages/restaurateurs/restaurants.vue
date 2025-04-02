@@ -13,7 +13,6 @@ import ArticleTile from '~/components/articles/ArticleTile.vue';
 ------------------------------------------------------------------------- */
 const activeTab = ref('0')
 const category = ref("")
-const articles = ref<Article[]>([])
 
 
 const nutriscoreOptions = ref([
@@ -106,6 +105,7 @@ const {
 );
 
 const selectedRestaurant = ref<Restaurant | null>(null)
+const selectedArticle = ref<Article | null>(null)
 
 const items = ref<TabsItem[]>([
     {
@@ -174,6 +174,11 @@ async function handleSubmit(restaurantId: string) {
     await fetchArticlesByRestaurant(restaurantId)
   }
 }
+const itemsRestaurant = computed(() => listeRestaurants.value.map(restaurant => ({
+  label: restaurant.nom,
+  slot: restaurant._id as const,
+  content: ''
+})) satisfies AccordionItem[])
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
@@ -207,7 +212,6 @@ watch(
         <UTabs :items="items" class="w-full" v-model="activeTab">
             <template #restaurant="{ item }">
                 <p class="text-black text-4xl font-bold">Gérer mes restaurants</p>
-
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col gap-4 w-full">
                         <div v-for="restaurant in listeRestaurants" :key="restaurant._id">
@@ -247,40 +251,21 @@ watch(
             </template>
             <template #plats="{ item }">
                 <p class="text-black text-4xl font-bold">Gérer mes plats</p>
-
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col gap-4 w-full">
-                        <div v-for="restaurant in listeRestaurants" :key="restaurant._id">
-                            <h2 class="text-xl font-semibold">{{ restaurant.nom }}</h2>
-                            <div class="flex">
-                                <!-- <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <UAccordion :items="itemsRestaurant" multiple>
+                            <template v-for="restaurant in listeRestaurants" :key="restaurant._id" #[restaurant._id]="{item}">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
                                     <ArticleTile
-                                        v-for="article in restaurant.articles"
-                                        :key="article._id"
-                                        :title="article.name"
-                                        :nutriscore="article.nutriscore"
-                                        :price="article.price.toFixed(2)"
-                                        :badgeText="article.nutriscore"
+                                    v-for="article in restaurant.articles"
+                                    :key="article._id"
+                                    :title="article.name"
+                                    :nutriscore="article.nutriscore"
+                                    :price="article.price.toFixed(2)"
+                                    :badgeText="article.nutriscore"
+                                    @click="selectedArticle = article"
                                     />
-                                </div> -->
-                                <UCarousel
-                                    v-if="restaurant.articles?.length"
-                                    :items="restaurant.articles"
-                                    v-slot="{ item: article }"
-                                    :ui="{
-                                        container: 'flex gap-4',
-                                        item: 'basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4',
-                                    }"
-                                    class="w-full"
-                                    >
-                                    <ArticleTile
-                                        :key="article._id"
-                                        :title="article.name"
-                                        :nutriscore="article.nutriscore"
-                                        :price="article.price.toFixed(2)"
-                                        :badgeText="article.nutriscore"
-                                    />
-                                </UCarousel>
+                                </div>
                                 <UButton
                                     icon="i-heroicons-plus"
                                     color="primary"
@@ -288,10 +273,10 @@ watch(
                                     @click="selectedRestaurant = restaurant"
                                     >
                                 </UButton>
-                            </div>
-                        </div>
+                            </template>
+                        </UAccordion>
                     </div>
-                    <div v-if="selectedRestaurant" class="w-3/5">
+                    <div v-if="selectedRestaurant" class="w-3/5 fixed">
                         <UCard>
                             <template #header>
                                 <div class="flex flex-row justify-between">
@@ -349,8 +334,11 @@ watch(
                             </form>
                         </UCard>
                     </div>
+                    <div v-if="selectedArticle" class="w-3/5">
+
+                    </div>
                 </div>
             </template>
         </UTabs>
-</div>
+    </div>
 </template>
