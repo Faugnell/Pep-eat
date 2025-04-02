@@ -23,7 +23,7 @@ spec:
       - name: microservice-restaurant
         image: <IMAGE>
         ports:
-        - containerPort: 80
+        - containerPort: 3101
         resources:
           requests:
             cpu: 100m
