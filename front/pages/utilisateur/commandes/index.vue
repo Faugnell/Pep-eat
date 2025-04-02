@@ -1,18 +1,31 @@
-<script setup>
+<script setup lang="ts">
+import { useUserStore } from '~/stores/userStore';
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
 
+const {
+    getId,
+    isConnected
+} = useUserStore();
+
+
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const router = useRouter()
+const userId = computed<string>(() => getId());
+const userConnected = computed<boolean>(() => isConnected())
 
-const user_id = "67e6a0dc966cad123f40d4b2"
+const { data: commande } = await useAsyncData<any>(
+  'posts',
+  () => $fetch(`http://localhost:3102/commandes/user/${userId.value}`), {
+    watch: [userId]
+  }
+)
 
-let loading = ref<Boolean>(true)
+// const user_id = "67e6a0dc966cad123f40d4b2"
 
-const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`, { method: "GET" })
+// const {data} = await useFetch(`http://localhost:3102/commandes/user/${userId}`, { method: "GET" })
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
@@ -29,14 +42,15 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
 
 <template>
     <div class="min-h-screen">
-        <div v-if="data == null" class="flex flex-col px-8 min-h-screen">
-            <p>y a pas wesh</p>
+        <div v-if="commande == null" class="flex flex-col px-8 min-h-screen">
+            <h1 v-if="userConnected" class="w-full">Une erreure est survenue</h1>
+            <h1 v-else class="w-full text-center text-2xl">Vous devez être connecté pour consulter vos commandes</h1>
         </div>
         <div v-else class="flex flex-col px-8 min-h-screen">
-            <p v-if="data.data.length !==0" class="py-3 w-full text-center text-xl">Vos commandes:</p>
+            <p v-if="commande.data.length !== 0" class="py-3 w-full text-center text-xl">Vos commandes :</p>
             <div class="flex justify-center">
-                <div v-if="data.data.length !==0" class="flex flex-col px-2.5 py-2.5 w-7/10 border-1 rounded-sm border-gray-300">
-                    <template  v-for="(commande, index) in data.data">
+                <div v-if="commande.data.length !==0" class="flex flex-col px-2.5 py-2.5 w-7/10 border-1 rounded-sm border-gray-300">
+                    <template  v-for="(commande, index) in commande.data">
                         <USeparator v-if="index !== 0"/>
                         <NuxtLink :to="`commandes/${commande._id}`">
                             <div class="group flex justify-between p-2.5 hover:bg-gray-500/10 transition-all hover:cursor-pointer active:bg-gray-500/5 rounded-lg">
@@ -66,7 +80,7 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
                 <div v-else class="flex flex-col py-5 w-6/10">
                     <h1 class="text-2xl w-full text-center">Aucune commande</h1>
                     <USeparator class="py-5"/>
-                    <p class="text-lg text-center">Faite votre première commande sur Pep'eat et régalez-vous !</p>
+                    <p class="text-lg text-center">Faites votre première commande sur Pep'eat et régalez-vous !</p>
                     <p class="text-md text-center">Accéder à notre large catalogue de restaurant en <NuxtLink class="text-primary-500" to="/">cliquant ici ! <UIcon name="i-ic:round-launch" size="10"/></NuxtLink></p>
                 </div>
             </div>
