@@ -42,4 +42,4 @@ spec:
       port: 3101
       targetPort: 3101
   selector:
-    app: pepeat
+    app: microservice-restaurant
