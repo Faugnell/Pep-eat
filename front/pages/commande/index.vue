@@ -48,7 +48,6 @@ const completePayment = () => {
 </script>
 
 <template>
-    <HeaderPepeat />
     <div class="w-full flex justify-center mt-6">
         <UStepper ref="stepper" :items="tabs" class="w-4/5 xl:w-3/5">
 

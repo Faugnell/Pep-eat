@@ -1,9 +1,14 @@
 <script setup lang='ts'>
+import type { DropdownMenuItem } from '@nuxt/ui';
 import Connexion from '~/components/authentification/Connexion.vue'
 import Inscription from '~/components/authentification/Inscription.vue'
-import type { DropdownMenuItem } from '@nuxt/ui';
-import { useRouter } from 'vue-router'
+/* -------------------------------------------------------------------------
+--------------------------------- STORES -----------------------------------
+------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------
+------------------------------- VARIABLES ----------------------------------
+------------------------------------------------------------------------- */
 const router = useRouter()
 
 const isConnected = ref<boolean>(true)
@@ -17,9 +22,24 @@ const handleLogout = () => {
 
 const itemsHeader = ref<DropdownMenuItem[][]>([
   [
-    { label: 'Profil', icon: 'i-lucide-user', to: '/profil' },
-    { label: 'Restaurant', icon: 'i-uil-restaurant' },
-    { label: 'Coursier', icon: 'i-mdi-bike-fast' },
+    {
+      label: 'Profil',
+      icon: 'i-lucide-user',
+      to: '/profil'
+    },
+    {
+      label: 'Mes commandes',
+      icon: 'i-material-symbols-light:shopping-bag-speed-outline',
+      to: '/utilisateur/commandes'
+    },
+    {
+      label: 'Restaurant',
+      icon: 'i-uil-restaurant'
+    },
+    {
+      label: 'Coursier',
+      icon: 'i-mdi-bike-fast'
+    },
   ],
   [
     { label: 'Développeur', icon: 'i-ic-baseline-computer' },
@@ -27,12 +47,30 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
   ],
   [
     {
-      label: 'Déconnexion', icon: 'i-basil-logout-outline', onSelect() {
+      label: 'Déconnexion',
+      icon: 'i-basil-logout-outline',
+      color: 'tertiary',
+      onSelect() {
         handleLogout()
       }
     }
   ],
 ]);
+
+
+/* -------------------------------------------------------------------------
+------------------------------- FONCTIONS ----------------------------------
+------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+------------------------------- WATCHERS -----------------------------------
+------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+---------------------------- LIFECYCLE HOOKS -------------------------------
+------------------------------------------------------------------------- */
+onMounted(async () => {
+});
 </script>
 
 <template>

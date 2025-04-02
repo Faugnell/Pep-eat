@@ -5,6 +5,8 @@ const commandesController = require("../controllers/commandes");
 // Toutes les commandes
 router.get("/", commandesController.list);
 
+// Toutes les commandes d'un utilisateur
+router.get("/user/:id", commandesController.listForUser)
 // Détails d'une commande
 router.get("/:id", commandesController.read);
 
