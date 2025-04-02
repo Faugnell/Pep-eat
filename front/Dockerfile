@@ -1,5 +1,5 @@
 FROM node:20.18.0-slim AS base
-ARG PORT=3000
+# ARG PORT=3000
 WORKDIR /src
 
 # Build
@@ -17,5 +17,7 @@ ENV NODE_ENV=production
 COPY --from=build /src/.output /src/.output
 # Optional, only needed if you rely on unbundled dependencies
 # COPY --from=build /src/node_modules /src/node_modules
+
+EXPOSE 3000
 
 CMD [ "node", ".output/server/index.mjs" ]
