@@ -1,22 +1,21 @@
-FROM node:20.18.0-slim AS base
-ARG PORT=3101
+FROM node:18-alpine AS base
+
 WORKDIR /src
 
-# Build
 FROM base AS build
+# Install dependencies
 COPY --link package.json package-lock.json .
 RUN npm install
+# Build the application
 COPY --link . .
 RUN npm run build
 
-# Run
-FROM base
+# Set environment variables
+ARG PORT=3101
 ENV PORT=$PORT
 ENV NODE_ENV=production
 ENV MONGO_CONNECTION_STRING=mongodb+srv://doadmin:T047v2J9G1CVP8j3@pepeat-mongo-db-ac667bc3.mongo.ondigitalocean.com/pepeat?tls=true&authSource=admin&replicaSet=pepeat-mongo-db
 
-COPY --from=build /src /src
-# Optional, only needed if you rely on unbundled dependencies
-# COPY --from=build /src/node_modules /src/node_modules
+EXPOSE $PORT
 
-CMD [ "node", "dist/index.js" ]
+CMD ["npm", "start"]
