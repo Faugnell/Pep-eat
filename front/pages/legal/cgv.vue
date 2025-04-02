@@ -1,9 +1,4 @@
 <script setup lang='ts'>
-import HeaderPepeat from "~/components/common/HeaderPepeat";
-import FooterPepeat from "~/components/common/FooterPepeat";
-const {
-} = defineProps({
-});
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
@@ -30,11 +25,6 @@ onMounted(async () => {
 
 <template>
     <div class="flex flex-col min-h-screen">
-        <HeaderPepeat/>
-            <div class="flex-1 w-full">Conditions générales de vente</div>
-        <FooterPepeat/>
+        <div class="flex-1 w-full">Conditions générales de vente</div>
     </div>
 </template>
-
-<style scoped>
-</style>

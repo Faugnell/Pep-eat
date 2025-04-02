@@ -1,6 +1,4 @@
 <script setup>
-import HeaderPepeat from "~/components/common/HeaderPepeat";
-import FooterPepeat from "~/components/common/FooterPepeat";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -30,7 +28,6 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
 </script>
 
 <template>
-    <HeaderPepeat />
     <div class="min-h-screen">
         <div v-if="data == null" class="flex flex-col px-8 min-h-screen">
             <p>y a pas wesh</p>
@@ -75,7 +72,6 @@ const {data} = await useFetch(`http://localhost:3102/commandes/user/${user_id}`,
             </div>
         </div>
     </div>
-    <FooterPepeat />
 </template>
 
 
