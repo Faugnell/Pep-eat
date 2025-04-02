@@ -356,7 +356,7 @@ async function fetchRestaurant() {
     }));
 
     console.log('Fetch restaurants --- $fetch --- server');
-    const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+    const restaurants2 = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
