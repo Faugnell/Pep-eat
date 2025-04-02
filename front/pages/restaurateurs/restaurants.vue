@@ -311,7 +311,8 @@ async function fetchRestaurant() {
         },
         retry: 3,
         retryDelay: 1000,
-        baseURL: 'http://localhost:3101'
+        baseURL: 'http://localhost:3101',
+        server: true
     });
 
     console.log(data.value, error.value);
