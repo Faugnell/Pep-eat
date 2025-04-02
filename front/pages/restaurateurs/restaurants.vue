@@ -122,7 +122,7 @@ async function fetchArticlesByRestaurant(restaurantId: string) {
     )
     return response
   } catch (error) {
-    console.error(`Erreur pour le resto ${restaurantId} :`, error)
+    // console.error(`Erreur pour le resto ${restaurantId} :`, error)
   }
 }
 
@@ -298,25 +298,45 @@ async function updateRestaurant() {
 }
 
 async function fetchRestaurant() {
-    const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            retry: 3,
-            retryDelay: 1000
-        }).then((response: Response<Restaurant[]>) => {
-            if (response.ok) {
-                return response.data;
-            } else {
-                throw new Error('Error while fetching restaurants');
-            }
-        }).catch((error => {
-            console.error('Error while fetching restaurants:', error);
-            return [];
-        }));
+    const {
+        data,
+        error
+    } = await useFetch(`/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+        baseURL: 'http://host.docker.internal:3101'
+    });
 
-    console.log(restaurants);
+    console.log(data.value, error.value);
+
+    if (error.value) {
+        console.error('Error while fetching restaurants:', error.value);
+        return [];
+    }
+
+    // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         retry: 3,
+    //         retryDelay: 1000
+    //     }).then((response: Response<Restaurant[]>) => {
+    //         if (response.ok) {
+    //             return response.data;
+    //         } else {
+    //             throw new Error('Error while fetching restaurants');
+    //         }
+    //     }).catch((error => {
+    //         console.error('Error while fetching restaurants:', error);
+    //         return [];
+    //     }));
+
+    // console.log(restaurants);
 }
 
 /* -------------------------------------------------------------------------
