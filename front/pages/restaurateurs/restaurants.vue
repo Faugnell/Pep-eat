@@ -3,7 +3,6 @@ import type { TabsItem } from '@nuxt/ui'
 import type { Restaurant } from '~/utils/types/Restaurant.ts';
 import type { Media } from '~/utils/types/Media.ts';
 import type { Response } from '~/utils/types/Response';
-import HeaderPepeat from '~/components/common/HeaderPepeat.vue';
 import Restaurants from '~/components/restaurateurs/restaurants.vue';
 import ArticleTile from '~/components/articles/ArticleTile.vue';
 
@@ -322,7 +321,6 @@ watch(
 </script>
 
 <template>
-    <HeaderPepeat/>
     <div class="flex flex-col p-4 w-full gap-4">
         <UTabs :items="items" class="w-full" color="neutral" v-model="activeTab">
             <template #restaurant="{ item }">

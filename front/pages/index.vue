@@ -2,6 +2,10 @@
 import HeaderPepeat from "~/components/common/HeaderPepeat";
 import FooterPepeat from "~/components/common/FooterPepeat";
 import RestaurantTile from "~/components/articles/RestaurantTile.vue";
+
+definePageMeta({
+  layout: false,
+});
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Router } from "vue-router";
-import HeaderPepeat from "~/components/common/HeaderPepeat.vue";
 import type { StepperItem } from '@nuxt/ui'
 
 const tabs: StepperItem[] = [

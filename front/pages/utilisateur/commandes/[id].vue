@@ -1,6 +1,4 @@
 <script setup>
-import HeaderPepeat from "~/components/common/HeaderPepeat";
-import FooterPepeat from "~/components/common/FooterPepeat";
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -26,7 +24,6 @@ const {data} = await useFetch(`http://localhost:3102/commandes/${route.params.id
 </script>
 
 <template>
-    <HeaderPepeat />
     <div class="flex justify-center min-h-screen pt-5">
         <div v-if="data === null">
             <p>{{ route.params.id }}</p>
@@ -77,7 +74,6 @@ const {data} = await useFetch(`http://localhost:3102/commandes/${route.params.id
             </UCard>
         </div>
     </div>
-    <FooterPepeat />
 </template>
 
 
