@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { ApiResponse, FormFieldLogin } from './types';
+import type { ApiResponse, FormFieldLogin, Data } from './types';
+import { useUserStore } from '~/stores/userStore';
+
+const {
+    setUserInfo
+} = useUserStore();
 
 const email = ref<string>('');
 const password = ref<string>('');
@@ -33,20 +38,37 @@ const handleLogIn = async (): Promise<void> => {
             body: JSON.stringify(loginData)
         });
 
-        const data: ApiResponse = await response.json();
+        const data: ApiResponse<Data> = await response.json();
 
-        if (!response.ok) {
-            errorMessage.value = data.message;
+        if (response.ok) {
+            // Stockage du token JWT
+            localStorage.setItem("token", data.data.token);
+            localStorage.setItem("user", JSON.stringify(data.data.user));
+
+            setUserInfo(
+                {
+                    id: data.data.user._id,
+                    firstName: data.data.user.first_name,
+                    lastName: data.data.user.last_name,
+                    role: data.data.user.role,
+                    city: data.data.user.city,
+                    postalCode: data.data.user.postal_code,
+                    address: data.data.user.address,
+                    email: data.data.user.email,
+                    phone: data.data.user.phone
+                }
+            );
+        } else {
+            useToast().add({
+                title: "Erreur lors de la connexion",
+                description: data.message,
+                color: "error"
+            });
+
             return;
         }
-
-        // Stockage du token JWT
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("user", JSON.stringify(data.data.user));
-
-        // Ferme la modale et actualise la page
-        window.location.reload();
     } catch (error) {
+        console.error(error);
         errorMessage.value = "Erreur lors de la connexion.";
     }
 };
