@@ -2,19 +2,21 @@ const express = require('express');
 const router = express.Router();
 const commandesController = require("../controllers/commandes");
 
-// Tous les artistes
+// Toutes les commandes
 router.get("/", commandesController.list);
 
-// Détails d'un artiste
+// Toutes les commandes d'un utilisateur
+router.get("/user/:id", commandesController.listForUser)
+// Détails d'une commande
 router.get("/:id", commandesController.read);
 
-// Créer un artiste
+// Créer une commande
 router.post("/", commandesController.create);
 
-// Modifier un artiste
+// Modifier une commande
 router.put("/:id", commandesController.update);
 
-// Supprimer un artiste
+// Supprimer une commande
 router.delete("/:id", commandesController.remove);
 
 module.exports = router;
