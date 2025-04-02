@@ -105,6 +105,6 @@ const connected = ref(false);
 
 <style scoped>
 .bg-fixed-background {
-    background-image: url('bg-homepage.png');
+    background-image: url('./bg-homepage.png');
 }
 </style>

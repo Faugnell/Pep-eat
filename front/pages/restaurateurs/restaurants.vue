@@ -1,5 +1,8 @@
 <script setup lang='ts'>
 import type { TabsItem } from '@nuxt/ui'
+import type { Restaurant } from '~/utils/types/Restaurant.ts';
+import type { Media } from '~/utils/types/Media.ts';
+import type { Response } from '~/utils/types/Response';
 import HeaderPepeat from '~/components/common/HeaderPepeat.vue';
 import Restaurants from '~/components/restaurateurs/restaurants.vue';
 import ArticleTile from '~/components/articles/ArticleTile.vue';
@@ -11,10 +14,9 @@ import ArticleTile from '~/components/articles/ArticleTile.vue';
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const activeTab = ref('0')
-const category = ref("")
-const articles = ref<Article[]>([])
-
+const activeTab = ref('0');
+const category = ref("");
+const articles = ref<Article[]>([]);
 
 const nutriscoreOptions = ref([
   { label: 'A', value: 'A' },
@@ -67,13 +69,6 @@ interface Article {
   category: string
 }
 
-interface Restaurant {
-  _id: string
-  nom: string
-  adresse: string
-  siret: string
-}
-
 // Champs du formulaire
 const name = ref('')
 const description = ref('')
@@ -83,26 +78,27 @@ const available = ref(true)
 const isSubmitting = ref(false)
 
 const {
-    data : listeRestaurants,
-    status,
-    error
+    data : listeRestaurants
 } = await useAsyncData(
     'liste-restaurants',
     () =>
-        $fetch(`http://localhost:3101/restaurants`, {
+        $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
             retry: 3,
             retryDelay: 1000,
-        }).then((response) => {
+        }).then((response: Response<Restaurant[]>) => {
             if (response.ok) {
                 return response.data;
             } else {
                 throw new Error('Error while fetching restaurants');
             }
-        })
+        }).catch((error => {
+            console.error('Error while fetching restaurants:', error);
+            return [];
+        }))
 );
 
 const selectedRestaurant = ref<Restaurant | null>(null)
@@ -180,6 +176,8 @@ async function handleSubmit(restaurantId: string) {
 function validate() {
     const errors = [];
 
+    if (!selectedRestaurant.value) return errors;
+
     if (!selectedRestaurant.value.nom) errors.push({name: 'nom', message: 'Nom is required'});
     if (!selectedRestaurant.value.adresse) errors.push({name: 'adresse', message: 'Adresse is required'});
     if (!selectedRestaurant.value.siret) errors.push({name: 'siret', message: 'SIRET is required'});
@@ -195,6 +193,8 @@ function handleImageUpdate(event: Event) {
     if (!file) return;
 
     fileReader.onloadend = () => {
+        if (!selectedRestaurant.value) return;
+
         selectedRestaurant.value.updatedImage = fileReader.result as string;
         selectedRestaurant.value.image = fileReader.result as string; // Mettre à jour l'image du restaurant
     };
@@ -204,7 +204,6 @@ function handleImageUpdate(event: Event) {
 }
 
 async function updateRestaurant() {
-
     if (!selectedRestaurant.value) return;
 
     const body = {
@@ -226,12 +225,12 @@ async function updateRestaurant() {
             const formData = new FormData();
             formData.append('buffer', selectedRestaurant.value.image);
 
-            const imageResponse = await $fetch(`http://localhost:3107/medias/${selectedRestaurant.value.id_media ?? ''}`, {
+            const imageResponse: Response<Media> = await $fetch<Response<Media>>(`http://localhost:3107/medias/${selectedRestaurant.value.id_media ?? ''}`, {
                 method: selectedRestaurant.value.id_media ? 'PUT' : 'POST', // PUT si l'image existe déjà, sinon POST
                 body: formData
             });
 
-            if (imageResponse.ok) {
+            if (imageResponse.ok && imageResponse.data) {
                 selectedRestaurant.value.id_media = imageResponse.data._id; // Mettre à jour l'ID de l'image dans le restaurant
                 body.id_media = imageResponse.data._id; // Ajouter l'ID de l'image au corps de la requête
                 delete selectedRestaurant.value.updatedImage; // Supprimer le champ updatedImage du restaurant
@@ -244,7 +243,7 @@ async function updateRestaurant() {
             }
         }
 
-        const response = await $fetch(`http://localhost:3101/restaurants/${selectedRestaurant.value._id}`, {
+        const response: Response<Restaurant> = await $fetch<Response<Restaurant>>(`http://localhost:3101/restaurants/${selectedRestaurant.value._id}`, {
             method: 'PUT',
             body,
             headers: {
@@ -272,7 +271,7 @@ async function updateRestaurant() {
         }
     } else {
         /* Création d'un nouveau restaurant */
-        const response = await $fetch(`http://localhost:3101/restaurants`, {
+        const response: Response<Restaurant> = await $fetch(`http://localhost:3101/restaurants`, {
             method: 'POST',
             body,
             headers: {
@@ -280,7 +279,7 @@ async function updateRestaurant() {
             },
         });
 
-        if (response.ok) {
+        if (response.ok && response.data) {
             listeRestaurants.value.push(response.data);
 
             selectedRestaurant.value = response.data;
