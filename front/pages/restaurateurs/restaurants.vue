@@ -81,7 +81,7 @@ const {
 } = await useAsyncData(
     'liste-restaurants',
     () =>
-        $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
+        $fetch<Response<Restaurant[]>>(`http://host.docker.internal:3101/restaurants`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
