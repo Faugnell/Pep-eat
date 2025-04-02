@@ -297,6 +297,28 @@ async function updateRestaurant() {
     }
 }
 
+async function fetchRestaurant() {
+    const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            retry: 3,
+            retryDelay: 1000
+        }).then((response: Response<Restaurant[]>) => {
+            if (response.ok) {
+                return response.data;
+            } else {
+                throw new Error('Error while fetching restaurants');
+            }
+        }).catch((error => {
+            console.error('Error while fetching restaurants:', error);
+            return [];
+        }));
+
+    console.log(restaurants);
+}
+
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
 ------------------------------------------------------------------------- */
@@ -321,6 +343,7 @@ watch(
 </script>
 
 <template>
+    <UButton label="test ci/cd" color="neutral" icon="i-heroicons-arrow-left-on-rectangle" @click="fetchRestaurant"/>
     <div class="flex flex-col p-4 w-full gap-4">
         <UTabs :items="items" class="w-full" color="neutral" v-model="activeTab">
             <template #restaurant="{ item }">
