@@ -311,7 +311,7 @@ async function fetchRestaurant() {
         },
         retry: 3,
         retryDelay: 1000,
-        baseURL: 'http://host.docker.internal:3101'
+        baseURL: 'http://localhost:3101'
     });
 
     console.log(data.value, error.value);
