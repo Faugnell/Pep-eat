@@ -81,13 +81,13 @@ const {
 } = await useAsyncData(
     'liste-restaurants',
     () =>
-        $fetch<Response<Restaurant[]>>(`http://host.docker.internal:3101/restaurants`, {
+        $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
             retry: 3,
-            retryDelay: 1000,
+            retryDelay: 1000
         }).then((response: Response<Restaurant[]>) => {
             if (response.ok) {
                 return response.data;
@@ -97,7 +97,10 @@ const {
         }).catch((error => {
             console.error('Error while fetching restaurants:', error);
             return [];
-        }))
+        })),
+    {
+        server: true
+    }
 );
 
 const selectedRestaurant = ref<Restaurant | null>(null)
