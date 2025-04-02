@@ -19,4 +19,6 @@ COPY --from=build /src /src
 # Optional, only needed if you rely on unbundled dependencies
 # COPY --from=build /src/node_modules /src/node_modules
 
+EXPOSE 3101
+
 CMD [ "node", "dist/index.js" ]
