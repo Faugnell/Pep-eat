@@ -33,9 +33,9 @@ export type Data = {
     token: string;
 }
 
-export type ApiResponse = {
+export type ApiResponse<T> = {
     code: number;
     ok: boolean;
-    data: Data;
+    data: T;
     message: string;
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import HeaderPepeat from "~/components/common/HeaderPepeat.vue";
 import type { TabsItem } from '@nuxt/ui'
 
 const last_name: Ref<string> = ref('');

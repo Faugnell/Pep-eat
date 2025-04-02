@@ -2,30 +2,31 @@
 import type { DropdownMenuItem } from '@nuxt/ui';
 import Connexion from '~/components/authentification/Connexion.vue'
 import Inscription from '~/components/authentification/Inscription.vue'
+import { useUserStore } from '~/stores/userStore';
+import PanierSlideover from '../panier/PanierSlideover.vue';
+import { usePanierStore } from '~/stores/panierStore';
+
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
+const {
+  getFirstName,
+  isConnected,
+  disconnectUser
+} = useUserStore();
+
+const {
+  getNumberOfArticles
+} = usePanierStore();
 
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const router = useRouter()
-
-const isConnected = ref<boolean>(true)
-const user = ref({ firstName: 'Victor' })
-
-const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  window.location.reload();
-};
-
 const itemsHeader = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Profil',
-      icon: 'i-lucide-user',
-      to: '/profil'
+      icon: 'i-lucide-user'
     },
     {
       label: 'Mes commandes',
@@ -42,25 +43,47 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
     },
   ],
   [
-    { label: 'Développeur', icon: 'i-ic-baseline-computer' },
-    { label: 'Commercial', icon: 'i-uil-briefcase-alt' }
+    {
+      label: 'Développeur',
+      icon: 'i-ic-baseline-computer'
+    },
+    {
+      label: 'Commercial',
+      icon: 'i-uil-briefcase-alt'
+    }
   ],
   [
     {
       label: 'Déconnexion',
       icon: 'i-basil-logout-outline',
-      color: 'tertiary',
-      onSelect() {
-        handleLogout()
+      color: 'error',
+      onSelect: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        disconnectUser();
       }
     }
   ],
 ]);
 
+const router = useRouter()
+const goHome = () => {
+  router.push('/')
+}
+
+const userConnected = computed<boolean>(() => isConnected());
+const userFirstName = computed<string>(() => getFirstName());
+
+const panierSlideoverOverlay = useOverlay().create(PanierSlideover);
+const numberOfArticles = computed(() => getNumberOfArticles());
+const showPanierChip = computed(() => numberOfArticles.value > 0);
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
+async function openPanierSlideover() {
+  await panierSlideoverOverlay.open();
+}
 
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
@@ -76,17 +99,21 @@ onMounted(async () => {
 <template>
   <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
     <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg"
-      @click="router.push('/')" />
-    <template v-if="isConnected">
-      <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..."
-        class="w-[50vh] min-w-50" />
-    </template>
-
-    <UDropdownMenu v-if="isConnected" class="h-[80%] object-contain mx-[1%]" :items="itemsHeader"
-      :ui="{ content: 'w-48' }">
-      <UButton :label="user.firstName" icon="i-lucide-user" color="neutral" variant="link" />
-    </UDropdownMenu>
-
+      @click="goHome" />
+    <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..."
+      class="w-[50vh] min-w-50" />
+    <div v-if="userConnected" class="flex gap-3 pr-4">
+      <UChip :text="numberOfArticles" :show="showPanierChip" size="3xl" color="neutral" inset>
+        <UButton color="neutral" variant="ghost" icon="i-lucide-shopping-basket" size="xl" :ui="{ base: 'text-xl' }"
+          @click="openPanierSlideover" />
+      </UChip>
+      <UDropdownMenu class="h-[80%] object-contain mx-[1%]" :items="itemsHeader" :ui="{
+        content: 'w-48'
+      }">
+        <UButton :label="userFirstName" icon="i-lucide-user" color="neutral" variant="link" size="xl"
+          :ui="{ base: 'text-xl' }" />
+      </UDropdownMenu>
+    </div>
     <div v-else class="flex gap-5 mr-3">
       <!-- Inscription -->
       <UModal title="Inscription">
@@ -95,11 +122,12 @@ onMounted(async () => {
           <Inscription />
         </template>
       </UModal>
-
       <!-- Connexion -->
       <UModal title="Se connecter à Pep'Eat">
         <UButton label="Connexion" color="primary" size="md" class="text-xl rounded-full cursor-pointer" />
+
         <template #body>
+          <!-- Email -->
           <Connexion />
         </template>
       </UModal>
