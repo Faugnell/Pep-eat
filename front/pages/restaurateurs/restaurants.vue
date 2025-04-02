@@ -97,10 +97,7 @@ const {
         }).catch((error => {
             console.error('Error while fetching restaurants:', error);
             return [];
-        })),
-    {
-        server: true
-    }
+        }))
 );
 
 const selectedRestaurant = ref<Restaurant | null>(null)
@@ -301,6 +298,7 @@ async function updateRestaurant() {
 }
 
 async function fetchRestaurant() {
+    console.log('Fetch restaurants --- useFetch --- server');
     const {
         data,
         error
@@ -319,8 +317,44 @@ async function fetchRestaurant() {
 
     if (error.value) {
         console.error('Error while fetching restaurants:', error.value);
-        return [];
     }
+
+    console.log('Fetch restaurants --- useFetch --- localhost');
+    const {
+        data: data2,
+        error: error2
+    } = await useFetch(`/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+        baseURL: 'http://localhost:3101',
+        server: false
+    });
+
+    console.log(data2.value, error2.value);
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants = await $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
 
     // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
     //         method: 'GET',
