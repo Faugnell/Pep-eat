@@ -71,12 +71,12 @@ async function create(req: Request, res: Response) {
   const newCommande = await commandesService.create({
     "user_id": req.body.user_id,
     "restaurant_id": req.body.restaurant_id,
-    "plat_ids": req.body.plat_ids,
+    "billing_details": req.body.billing_details,
     "date": req.body.date,
     "price": req.body.price,
     "promotions": req.body.promotions,
     "status": req.body.status,
-    "note": req.body.note
+    "comment": req.body.comment
   })
   if(newCommande._id){
     res.status(200).json({

@@ -33,13 +33,15 @@ const {data} = await useFetch(`http://localhost:3102/commandes/${route.params.id
                 <template #header>
                     <h1 class="w-full text-lg text-center">{{ `Commande #${data.data._id}` }}</h1>
                 </template>
+                <h1 class="w-full text-center text-xl capitalize">{{ data.data.status }}</h1>
+                <USeparator class="py-1"/>
                 <h2 class="text-lg">{{ `Votre commande du ${new Date(data.data.date).toLocaleString()}:` }}</h2>
                 <div class="pl-4 w-full">
-                    <template v-for="(plat, index) in data.data.plat_data">
+                    <template v-for="(plat, index) in data.data.billing_details">
                         <USeparator v-if="index !== 0" type="dashed" />
                         <div class="flex justify-between">
-                            <p>{{ `- ${plat.name}` }}</p>
-                            <p>{{`${plat.price.toFixed(2)}€`}}</p>
+                            <p>{{ `${plat.quantity} x - ${plat.article_data.name}` }}</p>
+                            <p>{{`${parseFloat(plat.article_data.price['$numberDecimal']*plat.quantity).toFixed(2)}€`}}</p>
                         </div>
                     </template>
                     <template v-for="(promotion, index) in data.data.promotions">
@@ -69,7 +71,7 @@ const {data} = await useFetch(`http://localhost:3102/commandes/${route.params.id
                     <p ></p>
                 </div>
                 <template #footer>
-                    <p class="text-sm text-center">Merci d'avoir commander sur Pep'eat ❤️</p>
+                    <p class="text-sm text-center">Merci d'avoir commandé sur Pep'eat ❤️</p>
                 </template>
             </UCard>
         </div>
