@@ -75,7 +75,7 @@ const restaurants = [
     <!--* ===========================================================================================     *-->
     <HeaderPepeat />
     <div v-if="userConnected === false" class="flex flex-col min-h-screen">
-        <div class="bg-fixed-background flex-1 w-full bg-cover bg-center">
+        <div class="homepageBackgroundImage flex-1 w-full bg-cover bg-center">
             <div class="absolute bottom-30 left-20">
                 <div class="text-white">
                     <NuxtImg src="/icons/white.png" width="400" />
