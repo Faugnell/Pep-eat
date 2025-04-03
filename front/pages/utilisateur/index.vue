@@ -26,10 +26,3 @@
     <!--* ===========================================================================================     *-->
     <div class="flex flex-col min-h-screen"></div>  
 </template>
-
-
-<style scoped>
-.bg-fixed-background {
-    background-image: url('bg-homepage.png');
-}
-</style>

@@ -8,7 +8,11 @@ export type commandeType = {
   billing_details: [{quantity: number, article_data: articleType}],
   date: Date,
   price: number,
-  promotions: {type: string, value: number, code: string},
+  promotions: {
+    type: string,
+    value: number,
+    code: string
+  },
   status: 'en cours'|'livrée'|'annulée',
   comment: String,
 }

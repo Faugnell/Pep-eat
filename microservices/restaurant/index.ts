@@ -39,7 +39,7 @@ async function main() {
         console.log(err)
     }
 
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, '0.0.0.0', () => {
         console.log(`Lancement de du micro-service gérant les restaurants sur le port : ${process.env.PORT}`);
         console.log(`Lancement de du micro-service gérant les restaurants sur l'adresse : ${ipAddress}:${process.env.PORT}`);
     })
