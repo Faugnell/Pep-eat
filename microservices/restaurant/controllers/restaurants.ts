@@ -11,8 +11,6 @@ const Restaurant = require("../models/restaurants");
  * @throws {Error} - Erreur lors de la récupération des restaurants
  */
 export async function find(req:Request, res:Response) {
-	console.log(`Find restaurant - ${req.params.id}`)
-
 	const id = req.params.id;
 
 	try {

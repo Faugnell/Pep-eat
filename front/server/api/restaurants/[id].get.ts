@@ -9,7 +9,7 @@ export default defineEventHandler(async (event : H3Event) => {
     if (!id) return buildErrorResponse(null, 400, `L'ID du restaurant est requis`);
 
     try {
-        const response = await $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants/${id}`, {
+        const response = await $fetch<Response<Restaurant[]>>(`http://${process.env.API_RESTAURANT_SERVICE_HOST}:${process.env.API_RESTAURANT_SERVICE_PORT}/restaurants/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

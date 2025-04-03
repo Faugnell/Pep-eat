@@ -11,7 +11,7 @@ export default defineEventHandler(async (event : H3Event) => {
     const body = await readBody(event);
 
     try {
-        const response = await $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants/${id}`, {
+        const response = await $fetch<Response<Restaurant[]>>(`http://${process.env.API_RESTAURANT_SERVICE_HOST}:${process.env.API_RESTAURANT_SERVICE_PORT}/restaurants/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
