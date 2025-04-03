@@ -5,7 +5,7 @@ import { Media } from "~/utils/types/Media";
 export default defineEventHandler(async (event : H3Event) => {
     try {
         const response = await $fetch<Response<Media[]>>(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/medias`, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -216,8 +216,6 @@ async function updateRestaurant() {
         sponsorise: selectedRestaurant.value.sponsorise
     };
 
-    console.log(`fetch /api/medias/${selectedRestaurant.value.id_media}`, selectedRestaurant.value);
-
     if (selectedRestaurant.value._id) {
         /* Mise à jour d'un restaurant existant */
 
