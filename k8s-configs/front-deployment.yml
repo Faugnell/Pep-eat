@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pepeat
+  name: front
   labels:
-    app: pepeat
+    app: front
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pepeat
+      app: front
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,10 +17,10 @@ spec:
   template:
     metadata:
       labels:
-        app: pepeat
+        app: front
     spec:
       containers:
-      - name: pepeat
+      - name: front
         image: <IMAGE>
         ports:
         - containerPort: 80
@@ -33,7 +33,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pepeat-service
+  name: front-service
 spec:
   type: LoadBalancer
   ports:
@@ -42,4 +42,4 @@ spec:
       port: 80
       targetPort: 3000
   selector:
-    app: pepeat
+    app: front
