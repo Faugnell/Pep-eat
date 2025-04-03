@@ -87,7 +87,7 @@ const {
                 'Content-Type': 'application/json',
             },
             retry: 3,
-            retryDelay: 1000,
+            retryDelay: 1000
         }).then((response: Response<Restaurant[]>) => {
             if (response.ok) {
                 return response.data;
@@ -122,7 +122,7 @@ async function fetchArticlesByRestaurant(restaurantId: string) {
     )
     return response
   } catch (error) {
-    console.error(`Erreur pour le resto ${restaurantId} :`, error)
+    // console.error(`Erreur pour le resto ${restaurantId} :`, error)
   }
 }
 
@@ -297,6 +297,124 @@ async function updateRestaurant() {
     }
 }
 
+async function fetchRestaurant() {
+    console.log('Fetch restaurants --- useFetch --- server');
+    const {
+        data,
+        error
+    } = await useFetch(`/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+        baseURL: 'http://localhost:3101',
+        server: true
+    });
+
+    console.log(data.value, error.value);
+
+    if (error.value) {
+        console.error('Error while fetching restaurants:', error.value);
+    }
+
+    console.log('Fetch restaurants --- useFetch --- localhost');
+    const {
+        data: data2,
+        error: error2
+    } = await useFetch(`/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+        baseURL: 'http://localhost:3101',
+        server: false
+    });
+
+    console.log(data2.value, error2.value);
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants = await $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants2 = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants3 = await $fetch<Response<Restaurant[]>>(`http://68.183.242.200:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
+
+    // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         retry: 3,
+    //         retryDelay: 1000
+    //     }).then((response: Response<Restaurant[]>) => {
+    //         if (response.ok) {
+    //             return response.data;
+    //         } else {
+    //             throw new Error('Error while fetching restaurants');
+    //         }
+    //     }).catch((error => {
+    //         console.error('Error while fetching restaurants:', error);
+    //         return [];
+    //     }));
+
+    // console.log(restaurants);
+}
+
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
 ------------------------------------------------------------------------- */
@@ -321,6 +439,7 @@ watch(
 </script>
 
 <template>
+    <UButton label="test ci/cd" color="neutral" icon="i-heroicons-arrow-left-on-rectangle" @click="fetchRestaurant"/>
     <div class="flex flex-col p-4 w-full gap-4">
         <UTabs :items="items" class="w-full" color="neutral" v-model="activeTab">
             <template #restaurant="{ item }">
