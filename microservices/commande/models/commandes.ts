@@ -5,13 +5,27 @@ const Schema = mongoose.Schema;
 export type commandeType = {
   user_id: Types.ObjectId,
   restaurant_id: Types.ObjectId,
-  plat_ids: [Types.ObjectId,],
+  billing_details: [{quantity: number, article_data: articleType}],
   date: Date,
   price: number,
-  promotions: {type: string, value: number, code: string},
+  promotions: {
+    type: string,
+    value: number,
+    code: string
+  },
   status: 'en cours'|'livrée'|'annulée',
-  note: String,
+  comment: String,
 }
+
+type articleType= {
+  article_id: string,
+  name: string,
+  description: string,
+  price: number,
+  nutriscore: string,
+  category: string
+}
+
 const promotionSchema = new Schema({
   type: {
     type: String,
@@ -26,7 +40,45 @@ const promotionSchema = new Schema({
     type: String,
     required: true
   }
-})
+}, { autoIndex: false })
+
+const platSchema = new Schema({
+  article_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    default: ""
+  },
+  price: {
+    type: mongoose.Schema.Types.Decimal128,
+    required: true
+  },
+  nutriscore: {
+    type: String,
+    default: "NA"
+  },
+  category: {
+    type: String,
+    required: true
+  }
+}, { autoIndex: false })
+
+const billingdetailSchema = new Schema({
+  quantity: {
+    type: Number,
+    default: 1
+  },
+  article_data: {
+    type: platSchema,
+    required: true
+  }
+}, { autoIndex: false })
 
 const commandeSchema = new Schema({
   user_id: {
@@ -39,13 +91,10 @@ const commandeSchema = new Schema({
     ref: "restaurants",
     required: true
   },
-  plat_ids: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "plats",
-      required: true
-    }
-  ],
+  billing_details: [{
+    type: billingdetailSchema,
+    required: true
+  }],
   date: {
     type: Date,
     required: true
@@ -65,7 +114,7 @@ const commandeSchema = new Schema({
     enum: ['en cours', 'livrée', 'annulée'],
     default: 'en cours'
   },
-  note: {
+  comment: {
     type: String,
     trim: true
   }

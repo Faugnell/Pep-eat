@@ -91,7 +91,7 @@ const {
                 'Content-Type': 'application/json',
             },
             retry: 3,
-            retryDelay: 1000,
+            retryDelay: 1000
         }).then((response: Response<Restaurant[]>) => {
             if (response.ok) {
                 return response.data;
@@ -138,7 +138,7 @@ async function fetchArticlesByRestaurant(restaurantId: string) {
     )
     return response
   } catch (error) {
-    console.error(`Erreur pour le resto ${restaurantId} :`, error)
+    // console.error(`Erreur pour le resto ${restaurantId} :`, error)
   }
 }
 
@@ -451,25 +451,79 @@ async function updateRestaurant() {
 }
 
 async function fetchRestaurant() {
-    const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            retry: 3,
-            retryDelay: 1000
-        }).then((response: Response<Restaurant[]>) => {
-            if (response.ok) {
-                return response.data;
-            } else {
-                throw new Error('Error while fetching restaurants');
-            }
-        }).catch((error => {
-            console.error('Error while fetching restaurants:', error);
-            return [];
-        }));
+    const a = await $fetch(`/api/restaurants`, { method: 'GET'});
 
-    console.log(restaurants);
+    const url = [
+        'http://localhost:3101/restaurants',
+        'http://microservice-restaurant-service.default.svc.cluster.local:3101/restaurants',
+        'http://10.114.0.2:3101/restaurants'
+    ];
+
+    for (let i = 0; i < 2; i++) {
+        for (const u of url) {
+            try {
+                console.log(`Fetching restaurants from ${u} using $fetch with server: ${i === 0}`);
+                const response = await $fetch<Response<Restaurant[]>>(u, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    retry: 3,
+                    retryDelay: 1000
+                });
+
+                if (response.ok) {
+                    console.log(`Fetched restaurants from ${u} using $fetch with server: ${i === 0}`);
+                    console.log(response.data);
+                } else {
+                    throw new Error('Error while fetching restaurants');
+                }
+            } catch (error) {
+                console.error('Error while fetching restaurants:', error);
+            }
+
+            try {
+                const response = await useFetch<Response<Restaurant[]>>(u, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    retry: 3,
+                    retryDelay: 1000,
+                    server: i === 0
+                });
+
+                if (response.data.value) {
+                    console.log(`Fetched restaurants from ${u} using useFetch with server: ${i === 0}`);
+                    console.log(response.data.value);
+                } else {
+                    throw new Error('Error while fetching restaurants');
+                }
+            } catch (error) {
+                console.error('Error while fetching restaurants:', error);
+            }
+        }
+    }
+
+    // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         retry: 3,
+    //         retryDelay: 1000
+    //     }).then((response: Response<Restaurant[]>) => {
+    //         if (response.ok) {
+    //             return response.data;
+    //         } else {
+    //             throw new Error('Error while fetching restaurants');
+    //         }
+    //     }).catch((error => {
+    //         console.error('Error while fetching restaurants:', error);
+    //         return [];
+    //     }));
+
+    // console.log(restaurants);
 }
 
 /* -------------------------------------------------------------------------

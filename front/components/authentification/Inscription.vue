@@ -79,7 +79,9 @@ const handleSubmit = async (): Promise<void> => {
                     postalCode: data.data.postal_code,
                     address: data.data.address,
                     email: data.data.email,
-                    phone: data.data.phone
+                    phone: data.data.phone,
+                    referral_link: data.data.referral_link,
+                    is_suspended: data.data.is_suspended
                 }
             );
         } else {
