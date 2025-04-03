@@ -59,7 +59,7 @@ const connected = ref(false);
     <!--* ===========================================================================================     *-->
     <HeaderPepeat />
     <div v-if="connected === false" class="flex flex-col min-h-screen">
-        <div class="bg-fixed-background flex-1 w-full bg-cover bg-center">
+        <div class="homepageBackgroundImage flex-1 w-full bg-cover bg-center">
             <div class="absolute bottom-30 left-20">
                 <div class="text-white">
                     <NuxtImg src="/icons/white.png" width="400" />
@@ -105,10 +105,3 @@ const connected = ref(false);
         <FooterPepeat />
     </div>
 </template>
-
-
-<style scoped>
-.bg-fixed-background {
-    background-image: url('./bg-homepage.png');
-}
-</style>

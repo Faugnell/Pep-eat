@@ -87,10 +87,3 @@ const { data: commande } = await useAsyncData<any>(
         </div>
     </div>
 </template>
-
-
-<style scoped>
-.bg-fixed-background {
-    background-image: url('bg-homepage.png');
-}
-</style>

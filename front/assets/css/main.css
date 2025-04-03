@@ -13,3 +13,7 @@ body,
     height: 100vh;
     font-family: 'Zain', sans-serif;
 }
+
+.homepageBackgroundImage {
+    background-image: url('/bg-homepage.png');
+}
