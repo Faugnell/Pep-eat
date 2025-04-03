@@ -355,25 +355,6 @@ async function fetchRestaurant() {
         return [];
     }));
 
-    console.log('Fetch restaurants --- $fetch --- server');
-    const restaurants2 = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        retry: 3,
-        retryDelay: 1000,
-    }).then((response: Response<Restaurant[]>) => {
-        if (response.ok) {
-            return response.data;
-        } else {
-            throw new Error('Error while fetching restaurants');
-        }
-    }).catch((error => {
-        console.error('Error while fetching restaurants:', error);
-        return [];
-    }));
-
     console.log('Fetch restaurants --- $fetch --- interne');
     const restaurants3 = await $fetch<Response<Restaurant[]>>(`http://microservice-restaurant-service.default.svc.cluster.local:3101/restaurants`, {
         method: 'GET',
@@ -392,6 +373,45 @@ async function fetchRestaurant() {
         console.error('Error while fetching restaurants:', error);
         return [];
     }));
+
+    console.log('Fetch restaurants --- $fetch --- 10.114.0.2');
+    const restaurants4 = await $fetch<Response<Restaurant[]>>(`http://10.114.0.2:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
+    console.log('Fetch restaurants --- $fetch --- 10.108.0.100');
+    const restaurants5 = await $fetch<Response<Restaurant[]>>(`http://10.108.0.100:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
 
 
     // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
