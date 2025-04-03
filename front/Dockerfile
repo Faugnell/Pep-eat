@@ -13,9 +13,6 @@ RUN npm run build
 FROM base
 ENV PORT=$PORT
 ENV NODE_ENV=production
-ENV NUXT_RESTAURANT_API=api-restaurant:3101
-ENV NUXT_MEDIA_API=api-media:3107
-ENV RESTAURANT_API=api-restaurant:3101
 
 COPY --from=build /src/.output /src/.output
 # Optional, only needed if you rely on unbundled dependencies

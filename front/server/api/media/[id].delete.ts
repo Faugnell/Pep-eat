@@ -1,16 +1,16 @@
 import { H3Event } from "h3";
 import { Response } from "~/utils/types/Response";
-import { Restaurant } from "~/utils/types/Restaurant";
+import { Media } from "~/utils/types/Media";
 import { buildErrorResponse } from "~/utils/responseBuilder";
 
 export default defineEventHandler(async (event : H3Event) => {
     const id = getRouterParam(event, 'id');
 
-    if (!id) return buildErrorResponse(null, 400, `L'ID du restaurant est requis`);
+    if (!id) return buildErrorResponse(null, 400, `L'ID du média est requis`);
 
     try {
-        const response = await $fetch<Response<Restaurant[]>>(`http://${process.env.API_RESTAURANT_SERVICE_HOST}:${process.env.API_RESTAURANT_SERVICE_PORT}/restaurants/${id}`, {
-            method: 'GET',
+        const response = await $fetch<Response<Media[]>>(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/media/${id}`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
