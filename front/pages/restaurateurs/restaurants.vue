@@ -298,29 +298,6 @@ async function updateRestaurant() {
     }
 }
 
-async function fetchR() {
-    const r = await $fetch<Response<Restaurant[]>>(`/api/restaurants`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            retry: 3,
-            retryDelay: 1000
-        }).then((response: Response<Restaurant[]>) => {
-            console.log(response);
-            if (response.ok) {
-                return response.data;
-            } else {
-                throw new Error('Error while fetching restaurants');
-            }
-        }).catch((error => {
-            console.error('Error while fetching restaurants:', error);
-            return [];
-        }));
-
-    console.log(r);
-}
-
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
 ------------------------------------------------------------------------- */
@@ -345,7 +322,6 @@ watch(
 </script>
 
 <template>
-    <UButton color="neutral" label="cicd" @click="fetchR"/>
     <div class="flex flex-col p-4 w-full gap-4">
         <UTabs :items="items" class="w-full" color="neutral" v-model="activeTab">
             <template #restaurant="{ item }">
