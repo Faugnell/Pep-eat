@@ -12,6 +12,8 @@ const Restaurant = require("../models/restaurants");
  */
 export async function find(req:Request, res:Response) {
 	console.log(`Find restaurant - ${req.params.id}`)
+	console.log(process.env);
+	console.log(process.env.RESTAURANT_API);
 
 	const id = req.params.id;
 
