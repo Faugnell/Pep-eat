@@ -374,8 +374,8 @@ async function fetchRestaurant() {
         return [];
     }));
 
-    console.log('Fetch restaurants --- $fetch --- server');
-    const restaurants3 = await $fetch<Response<Restaurant[]>>(`http://68.183.242.200:3101/restaurants`, {
+    console.log('Fetch restaurants --- $fetch --- interne');
+    const restaurants3 = await $fetch<Response<Restaurant[]>>(`http://microservice-restaurant-service.default.svc.cluster.local:3101/restaurants`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
