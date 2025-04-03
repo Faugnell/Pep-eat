@@ -298,6 +298,8 @@ async function updateRestaurant() {
 }
 
 async function fetchRestaurant() {
+    console.log(await this.$axios.$get('localhost:3101/restaurants'));
+
     console.log('Fetch restaurants --- useFetch --- server');
     const {
         data,
