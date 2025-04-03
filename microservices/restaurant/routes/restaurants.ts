@@ -8,6 +8,9 @@ router.get("/", restaurantsController.find);
 // Récupérer un restaurant spécifique
 router.get("/:id", restaurantsController.find);
 
+// Récupérer les restaurants selon un parametre
+router.get("/filter/:filter", restaurantsController.findLike);
+
 // Créer un restaurant
 router.post("/", restaurantsController.create);
 
