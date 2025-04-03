@@ -89,7 +89,6 @@ const {
             retry: 3,
             retryDelay: 1000
         }).then((response: Response<Restaurant[]>) => {
-            console.log(response);
             if (response.ok) {
                 return response.data;
             } else {
