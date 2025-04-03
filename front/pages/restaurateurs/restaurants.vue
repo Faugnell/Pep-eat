@@ -374,6 +374,25 @@ async function fetchRestaurant() {
         return [];
     }));
 
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants3 = await $fetch<Response<Restaurant[]>>(`http://68.183.242.200:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
 
     // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
     //         method: 'GET',
