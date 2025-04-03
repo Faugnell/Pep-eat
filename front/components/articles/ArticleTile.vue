@@ -73,21 +73,21 @@ onMounted(async () => {
 
 <template>
   <UCard
-    class="drop-shadow-[0_1px_1px_rgba(0,0,0,0.20)] w-[50vh] rounded-none"
-    :ui="{ body: 'p-0 sm:p-6' }"
+    class="drop-shadow-[0_1px_1px_rgba(0,0,0,0.20)] w-full rounded-md"
+    :ui="{ body: 'p-0 sm:p-0 w-full grow' }"
   >
-  <div class="flex justify-center">
-    <NuxtImg class="grow" src="https://picsum.photos/800/500?random=1" fit="cover" />
-  </div>
+    <div class="flex justify-center">
+      <NuxtImg class="grow" :src="imageUrl" fit="cover" />
+    </div>
     <template #footer>
-      <div class="flex gap-2 flex-row">
-        <div class="flex basis-5/6 items-center">
-          <UBadge class="font-bold rounded-full" :class="computedBadgeClass">
+      <div class="flex justify-between">
+        <div class="flex items-center">
+          <UBadge class="font-bold rounded-full mr-1" :class="computedBadgeClass">
             {{ computedBadgeText }}
           </UBadge>
           <p>{{ title }}</p>
         </div>
-        <div class="basis-1/6 text-right">{{ price }} €</div>
+        <div class="text-right">{{ price }} €</div>
       </div>
     </template>
   </UCard>

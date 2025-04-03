@@ -33,17 +33,17 @@ export async function listByCategory(req: Request, res: Response) {
 
 export async function read(req: Request, res: Response) {
   try {
-    const { articleId } = req.params;
+    const { id } = req.params;
 
     // Vérification de l'ID
-    if (!articleId) {
-      return res.status(400).json({ message: "Paramètre 'articleId' manquant." });
+    if (!id) {
+      return res.status(400).json({ message: "Paramètre 'id' manquant." });
     }
 
-    const article = await articlesService.findById(articleId);
+    const article = await articlesService.findById(id);
 
     if (!article) {
-      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${articleId}` });
+      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${id}` });
     }
 
     return res.status(200).json(article);
@@ -79,17 +79,17 @@ export async function create(req: Request, res: Response) {
  
 export async function update(req: Request, res: Response) {
   try {
-    const { articleId } = req.params;
+    const { id } = req.params;
     const updateData = req.body;
 
-    if (!articleId) {
+    if (!id) {
       return res.status(400).json({ message: "Paramètre 'articleId' manquant." });
     }
 
-    const updatedArticle = await articlesService.updateById(articleId, updateData);
+    const updatedArticle = await articlesService.updateById(id, updateData);
 
     if (!updatedArticle) {
-      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${articleId}` });
+      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${id}` });
     }
 
     return res.status(200).json({ message: "Article mis à jour avec succès", article: updatedArticle });
@@ -104,16 +104,15 @@ export async function update(req: Request, res: Response) {
  
 export async function remove(req: Request, res: Response) {
   try {
-    const { articleId } = req.params;
-
-    if (!articleId) {
-      return res.status(400).json({ message: "Paramètre 'articleId' manquant." });
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Paramètre 'id' manquant." });
     }
 
-    const deleted = await articlesService.deleteById(articleId);
-
+    const deleted = await articlesService.deleteById(id);
+    
     if (!deleted) {
-      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${articleId}` });
+      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${id}` });
     }
 
     return res.status(200).json({ message: "Article supprimé avec succès.", article: deleted });
