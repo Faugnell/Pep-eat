@@ -81,13 +81,13 @@ const {
 } = await useAsyncData(
     'liste-restaurants',
     () =>
-        $fetch<Response<Restaurant[]>>(`http://host.docker.internal:3101/restaurants`, {
+        $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
             retry: 3,
-            retryDelay: 1000,
+            retryDelay: 1000
         }).then((response: Response<Restaurant[]>) => {
             if (response.ok) {
                 return response.data;
@@ -298,6 +298,7 @@ async function updateRestaurant() {
 }
 
 async function fetchRestaurant() {
+    console.log('Fetch restaurants --- useFetch --- server');
     const {
         data,
         error
@@ -308,15 +309,90 @@ async function fetchRestaurant() {
         },
         retry: 3,
         retryDelay: 1000,
-        baseURL: 'http://host.docker.internal:3101'
+        baseURL: 'http://localhost:3101',
+        server: true
     });
 
     console.log(data.value, error.value);
 
     if (error.value) {
         console.error('Error while fetching restaurants:', error.value);
-        return [];
     }
+
+    console.log('Fetch restaurants --- useFetch --- localhost');
+    const {
+        data: data2,
+        error: error2
+    } = await useFetch(`/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+        baseURL: 'http://localhost:3101',
+        server: false
+    });
+
+    console.log(data2.value, error2.value);
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants = await $fetch<Response<Restaurant[]>>(`http://localhost:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants2 = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
+    console.log('Fetch restaurants --- $fetch --- server');
+    const restaurants3 = await $fetch<Response<Restaurant[]>>(`http://68.183.242.200:3101/restaurants`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000,
+    }).then((response: Response<Restaurant[]>) => {
+        if (response.ok) {
+            return response.data;
+        } else {
+            throw new Error('Error while fetching restaurants');
+        }
+    }).catch((error => {
+        console.error('Error while fetching restaurants:', error);
+        return [];
+    }));
+
 
     // const restaurants = await $fetch<Response<Restaurant[]>>(`http://209.38.113.44:3101/restaurants`, {
     //         method: 'GET',
