@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice-media
+  name: front
   labels:
-    app: microservice-media
+    app: front
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: microservice-media
+      app: front
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,10 +17,10 @@ spec:
   template:
     metadata:
       labels:
-        app: microservice-media
+        app: front
     spec:
       containers:
-      - name: microservice-media
+      - name: front
         image: <IMAGE>
         ports:
         - containerPort: 80
@@ -29,3 +29,17 @@ spec:
             cpu: 100m
           limits:
             cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: front

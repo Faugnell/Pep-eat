@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice-restaurant
+  name: media
   labels:
-    app: microservice-restaurant
+    app: media
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: microservice-restaurant
+      app: media
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,13 +17,13 @@ spec:
   template:
     metadata:
       labels:
-        app: microservice-restaurant
+        app: media
     spec:
       containers:
-      - name: microservice-restaurant
+      - name: media
         image: <IMAGE>
         ports:
-        - containerPort: 3101
+        - containerPort: 80
         resources:
           requests:
             cpu: 100m

@@ -24,9 +24,6 @@ const paymentMessageVisible: Ref<boolean> = ref(false);
 const stepper = useTemplateRef('stepper')
 
 const router: Router = useRouter()
-const goHome = (): void => {
-    router.push('/')
-}
 
 // DONNÉES DE TEST
 const items: Ref<{ item: string; price: number }[]> = ref([
@@ -148,8 +145,8 @@ const completePayment = () => {
                         <p class="text-gray-600 mb-6">Vous recevrez une notification de confirmation sous peu.
                         </p>
                         <div class="flex space-x-4">
-                            <UButton label="Retourner à l'accueil" color="primary" variant="outline" @click="goHome" />
-                            <UButton label="Suivre la commande" color="primary" variant="solid" />
+                            <UButton label="Retourner à l'accueil" color="primary" variant="outline" @click="router.push('/')" />
+                            <UButton label="Suivre la commande" color="primary" variant="solid" @click="router.push('/commande/avancement')" />
                         </div>
                     </div>
                 </UCard>

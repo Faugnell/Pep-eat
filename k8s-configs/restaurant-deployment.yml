@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pepeat
+  name: restaurant
   labels:
-    app: pepeat
+    app: restaurant
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pepeat
+      app: restaurant
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,29 +17,15 @@ spec:
   template:
     metadata:
       labels:
-        app: pepeat
+        app: restaurant
     spec:
       containers:
-      - name: pepeat
+      - name: restaurant
         image: <IMAGE>
         ports:
-        - containerPort: 80
+        - containerPort: 3101
         resources:
           requests:
             cpu: 100m
           limits:
             cpu: 100m
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pepeat-service
-spec:
-  type: LoadBalancer
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 3000
-  selector:
-    app: pepeat
