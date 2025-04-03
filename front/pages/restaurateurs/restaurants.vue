@@ -301,7 +301,7 @@ async function fetchRestaurant() {
     const url = [
         'http://localhost:3101/restaurants',
         'http://microservice-restaurant-service.default.svc.cluster.local:3101/restaurants',
-        '10.114.0.2:3101/restaurants'
+        'http://10.114.0.2:3101/restaurants'
     ];
 
     for (let i = 0; i < 2; i++) {
