@@ -270,7 +270,7 @@ async function updateRestaurant() {
         }
     } else {
         /* Création d'un nouveau restaurant */
-        const response: Response<Restaurant> = await $fetch(`api/restaurants`, {
+        const response: Response<Restaurant> = await $fetch(`/api/restaurants`, {
             method: 'POST',
             body,
             headers: {
