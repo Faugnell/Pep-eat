@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: microservice-media
+  name: media
   labels:
-    app: microservice-media
+    app: media
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: microservice-media
+      app: media
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,10 +17,10 @@ spec:
   template:
     metadata:
       labels:
-        app: microservice-media
+        app: media
     spec:
       containers:
-      - name: microservice-media
+      - name: media
         image: <IMAGE>
         ports:
         - containerPort: 80
