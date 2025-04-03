@@ -27,16 +27,24 @@ interface IUser extends mongoose.Document {
  * @return {Object} - L'objet utilisateur mis à jour
  * @throws {Error} - Erreur lors de la mise à jour de l'utilisateur
  */
-export async function update(req: Request, res: Response) {
+export async function update(req:Request, res:Response) {
+	const id: string = req.params.id;
 
-}
+	if (!id) {
+		return res.status(400).send(buildErrorResponse(null, 400, "Aucun identifiant fourni"));
+	}
 
-/**
- * Supprimer un utilisateur
- * @param id - L'identifiant de l'utilisateur à supprimer 
- * @returns {Object} - L'objet utilisateur supprimé
- * @throws {Error} - Erreur lors de la suppression de l'utilisateur
- */
-export async function remove(req: Request, res: Response) {
+	try {
+		const user: IUser = await Utilisateur.findByIdAndUpdate(id, req.body);
 
+		if (user === null) {
+			return res.status(400).send(buildErrorResponse(null, 400, "Erreur lors de la mise à jour de l'utilisateur"));
+		}
+
+		const updatedUser: [IUser] = await Utilisateur.find({ _id: id });
+
+		return res.status(200).send(buildSuccessResponse(updatedUser, 200, "Utilisateur mis à jour avec succès"));
+	} catch (err) {
+		res.status(500).send(buildErrorResponse(err, 500, "Erreur lors de la mise à jour de l'utilisateur"));
+	}
 }

@@ -55,7 +55,9 @@ const handleLogIn = async (): Promise<void> => {
                     postalCode: data.data.user.postal_code,
                     address: data.data.user.address,
                     email: data.data.user.email,
-                    phone: data.data.user.phone
+                    phone: data.data.user.phone,
+                    referral_link: data.data.user.referral_link,
+                    is_suspended: data.data.user.is_suspended
                 }
             );
         } else {

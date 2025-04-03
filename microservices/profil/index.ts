@@ -8,6 +8,9 @@ const routes = require("./routes");
 
 const app = express();
 
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
+
 app.use((req:Request, res:Response, next:NextFunction) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -20,8 +23,8 @@ app.use((req:Request, res:Response, next:NextFunction) => {
     next();
 });
 
+app.use("/", jsonParser, routes);
 app.use(express.json());
-app.use("/", routes);
 
 async function main() {
     try {

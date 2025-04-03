@@ -22,11 +22,17 @@ const {
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
+const router = useRouter()
+const goHome = () => {
+  router.push('/')
+}
+
 const itemsHeader = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Profil',
-      icon: 'i-lucide-user'
+      icon: 'i-lucide-user',
+      to: '/profil'
     },
     {
       label: 'Mes commandes',
@@ -61,15 +67,11 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         disconnectUser();
+        goHome();
       }
     }
   ],
 ]);
-
-const router = useRouter()
-const goHome = () => {
-  router.push('/')
-}
 
 const userConnected = computed<boolean>(() => isConnected());
 const userFirstName = computed<string>(() => getFirstName());
