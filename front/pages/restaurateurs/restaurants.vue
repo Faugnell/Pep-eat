@@ -298,6 +298,8 @@ async function updateRestaurant() {
 }
 
 async function fetchRestaurant() {
+    const a = await $fetch(`/api/restaurants`, { method: 'GET'});
+
     const url = [
         'http://localhost:3101/restaurants',
         'http://microservice-restaurant-service.default.svc.cluster.local:3101/restaurants',
