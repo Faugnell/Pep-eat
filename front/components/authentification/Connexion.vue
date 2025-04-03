@@ -55,7 +55,9 @@ const handleLogIn = async (): Promise<void> => {
                     postalCode: data.data.user.postal_code,
                     address: data.data.user.address,
                     email: data.data.user.email,
-                    phone: data.data.user.phone
+                    phone: data.data.user.phone,
+                    referral_link: data.data.user.referral_link,
+                    is_suspended: data.data.user.is_suspended
                 }
             );
         } else {
@@ -75,9 +77,7 @@ const handleLogIn = async (): Promise<void> => {
 </script>
 
 <template>
-    <div class="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
-        <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
-
+    <div class="max-w-md mx-auto p-4">
         <!-- Champs du formulaire -->
         <div v-for="(field, index) in formFields" :key="index" class="w-full mb-4">
             <UFormField :label="field.label" required>
