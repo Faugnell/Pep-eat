@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+import type { ordersDataType } from '~/utils/types/Commande'
+
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -6,9 +8,15 @@
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
+type fetchedDataType = {
+    "code": number,
+    "ok": boolean,
+    "message": string,
+    "data": ordersDataType
+}
 
 const route = useRoute()
-const {data} = await useFetch(`http://localhost:3102/commandes/${route.params.id}`, { method: "GET" })
+const {data} = await useFetch<fetchedDataType>(`http://localhost:3102/commandes/${route.params.id}`, { method: "GET" })
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
@@ -41,14 +49,14 @@ const {data} = await useFetch(`http://localhost:3102/commandes/${route.params.id
                         <USeparator v-if="index !== 0" type="dashed" />
                         <div class="flex justify-between">
                             <p>{{ `${plat.quantity} x - ${plat.article_data.name}` }}</p>
-                            <p>{{`${parseFloat(plat.article_data.price['$numberDecimal']*plat.quantity).toFixed(2)}€`}}</p>
+                            <p>{{`${(parseFloat(plat.article_data.price['$numberDecimal'])*plat.quantity).toFixed(2)}€`}}</p>
                         </div>
                     </template>
                     <template v-for="(promotion, index) in data.data.promotions">
                         <USeparator v-if="index===0" class="py-1" size="md"/>
                         <div class="flex justify-between">
                             <p>{{ promotion.code }}</p>
-                            <p v-if="promotion.type==='percentage'">{{`-${((promotion.value['$numberDecimal'])*100).toFixed(2)}%`}}</p>
+                            <p v-if="promotion.type==='percentage'">{{`-${(parseFloat(promotion.value['$numberDecimal'])*100).toFixed(2)}%`}}</p>
                         </div>
                     </template>
                     <USeparator class="py-1" size="md"/>
