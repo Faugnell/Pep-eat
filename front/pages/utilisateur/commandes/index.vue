@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/userStore';
+import type { ordersDataType } from '~/utils/types/Commande';
+
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
@@ -9,23 +10,26 @@ const {
     isConnected
 } = useUserStore();
 
-
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
+
+type fetchedDataType = {
+    "code": number,
+    "ok": boolean,
+    "message": string,
+    "data": Array<ordersDataType>
+}
+
 const userId = computed<string>(() => getId());
 const userConnected = computed<boolean>(() => isConnected())
 
-const { data: commande } = await useAsyncData<any>(
+const { data: commande } = await useAsyncData<fetchedDataType>(
   'posts',
   () => $fetch(`http://localhost:3102/commandes/user/${userId.value}`), {
     watch: [userId]
   }
 )
-
-// const user_id = "67e6a0dc966cad123f40d4b2"
-
-// const {data} = await useFetch(`http://localhost:3102/commandes/user/${userId}`, { method: "GET" })
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
