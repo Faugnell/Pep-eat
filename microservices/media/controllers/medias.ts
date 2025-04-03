@@ -27,7 +27,8 @@ export async function find(req:Request, res:Response) {
  * @return {Object} - L'objet média créé
  * @throws {Error} - Erreur lors de la création du média
  */
-export async function create(req:any, res:Response) {	if (!req.body.buffer) {
+export async function create(req:any, res:Response) {
+	if (!req.body.buffer) {
 		return res.status(400).send(buildErrorResponse(null, 400, "Aucun buffer fourni"));
 	}
 
