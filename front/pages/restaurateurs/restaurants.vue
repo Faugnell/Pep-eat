@@ -224,7 +224,7 @@ async function updateRestaurant() {
             const formData = new FormData();
             formData.append('buffer', selectedRestaurant.value.image);
 
-            const imageResponse: Response<Media> = await $fetch<Response<Media>>(`http://localhost:3107/medias/${selectedRestaurant.value.id_media ?? ''}`, {
+            const imageResponse: Response<Media> = await $fetch<Response<Media>>(`/api/medias/${selectedRestaurant.value.id_media ?? ''}`, {
                 method: selectedRestaurant.value.id_media ? 'PUT' : 'POST', // PUT si l'image existe déjà, sinon POST
                 body: formData
             });
