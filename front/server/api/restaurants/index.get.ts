@@ -3,6 +3,9 @@ import { Response } from "~/utils/types/Response";
 import { Restaurant } from "~/utils/types/Restaurant";
 
 export default defineEventHandler(async (event : H3Event) => {
+    console.log(process.env);
+	console.log(process.env.RESTAURANT_API);
+    
     try {
         const response = await $fetch<Response<Restaurant[]>>('http://localhost:3101/restaurants', {
             method: 'GET',
