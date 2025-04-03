@@ -2,7 +2,7 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-	modules: ['@nuxt/icon', '@nuxt/ui', '@nuxt/image', '@pinia/nuxt', '@nuxtjs/axios'],
+	modules: ['@nuxt/icon', '@nuxt/ui', '@nuxt/image', '@pinia/nuxt'],
 	app: {
 		head: {
 			title: 'Pep\'eat',
