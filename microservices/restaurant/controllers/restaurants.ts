@@ -11,8 +11,6 @@ const Restaurant = require("../models/restaurants");
  * @throws {Error} - Erreur lors de la récupération des restaurants
  */
 export async function find(req:Request, res:Response) {
-	console.log(`Find restaurant - ${req.params.id ? req.params.id : 'all'}`)
-
 	const match = req.params.id !== undefined ? {_id : new mongoose.Types.ObjectId(req.params.id)} : {};
 
 	try {
@@ -154,10 +152,8 @@ export async function findLike(req:Request, res:Response) {
  * @throws {Error} - Erreur lors de la création du restaurant
  */
 export async function create(req:Request, res:Response) {
-	// TODO: Supprimer la ligne ci-dessous
-	if (req.body.id_proprietaire === undefined) {
-		req.body.id_proprietaire = '660c1a1e2f5a5b1a4b8e4c21';
-	}
+	console.log(`Create restaurant : ${req.body.nom}`);
+	console.log(req.body);
 
 	try {
 		const restaurant = await Restaurant.findOne({ siret: req.body.siret });

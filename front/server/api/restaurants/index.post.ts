@@ -4,9 +4,10 @@ import { Restaurant } from "~/utils/types/Restaurant";
 
 export default defineEventHandler(async (event : H3Event) => {
     const body = await readBody(event);
+    console.log('POST /restaurants', body);
 
     try {
-        const response = await $fetch<Response<Restaurant[]>>(`http://${process.env.API_RESTAURANT_SERVICE_HOST}:${process.env.API_RESTAURANT_SERVICE_PORT}/restaurants/${id}`, {
+        const response = await $fetch<Response<Restaurant[]>>(`http://${process.env.API_RESTAURANT_SERVICE_HOST}:${process.env.API_RESTAURANT_SERVICE_PORT}/restaurants`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
