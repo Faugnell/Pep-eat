@@ -27,6 +27,8 @@ const goHome = () => {
   router.push('/')
 }
 
+const searchValue = ref<string | number | null | undefined>("")
+
 const itemsHeader = ref<DropdownMenuItem[][]>([
   [
     {
@@ -87,6 +89,10 @@ async function openPanierSlideover() {
   await panierSlideoverOverlay.open();
 }
 
+const goToSearch = () => {
+  router.push(`/restaurants/search/${searchValue.value ? searchValue.value : "" }`)
+}
+
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
 ------------------------------------------------------------------------- */
@@ -100,9 +106,21 @@ onMounted(async () => {
 
 <template>
   <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
-    <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%] hover:cursor-pointer hover:h-[83%] ease-in-out duration-150" src="../../public/icons/black.svg" @click="goHome" />
-    <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..."
-      class="w-[50vh] min-w-50" />
+    <img id="logo" alt="logo"
+      class="h-[80%] object-contain mx-[1%] hover:cursor-pointer hover:h-[83%] ease-in-out duration-150"
+      src="../../public/icons/black.svg" @click="goHome" />
+    <UInput
+    v-on:keyup.enter="goToSearch" 
+    ize="md"
+    variant="outline"
+    placeholder="Restaurant, commerces, plats..."
+      class="w-[50vh] min-w-50"
+      v-model="searchValue">
+      <template #trailing>
+        <UButton color="neutral" variant="link" size="sm" icon="i-lucide-search"
+          @click="goToSearch"/>
+      </template>
+    </UInput>
     <div v-if="userConnected" class="flex gap-3 pr-4">
       <UChip :text="numberOfArticles" :show="showPanierChip" size="3xl" color="neutral" inset>
         <UButton color="neutral" variant="ghost" icon="i-lucide-shopping-basket" size="xl" :ui="{ base: 'text-xl' }"

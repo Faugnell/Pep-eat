@@ -83,7 +83,7 @@ const billingdetailSchema = new Schema({
 const commandeSchema = new Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    ref: "utilisateurs",
     required: true
   },
   restaurant_id: {

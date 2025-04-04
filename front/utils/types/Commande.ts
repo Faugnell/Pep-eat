@@ -32,7 +32,8 @@ export type restaurantDataType = {
     "siret": string,
     "type_cuisine": string,
     "sponsorise": false,
-    "id_media": string
+    "id_media": string,
+    "image": string
 }
 
 export type ordersDataType= {

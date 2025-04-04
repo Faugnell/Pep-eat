@@ -11,7 +11,69 @@ const Restaurant = require("../models/restaurants");
  * @throws {Error} - Erreur lors de la récupération des restaurants
  */
 export async function find(req:Request, res:Response) {
-	const id = req.params.id;
+	console.log(`Find restaurant - ${req.params.id ? req.params.id : 'all'}`)
+
+	const match = req.params.id !== undefined ? {_id : new mongoose.Types.ObjectId(req.params.id)} : {};
+
+	try {
+		const restaurants =
+			/* Si un identifiant est fourni, on récupère le restaurant correspondant */
+			await Restaurant.aggregate([
+				{
+					$match: match
+				},
+				{
+					$lookup: {
+						from: "users",
+						localField: "id_proprietaire",
+						foreignField: "_id",
+						as: "proprietaire"
+					}
+				},
+				{
+					$unwind: {
+						path: "$proprietaire",
+						preserveNullAndEmptyArrays: true /* Conserve le restaurant même si le propriétaire n'existe pas */
+					}
+				},
+				{
+					$lookup: {
+						from: "medias",
+						localField: "id_media",
+						foreignField: "_id",
+						as: "media"
+					}
+				},
+				{
+					$unwind: {
+						path: "$media",
+						preserveNullAndEmptyArrays: true /* Conserve le restaurant même si le média n'existe pas */
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							/* Conserve le restaurant et ajoute le propriétaire et le média (garder uniquement l'image) */
+							$mergeObjects: ["$$ROOT", { image: "$media.buffer" }]
+						}
+					}
+				},
+				{
+					$project: {
+						media: 0 /* Supprime le champ media de la réponse créé lors de la jointure et maintenant inutile */
+					}
+				}
+			]);
+
+		res.status(200).send(buildSuccessResponse(restaurants, 200, "Restaurants récupérés avec succès"));
+	} catch (err) {
+		res.status(500).send(buildErrorResponse(err, 500, "Erreur lors de la récupération des restaurants"));
+	}
+}
+
+export async function findLike(req:Request, res:Response) {
+	console.log(`Find restaurant like : ${req.params.filter}`)
+	const filter = req.params.filter
 
 	try {
 		const restaurants =
@@ -20,9 +82,13 @@ export async function find(req:Request, res:Response) {
 				{
 					$match: {
 						$or: [
-							{ _id: new mongoose.Types.ObjectId(id) }, /* Si l'identifiant est fourni, récupérer le restaurant correspondant */
-							{ _id: { $exists: true } } /* Sinon, récupérer tous les restaurants */
-						  ]
+							{
+								nom: { $regex: '.*' + filter + '.*' }
+							},
+							{
+								type_cuisine: { $regex: '.*' + filter + '.*' }
+							},
+						]
 					}
 				},
 				{
