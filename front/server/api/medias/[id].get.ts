@@ -9,8 +9,6 @@ export default defineEventHandler(async (event : H3Event) => {
     if (!id) return buildErrorResponse(null, 400, `L'ID du média est requis`);
 
     try {
-        console.log(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/medias/${id}`);
-        console.log(process.env);
         const response = await $fetch<Response<Media[]>>(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/medias/${id}`, {
             method: 'GET',
             headers: {
