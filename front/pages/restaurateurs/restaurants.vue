@@ -630,6 +630,7 @@ watch(
                                 <ArticleTile
                                     v-for="article in restaurant.articles"
                                     :key="article._id"
+                                    :image-url="articleImage"
                                     :title="article.name"
                                     :nutriscore="article.nutriscore"
                                     :price="article.price ? article.price.toFixed(2) : '0.00'"

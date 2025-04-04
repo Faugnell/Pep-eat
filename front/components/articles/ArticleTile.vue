@@ -8,7 +8,7 @@ const {
   imageUrl: {
     type: String,
     required: false,
-    default: 'https://via.placeholder.com/800x500',
+    default: 'https://placehold.co/800x500',
   },
   badgeText: {
     type: String,
