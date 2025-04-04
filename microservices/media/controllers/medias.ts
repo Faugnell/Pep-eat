@@ -11,13 +11,12 @@ const Media = require("../models/medias");
  */
 export async function find(req:Request, res:Response) {
 	const id = req.params.id;
-	
+
 	try {
 		const media = await Media.findById(id);
 
 		res.status(200).send(buildSuccessResponse(media, 200, "Média récupéré avec succès"));
 	} catch (err) {
-		console.log(err);
 		res.status(500).send(buildErrorResponse(err, 500, "Erreur lors de la récupération du média"));
 	}
 }
@@ -29,9 +28,6 @@ export async function find(req:Request, res:Response) {
  * @throws {Error} - Erreur lors de la création du média
  */
 export async function create(req:any, res:Response) {
-	console.log('Création d\'un média avec le buffer :', req.body.buffer); // Log du buffer pour le débogage
-	console.log(req.files);
-
 	if (!req.body.buffer) {
 		return res.status(400).send(buildErrorResponse(null, 400, "Aucun buffer fourni"));
 	}

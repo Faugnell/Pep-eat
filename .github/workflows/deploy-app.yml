@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [front, media, restaurant]
+        app: [article, authentification, commande, front, media, profil, restaurant]
 
     steps:
     - name: Checkout code

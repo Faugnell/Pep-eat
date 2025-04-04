@@ -3,12 +3,12 @@ import { Response } from "~/utils/types/Response";
 import { Media } from "~/utils/types/Media";
 
 export default defineEventHandler(async (event : H3Event) => {
+    const formData = await readFormData(event);
+
     try {
-        const response = await $fetch<Response<Media[]>>(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/media`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const response = await $fetch<Response<Media[]>>(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/medias`, {
+            method: 'POST',
+            body: formData,
             retry: 3,
             retryDelay: 1000
         });

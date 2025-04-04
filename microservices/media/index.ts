@@ -37,7 +37,7 @@ async function main() {
         console.log(err)
     }
 
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, '0.0.0.0', () => {
         console.log(`Lancement de du micro-service gérant les médias sur le port : ${process.env.PORT}`);
     })
 }

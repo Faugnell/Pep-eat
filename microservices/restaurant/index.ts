@@ -28,9 +28,6 @@ app.use((req:Request, res:Response, next:NextFunction) => {
 app.use("/restaurants", jsonParser, routes)
 app.use(express.json());
 
-const ip = require('ip');
-const ipAddress = ip.address();
-
 async function main() {
     try {
         // Attendre la connexion à la base de données avant de lancer le serveur
@@ -41,7 +38,6 @@ async function main() {
 
     app.listen(process.env.PORT, '0.0.0.0', () => {
         console.log(`Lancement de du micro-service gérant les restaurants sur le port : ${process.env.PORT}`);
-        console.log(`Lancement de du micro-service gérant les restaurants sur l'adresse : ${ipAddress}:${process.env.PORT}`);
     })
 }
 
