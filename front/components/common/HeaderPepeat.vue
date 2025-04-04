@@ -100,8 +100,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex justify-between items-center w-full bg-white h-[7vh] min-h-10">
-    <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%]" src="../../public/icons/black.svg"
-      @click="goHome" />
+    <img id="logo" alt="logo" class="h-[80%] object-contain mx-[1%] hover:cursor-pointer hover:h-[83%] ease-in-out duration-150" src="../../public/icons/black.svg" @click="goHome" />
     <UInput icon="i-lucide-search" size="md" variant="outline" placeholder="Restaurant, commerces, plats..."
       class="w-[50vh] min-w-50" />
     <div v-if="userConnected" class="flex gap-3 pr-4">
