@@ -70,7 +70,6 @@ export async function find(req:Request, res:Response) {
 }
 
 export async function findLike(req:Request, res:Response) {
-	console.log(`Find restaurant like : ${req.params.filter}`)
 	const filter = req.params.filter
 
 	try {
@@ -152,9 +151,6 @@ export async function findLike(req:Request, res:Response) {
  * @throws {Error} - Erreur lors de la création du restaurant
  */
 export async function create(req:Request, res:Response) {
-	console.log(`Create restaurant : ${req.body.nom}`);
-	console.log(req.body);
-
 	try {
 		const restaurant = await Restaurant.findOne({ siret: req.body.siret });
 
