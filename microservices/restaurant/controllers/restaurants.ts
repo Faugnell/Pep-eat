@@ -11,7 +11,19 @@ const Restaurant = require("../models/restaurants");
  * @throws {Error} - Erreur lors de la récupération des restaurants
  */
 export async function find(req:Request, res:Response) {
-	const match = req.params.id !== undefined ? {_id : new mongoose.Types.ObjectId(req.params.id)} : {};
+	let match = {};
+	const filter = req.params.filter;
+
+	if (req.params.id !== undefined) {
+		match = { _id : new mongoose.Types.ObjectId(req.params.id) };
+	} else if (filter !== undefined) {
+		match = {
+			$or: [
+				{ nom: { $regex: new RegExp(`.*${filter}.*`, 'i') } },
+				{ type_cuisine: { $regex: new RegExp(`.*${filter}.*`, 'i') } }
+			]
+		};
+	}
 
 	try {
 		const restaurants =
@@ -19,74 +31,6 @@ export async function find(req:Request, res:Response) {
 			await Restaurant.aggregate([
 				{
 					$match: match
-				},
-				{
-					$lookup: {
-						from: "users",
-						localField: "id_proprietaire",
-						foreignField: "_id",
-						as: "proprietaire"
-					}
-				},
-				{
-					$unwind: {
-						path: "$proprietaire",
-						preserveNullAndEmptyArrays: true /* Conserve le restaurant même si le propriétaire n'existe pas */
-					}
-				},
-				{
-					$lookup: {
-						from: "medias",
-						localField: "id_media",
-						foreignField: "_id",
-						as: "media"
-					}
-				},
-				{
-					$unwind: {
-						path: "$media",
-						preserveNullAndEmptyArrays: true /* Conserve le restaurant même si le média n'existe pas */
-					}
-				},
-				{
-					$replaceRoot: {
-						newRoot: {
-							/* Conserve le restaurant et ajoute le propriétaire et le média (garder uniquement l'image) */
-							$mergeObjects: ["$$ROOT", { image: "$media.buffer" }]
-						}
-					}
-				},
-				{
-					$project: {
-						media: 0 /* Supprime le champ media de la réponse créé lors de la jointure et maintenant inutile */
-					}
-				}
-			]);
-
-		res.status(200).send(buildSuccessResponse(restaurants, 200, "Restaurants récupérés avec succès"));
-	} catch (err) {
-		res.status(500).send(buildErrorResponse(err, 500, "Erreur lors de la récupération des restaurants"));
-	}
-}
-
-export async function findLike(req:Request, res:Response) {
-	const filter = req.params.filter
-
-	try {
-		const restaurants =
-			/* Si un identifiant est fourni, on récupère le restaurant correspondant */
-			await Restaurant.aggregate([
-				{
-					$match: {
-						$or: [
-							{
-								nom: { $regex: '.*' + filter + '.*' }
-							},
-							{
-								type_cuisine: { $regex: '.*' + filter + '.*' }
-							},
-						]
-					}
 				},
 				{
 					$lookup: {
