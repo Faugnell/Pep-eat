@@ -22,7 +22,7 @@ const nutriscoreValues = {
     null: 0,
 };
 
-const { data: restaurant } = useAsyncData('restaurant-data', async () => {
+const { data: restaurant } = useLazyAsyncData('restaurant-data', async () => {
     const restaurantId = useRoute().params.id as string;
 
     const { data } = await $fetch<Response<Restaurant>>(`/api/restaurants/${restaurantId}`);
@@ -49,7 +49,6 @@ const { data: articles } = useAsyncData('articles-data', async () => {
 });
 
 const categories = computed(() => {
-    console.log(articles.value);
     if (!articles.value || articles.value.length === 0) return [];
 
     return articles.value?.map((article) => article.category).filter((category, index, self) => self.indexOf(category) === index);

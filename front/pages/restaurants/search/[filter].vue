@@ -45,7 +45,7 @@ const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaura
             </div>
             <template v-for="(restaurant, index) in data.data" :key="restaurant._id">
                 <USeparator v-if="index !== 0" />
-                <NuxtLink :to="`/restaurants/${restaurant._id}`">
+                <NuxtLink :to="{ name: 'restaurants-id', params: { id: restaurant._id }}">
                     <RestaurantRowTile
                     :imageUrl="restaurant.image ? restaurant.image : './restaurants/thumbnails/.default-thumbnail.jpg'"
                     :Name="restaurant.nom"
