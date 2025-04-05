@@ -5,6 +5,7 @@ import Inscription from '~/components/authentification/Inscription.vue'
 import { useUserStore } from '~/stores/userStore';
 import PanierSlideover from '../panier/PanierSlideover.vue';
 import { usePanierStore } from '~/stores/panierStore';
+import { string } from 'valibot';
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
@@ -90,7 +91,8 @@ async function openPanierSlideover() {
 }
 
 const goToSearch = () => {
-  router.push(`/restaurants/search/${searchValue.value ? searchValue.value : "" }`)
+  const filter = String(searchValue.value).length ? `/${String(searchValue.value)}` : ""
+  router.push(`/restaurants/search${filter}`)
 }
 
 /* -------------------------------------------------------------------------
