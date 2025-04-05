@@ -19,7 +19,7 @@ type fetchedDataType = {
     "data": Array<Restaurant>
 }
 
-const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaurants/filter/${route.params.filter ? route.params.filter : "" }`, { method: "GET" })
+const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaurants/`, { method: "GET" })
 
 
 /* -------------------------------------------------------------------------

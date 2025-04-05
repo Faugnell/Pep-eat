@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { buildSuccessResponse, buildErrorResponse } from '../utils/responseBuilder';
+import { isValidMongoId } from '../utils/functions';
 
 const Restaurant = require("../models/restaurants");
 
@@ -11,7 +12,9 @@ const Restaurant = require("../models/restaurants");
  * @throws {Error} - Erreur lors de la récupération des restaurants
  */
 export async function find(req:Request, res:Response) {
-	const match = req.params.id !== undefined ? {_id : new mongoose.Types.ObjectId(req.params.id)} : {};
+
+	const match = isValidMongoId(String(req.params.id))  ? {_id : new mongoose.Types.ObjectId(req.params.id)} : {};
+	console.log(`Find restaurant - ${Object.keys(match).length ? match._id : 'all'}`)
 
 	try {
 		const restaurants =
