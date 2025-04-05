@@ -24,8 +24,8 @@ const {
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
 const router = useRouter()
-const goHome = () => {
-  router.push('/')
+const goHome = async () => {
+  await navigateTo('/');
 }
 
 const searchValue = ref<string | number | null | undefined>("")
