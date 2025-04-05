@@ -5,7 +5,6 @@ import Inscription from '~/components/authentification/Inscription.vue'
 import { useUserStore } from '~/stores/userStore';
 import PanierSlideover from '../panier/PanierSlideover.vue';
 import { usePanierStore } from '~/stores/panierStore';
-import { string } from 'valibot';
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
