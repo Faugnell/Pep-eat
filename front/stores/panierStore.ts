@@ -15,26 +15,7 @@ const updatePanierBDD = useDebounce(async (panier: Panier) => {
 export const usePanierStore = defineStore("panier", {
     state: () : Panier => ({
         userId: null,
-        articles: [
-            {
-                id: "1",
-                name: "Article 1",
-                price: 10,
-                quantity: 1,
-            },
-            {
-                id: "2",
-                name: "Article 2",
-                price: 20,
-                quantity: 2,
-            },
-            {
-                id: "3",
-                name: "Article 3",
-                price: 30,
-                quantity: 3,
-            },
-        ],
+        articles: [],
         nombreArticlesUnique: 0,
         nombreArticles: 0,
         prixTotal: 0
@@ -46,6 +27,9 @@ export const usePanierStore = defineStore("panier", {
         getPrixTotal: (state) => () => state.articles.reduce((total: number, article: ArticlePanier) => total + (article.price * article.quantity), 0),
         getArticleById: (state) => (id: string) => {
             return state.articles.find((article: ArticlePanier) => article.id === id);
+        },
+        isArticleInPanier: (state) => (id: string) => {
+            return state.articles.some((article: ArticlePanier) => article.id === id);
         }
     },
     actions: {
