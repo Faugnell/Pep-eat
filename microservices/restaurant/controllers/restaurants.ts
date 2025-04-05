@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { buildSuccessResponse, buildErrorResponse } from '../utils/responseBuilder';
+import { isValidMongoId } from '../utils/functions';
 
 const Restaurant = require("../models/restaurants");
 
@@ -14,7 +15,7 @@ export async function find(req:Request, res:Response) {
 	let match = {};
 	const filter = req.params.filter;
 
-	if (req.params.id !== undefined) {
+	if (req.params.id !== undefined && isValidMongoId(String(req.params.id))) {
 		match = { _id : new mongoose.Types.ObjectId(req.params.id) };
 	} else if (filter !== undefined) {
 		match = {

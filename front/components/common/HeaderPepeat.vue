@@ -92,7 +92,8 @@ async function openPanierSlideover() {
 }
 
 const goToSearch = () => {
-  router.push(`/restaurants/search/${searchValue.value ? searchValue.value : "" }`)
+  const filter = String(searchValue.value).length ? `/${String(searchValue.value)}` : ""
+  router.push(`/restaurants/search${filter}`)
 }
 
 /* -------------------------------------------------------------------------
