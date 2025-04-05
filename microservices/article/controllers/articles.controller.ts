@@ -12,7 +12,6 @@ export async function list(req: Request, res: Response) {
 }
 
 export async function listByRestaurant(req: Request, res: Response) {
-  console.log('listByRestaurant called');
   try {
     const { restaurantId } = req.params;
     const articles = await articlesService.findByRestaurant(restaurantId);
@@ -23,7 +22,6 @@ export async function listByRestaurant(req: Request, res: Response) {
 }
 
 export async function listByCategory(req: Request, res: Response) {
-  console.log('listByCategory called');
   try {
     const { category } = req.params;
     const articles = await articlesService.findByCategory(category);
