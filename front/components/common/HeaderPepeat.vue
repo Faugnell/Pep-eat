@@ -17,7 +17,8 @@ const {
 } = useUserStore();
 
 const {
-  getNumberOfArticles
+  getNombreArticles,
+  setUserId
 } = usePanierStore();
 
 /* -------------------------------------------------------------------------
@@ -69,6 +70,7 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
       onSelect: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        setUserId(null);
         disconnectUser();
         goHome();
       }
@@ -80,7 +82,7 @@ const userConnected = computed<boolean>(() => isConnected());
 const userFirstName = computed<string>(() => getFirstName());
 
 const panierSlideoverOverlay = useOverlay().create(PanierSlideover);
-const numberOfArticles = computed(() => getNumberOfArticles());
+const numberOfArticles = computed(() => getNombreArticles());
 const showPanierChip = computed(() => numberOfArticles.value > 0);
 
 /* -------------------------------------------------------------------------
