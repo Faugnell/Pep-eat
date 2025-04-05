@@ -43,7 +43,7 @@ const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaura
                 <USeparator class="py-5"/>
                 <p class="text-md text-center">Accéder à notre large catalogue de restaurant en <NuxtLink class="text-primary-500" to="/restaurants">cliquant ici ! <UIcon name="i-ic:round-launch" size="10"/></NuxtLink></p>
             </div>
-            <template v-for="(restaurant, index) in data.data">
+            <template v-for="(restaurant, index) in data.data" :key="restaurant._id">
                 <USeparator v-if="index !== 0" />
                 <NuxtLink :to="`/restaurants/${restaurant._id}`">
                     <RestaurantRowTile

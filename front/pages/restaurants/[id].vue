@@ -28,7 +28,7 @@ const { data: restaurant } = useAsyncData('restaurant-data', async () => {
     const { data } = await $fetch<Response<Restaurant>>(`/api/restaurants/${restaurantId}`);
 
     if (data.length === 0) {
-        return new Error('No restaurant found with this ID.');
+        throw new Error('No restaurant found with this ID.');
     }
 
     return data[0];
@@ -40,7 +40,7 @@ const { data: articles } = useAsyncData('articles-data', async () => {
     const articles = await $fetch<Response<ArticleType[]>>(`/api/articles/restaurant/${restaurantId}`);
 
     if (articles.length === 0) {
-        return new Error('No articles found for this restaurant.');
+        throw new Error('No articles found for this restaurant.');
     }
 
     return articles.sort((a, b) => {
@@ -49,7 +49,10 @@ const { data: articles } = useAsyncData('articles-data', async () => {
 });
 
 const categories = computed(() => {
-    return articles.value.map((article) => article.category).filter((category, index, self) => self.indexOf(category) === index);
+    console.log(articles.value);
+    if (!articles.value || articles.value.length === 0) return [];
+
+    return articles.value?.map((article) => article.category).filter((category, index, self) => self.indexOf(category) === index);
 });
 
 /* -------------------------------------------------------------------------
@@ -66,7 +69,7 @@ const categories = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col bg-slate-50">
+    <div class="flex flex-col bg-slate-50 w-full h-full overflow-hidden">
         <div class="w-full h-80 bg-[url(/restaurants/banner/banner.jpg)] bg-cover bg-center bg-no-repeat flex items-center p-6">
             <div class="bg-white w-fit px-4 py-10 rounded-sm shadow-lg">
                 <div class="flex flex-col">
@@ -87,9 +90,9 @@ const categories = computed(() => {
                 </div>
             </div>
         </div>
-        <div class="px-4 py-1">
+        <div class="px-4 py-1 w-full h-full">
             <h2 class="text-3xl font-bold my-4">Nos Articles</h2>
-            <UCarousel v-slot="{ item: article }" :items="articles" arrows :ui="{ container: 'flex gap-1 py-2', item: 'basis-auto sm:basis-1/2 md:basis-1/3 lg:basis-auto' }">
+            <UCarousel v-if="articles" v-slot="{ item: article }" :items="articles" arrows :ui="{ container: 'flex gap-1 py-2', root: 'w-[95%]', item: 'basis-auto sm:basis-1/2 md:basis-1/3 lg:basis-auto' }">
                 <Article
                     :key="article._id"
                     :id="article._id"
@@ -102,7 +105,7 @@ const categories = computed(() => {
                 />
             </UCarousel>
         </div>
-        <div v-for="category in categories" :key="category" class="flex flex-col px-4 py-1">
+        <div v-if="categories" v-for="category in categories" :key="category" class="flex flex-col px-4 py-1">
             <USeparator class="my-4" />
             <h2 class="text-3xl font-bold my-2 capitalize">{{ category }}</h2>
             <div class="grid grid-cols-6 gap-2">
