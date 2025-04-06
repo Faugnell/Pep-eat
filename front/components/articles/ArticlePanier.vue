@@ -57,7 +57,7 @@ const updateQuantity = (quantity: number) => {
 </script>
 
 <template>
-    <div class="flex flex-row gap-4 items-center justify-between">
+    <div class="grid grid-cols-[1fr_25%_15%] gap-4 items-center justify-between">
         <div class="flex flex-row gap-4 items-center">
             <NuxtImg src="https://placehold.co/50x50" width="50" height="50" class="rounded-sm"/>
             <div class="flex flex-col">
