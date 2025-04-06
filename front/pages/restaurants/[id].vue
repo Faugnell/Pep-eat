@@ -91,18 +91,21 @@ const categories = computed(() => {
         </div>
         <div class="px-4 py-1 w-full h-full">
             <h2 class="text-3xl font-bold my-4">Nos Articles</h2>
-            <UCarousel v-if="articles" v-slot="{ item: article }" :items="articles" arrows :ui="{ container: 'flex gap-1 py-2', root: 'w-[95%]', item: 'basis-auto sm:basis-1/2 md:basis-1/3 lg:basis-auto' }">
-                <Article
-                    :key="article._id"
-                    :id="article._id"
-                    :nom="article.name"
-                    :description="article.description"
-                    :prix="article.price"
-                    :nutriscore="article.nutriscore"
-                    :image="article.image"
-                    class="select-none"
-                />
-            </UCarousel>
+            <div class="flex items-center justify-center">
+                <UCarousel v-if="articles" v-slot="{ item: article }" :items="articles" arrows :ui="{ container: 'flex gap-1 py-2', root: 'w-[95%]', item: 'basis-auto sm:basis-1/2 md:basis-1/3 lg:basis-auto' }">
+                    <Article
+                        :key="article._id"
+                        :id="article._id"
+                        :nom="article.name"
+                        :description="article.description"
+                        :prix="article.price"
+                        :nutriscore="article.nutriscore"
+                        :image="article.image"
+                        class="select-none"
+                    />
+                </UCarousel>
+            </div>
+            
         </div>
         <div v-if="categories" v-for="category in categories" :key="category" class="flex flex-col px-4 py-1">
             <USeparator class="my-4" />
