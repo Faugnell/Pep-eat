@@ -68,7 +68,7 @@ const categories = computed(() => {
 </script>
 
 <template>
-    <div class="flex flex-col bg-slate-50 w-full h-full">
+    <div class="flex flex-col bg-slate-50 w-full h-full overflow-x-scroll">
         <div class="w-full h-80 bg-[url(/restaurants/banner/banner.jpg)] bg-cover bg-center bg-no-repeat flex items-center p-6">
             <div class="bg-white w-fit px-4 py-10 rounded-sm shadow-lg">
                 <div class="flex flex-col">
