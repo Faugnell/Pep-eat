@@ -56,8 +56,24 @@ async function create(newPanierData: panierType) {
 
 async function update(id: string, updatedPanier: panierType) {
   try {
-    const panier = await Panier.findOneAndUpdate({ user_id: new mongoose.Types.ObjectId(id) }, updatedPanier)
-    return panier
+    const exists = await Panier.countDocuments({ user_id: new mongoose.Types.ObjectId(id)})
+    if(exists > 0) {
+      return await Panier.findOneAndUpdate({ user_id: new mongoose.Types.ObjectId(id) }, updatedPanier)
+    }
+    else {
+      const newPanier = new Panier({
+        "user_id": new mongoose.Types.ObjectId(id),
+        "articles": updatedPanier.articles,
+        "prix_total": updatedPanier.prix_total
+      })
+      try {
+        let output: panierType = await newPanier.save()
+        return output
+      } catch (err) {
+        console.log("Erreur lors de la création du Panier:", err)
+        return err
+      }
+    }
   } catch (err) {
     console.log("Erreur lors de l'update du panier", err)
     return err
