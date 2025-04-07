@@ -1,4 +1,17 @@
-export default defineAppConfig({
+import type { ToasterProps } from "@nuxt/ui";
+
+type appConfigProps = {
+    toaster: ToasterProps,
+    ui: {
+        colors: {
+            primary: string,
+            secondary: string,
+            tertiary: string
+        }
+    }
+}
+
+const appConfig:appConfigProps = {
     toaster: {
         position: 'top-center',
         expand: true,
@@ -11,4 +24,6 @@ export default defineAppConfig({
             tertiary: 'tacao'
         }
     }
-});
+}
+
+export default defineAppConfig(appConfig);
