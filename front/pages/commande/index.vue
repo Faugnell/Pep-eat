@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { StepperItem } from '@nuxt/ui'
-import type { Order } from './commande.type';
 
 const tabs: StepperItem[] = [
     { slot: "recapitulatif", title: "Récapitulatif", description: "Résumé de la commande", icon: "i-lucide-shopping-cart" },
@@ -26,7 +25,7 @@ const stepper = useTemplateRef('stepper')
 const route = useRoute();
 const router = useRouter()
 
-const delivery = ref<Order | null>(null);
+const delivery = ref(null);
 
 // Initialiser items pour stocker les éléments de la commande et leurs prix
 const items: Ref<{ item: string; price: number }[]> = ref([]);
@@ -170,7 +169,7 @@ onMounted(() => {
                         <div class="flex space-x-4">
                             <UButton label="Retourner à l'accueil" color="primary" variant="outline" @click="router.push('/')" />
                             <UButton label="Suivre la commande" color="primary" variant="solid" 
-                            @click="router.push(`/commande/avancement/${route.params.id}`)" />
+                            @click="router.push(`/commande/avancement`)" />
                         </div>
                     </div>
                 </UCard>
