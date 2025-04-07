@@ -2,10 +2,15 @@
 import { ref } from 'vue';
 import type { ApiResponse, FormFieldLogin, Data } from './types';
 import { useUserStore } from '~/stores/userStore';
+import { usePanierStore } from '~/stores/panierStore';
 
 const {
     setUserInfo
 } = useUserStore();
+
+const {
+    setUserId
+} = usePanierStore();
 
 const email = ref<string>('');
 const password = ref<string>('');
@@ -60,6 +65,8 @@ const handleLogIn = async (): Promise<void> => {
                     is_suspended: data.data.user.is_suspended
                 }
             );
+
+            setUserId(data.data.user._id);
         } else {
             useToast().add({
                 title: "Erreur lors de la connexion",

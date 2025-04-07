@@ -5,10 +5,14 @@ import type { Media } from '~/utils/types/Media.ts';
 import type { Response } from '~/utils/types/Response';
 import Restaurants from '~/components/restaurateurs/restaurants.vue';
 import ArticleTile from '~/components/articles/ArticleTile.vue';
+import { useUserStore } from '~/stores/userStore';
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
+const {
+    getId
+} = useUserStore();
 
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
@@ -205,6 +209,10 @@ function handleImageUpdate(event: Event) {
 async function updateRestaurant() {
     if (!selectedRestaurant.value) return;
 
+    const userId = getId();
+
+    if (!userId) return;
+
     const body = {
         nom: selectedRestaurant.value.nom,
         adresse: selectedRestaurant.value.adresse,
@@ -213,7 +221,8 @@ async function updateRestaurant() {
         telephone: selectedRestaurant.value.telephone,
         horaires: selectedRestaurant.value.horaires,
         type_cuisine: selectedRestaurant.value.type_cuisine,
-        sponsorise: selectedRestaurant.value.sponsorise
+        sponsorise: selectedRestaurant.value.sponsorise,
+        id_proprietaire: userId
     };
 
     if (selectedRestaurant.value._id) {

@@ -1,4 +1,5 @@
 <script setup lang='ts'>
+
 const {
     restaurantId,
     imageUrl,
@@ -47,7 +48,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <NuxtLink :to="`/restaurant/${restaurantId}`">
+    <NuxtLink :to="`/restaurants/${restaurantId}`">
         <UCard :ui="{ body: 'p-2 sm:p-2 w-full grow' }" class="mx-2 my-1 drop-shadow-sm rounded-sm flex-col justify-center">
             <div class="flex justify-center">
                 <NuxtImg :src="imageUrl" fit="contain" class="rounded-sm grow h-[125px] md:h-[250px] lg:h-[300px]" />

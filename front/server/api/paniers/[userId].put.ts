@@ -1,23 +1,26 @@
 import { H3Event } from "h3";
 import { Response } from "~/utils/types/Response";
-import { Media } from "~/utils/types/Media";
+import { Panier } from "~/utils/types/Panier";
 import { buildErrorResponse } from "~/utils/responseBuilder";
 
 export default defineEventHandler(async (event : H3Event) => {
-    const id = getRouterParam(event, 'id');
+    const userId = getRouterParam(event, 'userId');
 
-    if (!id) return buildErrorResponse(null, 400, `L'ID du média est requis`);
+    if (!userId) return buildErrorResponse(null, 400, `L'ID de l'utilisateur est requis`);
+
+    const body = await readBody(event);
 
     try {
-        const response = await $fetch<Response<Media[]>>(`http://${process.env.API_MEDIA_SERVICE_HOST}:${process.env.API_MEDIA_SERVICE_PORT}/medias/${id}`, {
-            method: 'GET',
+        const response = await $fetch<Response<Panier[]>>(`http://${process.env.API_COMMANDE_SERVICE_HOST}:${process.env.API_COMMANDE_SERVICE_PORT}/paniers/${userId}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body,
             retry: 3,
             retryDelay: 1000
         });
-
+        
         return response;
     } catch (error) {
         console.log(error);
