@@ -11,7 +11,7 @@ import Article from '~/components/articles/Article.vue';
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const nutriscoreValues = {
+const nutriscoreValues:{[key:string]: number} = {
     A: 5,
     B: 4,
     C: 3,
@@ -25,24 +25,26 @@ const nutriscoreValues = {
 const { data: restaurant } = useLazyAsyncData('restaurant-data', async () => {
     const restaurantId = useRoute().params.id as string;
 
-    const { data } = await $fetch<Response<Restaurant>>(`/api/restaurants/${restaurantId}`);
-
-    if (data.length === 0) {
-        throw new Error('No restaurant found with this ID.');
+    const { data } = await $fetch<Response<Array<Restaurant>>>(`/api/restaurants/${restaurantId}`);
+    if(data !== undefined){
+        if (data.length === 0) {
+            throw new Error('No restaurant found with this ID.');
+        }
+        return data[0];
+    } else {
+        throw new Error('No response from API')
     }
-
-    return data[0];
 });
 
 const { data: articles } = useAsyncData('articles-data', async () => {
     const restaurantId = useRoute().params.id as string;
 
-    const articles = await $fetch<Response<ArticleType[]>>(`/api/articles/restaurant/${restaurantId}`);
-
-    if (articles.length === 0) {
-        throw new Error('No articles found for this restaurant.');
+    const articles = await $fetch<Array<ArticleType>>(`/api/articles/restaurant/${restaurantId}`);
+    if(articles !== undefined){
+        if (articles.length === 0) {
+            throw new Error('No articles found for this restaurant.');
+        }
     }
-
     return articles.sort((a, b) => {
         return nutriscoreValues[b.nutriscore] - nutriscoreValues[a.nutriscore];
     });
@@ -70,7 +72,7 @@ const categories = computed(() => {
 <template>
     <div class="flex flex-col bg-slate-50 w-full h-full overflow-x-scroll">
         <div class="w-full h-80 bg-[url(/restaurants/banner/banner.jpg)] bg-cover bg-center bg-no-repeat flex items-center p-6">
-            <div class="bg-white w-fit px-4 py-10 rounded-sm shadow-lg">
+            <div v-if="restaurant" class="bg-white w-fit px-4 py-10 rounded-sm shadow-lg">
                 <div class="flex flex-col">
                     <h2 class="text-black text-6xl font-black">{{ restaurant.nom }}</h2>
                     <p class="text-lg mb-2 italic">{{ restaurant.description }}</p>
@@ -98,9 +100,9 @@ const categories = computed(() => {
                         :id="article._id"
                         :nom="article.name"
                         :description="article.description"
-                        :prix="article.price"
+                        :prix="String(article.price)"
                         :nutriscore="article.nutriscore"
-                        :image="article.image"
+                        :image="article.image ? article.image : './articles/.default-plate.jpg'"
                         class="select-none"
                     />
                 </UCarousel>
@@ -110,16 +112,16 @@ const categories = computed(() => {
         <div v-if="categories" v-for="category in categories" :key="category" class="flex flex-col px-4 py-1">
             <USeparator class="my-4" />
             <h2 class="text-3xl font-bold my-2 capitalize">{{ category }}</h2>
-            <div class="grid grid-cols-6 gap-2">
+            <div v-if="articles" class="grid grid-cols-6 gap-2">
                 <Article
                     v-for="article in articles.filter(article => article.category === category)"
                     :key="article._id"
                     :id="article._id"
                     :nom="article.name"
                     :description="article.description"
-                    :prix="article.price"
+                    :prix="String(article.price)"
                     :nutriscore="article.nutriscore"
-                    :image="article.image"
+                    :image="article.image ? article.image : './articles/.default-plate.jpg'"
                 />
             </div>
         </div>
