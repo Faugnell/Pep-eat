@@ -23,6 +23,20 @@ async function findAll() {
           preserveNullAndEmptyArrays: true
         }
       },
+      {
+        $lookup: {
+          from: "utilisateurs",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user_data"
+        }
+      },
+      {
+        $unwind: {
+          path: "$user_data",
+          preserveNullAndEmptyArrays: true
+        }
+      }
     ]);
     return commandes;
   } catch (err) {
@@ -57,6 +71,20 @@ async function findForUser(filter: string) {
           preserveNullAndEmptyArrays: true
         }
       },
+      {
+        $lookup: {
+          from: "utilisateurs",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user_data"
+        }
+      },
+      {
+        $unwind: {
+          path: "$user_data",
+          preserveNullAndEmptyArrays: true
+        }
+      }
     ]);
     return commandes;
   } catch (err) {
@@ -91,6 +119,20 @@ async function find(id: string) {
           preserveNullAndEmptyArrays: true
         }
       },
+      {
+        $lookup: {
+          from: "utilisateurs",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user_data"
+        }
+      },
+      {
+        $unwind: {
+          path: "$user_data",
+          preserveNullAndEmptyArrays: true
+        }
+      }
     ]);
     return commande[0] || {};
   } catch (err) {
@@ -121,8 +163,8 @@ async function create(newCommand: commandeType) {
     console.log("Erreur lors de la création de la commande:", err)
     return err
   }
-
 }
+
 // * ==================================================
 // * ===================   UPDATE   ===================
 // * ==================================================

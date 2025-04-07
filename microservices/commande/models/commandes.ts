@@ -13,8 +13,8 @@ export type commandeType = {
     value: number,
     code: string
   },
-  status: 'en cours'|'livrée'|'annulée',
-  comment: String,
+  status: 'en attente'|'en cours'|'livrée'|'annulée',
+  comment: string,
 }
 
 type articleType= {
@@ -83,7 +83,7 @@ const billingdetailSchema = new Schema({
 const commandeSchema = new Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    ref: "utilisateurs",
     required: true
   },
   restaurant_id: {
@@ -111,7 +111,7 @@ const commandeSchema = new Schema({
   ],
   status: {
     type: String,
-    enum: ['en cours', 'livrée', 'annulée'],
+    enum: ['en attente', 'en cours', 'livrée', 'annulée'],
     default: 'en cours'
   },
   comment: {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Router } from "vue-router";
 import type { StepperItem } from '@nuxt/ui'
+import type { Order } from './commande.type';
 
 const tabs: StepperItem[] = [
     { slot: "recapitulatif", title: "Récapitulatif", description: "Résumé de la commande", icon: "i-lucide-shopping-cart" },
@@ -23,24 +23,48 @@ const paymentMessageVisible: Ref<boolean> = ref(false);
 
 const stepper = useTemplateRef('stepper')
 
-const router: Router = useRouter()
+const route = useRoute();
+const router = useRouter()
 
-// DONNÉES DE TEST
-const items: Ref<{ item: string; price: number }[]> = ref([
-    { item: "Coca", price: 1.99 },
-    { item: "Tacos XL", price: 9.99 },
-    { item: "Nuggets", price: 4.99 },
-    { item: "Glace", price: 3.99 },
-]);
+const delivery = ref<Order | null>(null);
+
+// Initialiser items pour stocker les éléments de la commande et leurs prix
+const items: Ref<{ item: string; price: number }[]> = ref([]);
 
 // Calcule le prix total de la commande
 const totalPrice = computed<number>(() =>
-    items.value.reduce((total, product) => total + product.price, 0)
+    parseFloat(items.value.reduce((total, product) => total + product.price, 0).toFixed(2))
 );
 
-const completePayment = () => {
+const completePayment = (): void => {
     paymentMessageVisible.value = true;
 }
+
+const fetchDelivery = async () => {
+    try {
+        const response = await fetch(`http://localhost:3102/commandes/${route.params.id}`); // 67ed303d07fdf33c8fda5ceb
+        const data = await response.json();
+        console.log(data.data);
+
+        if (data.ok && data.data) {
+            delivery.value = data.data;
+
+            // Récupérer les articles et leurs prix depuis billing_details
+            const fetchedItems = data.data.billing_details.map((item: any) => ({
+                item: item.article_data.name,
+                price: parseFloat(item.article_data.price.$numberDecimal)
+            }));
+
+            items.value = fetchedItems;
+        }
+    } catch (err) {
+        console.error('Erreur lors de la récupération de la commande :', err);
+    }
+}
+
+onMounted(() => {
+    fetchDelivery();
+})
 </script>
 
 <template>
@@ -135,7 +159,6 @@ const completePayment = () => {
                 </UCard>
             </template>
 
-
             <!-- Page de finalisation -->
             <template #finalisation>
                 <UCard class="w-full min-h-[400px] mt-6">
@@ -146,7 +169,8 @@ const completePayment = () => {
                         </p>
                         <div class="flex space-x-4">
                             <UButton label="Retourner à l'accueil" color="primary" variant="outline" @click="router.push('/')" />
-                            <UButton label="Suivre la commande" color="primary" variant="solid" @click="router.push('/commande/avancement')" />
+                            <UButton label="Suivre la commande" color="primary" variant="solid" 
+                            @click="router.push(`/commande/avancement/${route.params.id}`)" />
                         </div>
                     </div>
                 </UCard>

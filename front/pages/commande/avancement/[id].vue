@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 const listOrderInstruction: { progress: number; instruction: string }[] = [
     { progress: 1, instruction: "Le restaurant prépare votre commande." },
-    { progress: 2, instruction: "Le livreur prend en charge votre commande." },
-    { progress: 3, instruction: "Votre commande arrive." },
-    { progress: 4, instruction: "Votre commande a été livrée." }
+    { progress: 2, instruction: "Prise en charge de la commande." },
+    { progress: 3, instruction: "La commande arrive." },
+    { progress: 4, instruction: "La commande a été livrée." }
 ];
 
-const progressBarValue: Ref<number> = ref(listOrderInstruction[1].progress);
+// Simulation de la réponse du backend
+const instructionFromBackend: string = "La commande a été livrée.";
+
+const progressBarValue = ref<number>(
+    listOrderInstruction.findIndex(instruction => instruction.instruction === instructionFromBackend) + 1
+);
+
+const progressBarNumber: number = Number(progressBarValue.value);
 </script>
 
 <template>
@@ -19,7 +28,7 @@ const progressBarValue: Ref<number> = ref(listOrderInstruction[1].progress);
         <!-- Barre de progression -->
         <div class="mt-2">
             <UProgress v-model="progressBarValue" :max="4" color="success" class="w-full" />
-            <p class="mt-1 text-gray-700">{{ listOrderInstruction[1].instruction }}</p>
+            <p class="mt-1 text-gray-700">{{ listOrderInstruction[progressBarNumber - 1]?.instruction }}</p>
             <p class="text-gray-500">Arrivée la plus tardive : <strong>12:40</strong></p>
         </div>
 

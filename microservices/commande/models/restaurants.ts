@@ -4,14 +4,14 @@ const Schema = mongoose.Schema;
 
 export type restaurantsType = {
     "_id": Types.ObjectId,
-    "nom": String,
-    "description": String,
-    "adresse": String,
-    "telephone": String,
-    "horaires": String,
+    "nom": string,
+    "description": string,
+    "adresse": string,
+    "telephone": string,
+    "horaires": string,
     "id_proprietaire": Types.ObjectId,
-    "siret": String,
-    "type_cuisine": String
+    "siret": string,
+    "type_cuisine": string
   }
 
 const restaurantSchema = new Schema({
