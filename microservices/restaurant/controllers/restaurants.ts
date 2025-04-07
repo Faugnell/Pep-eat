@@ -14,6 +14,7 @@ const Restaurant = require("../models/restaurants");
 export async function find(req:Request, res:Response) {
 	let match = {};
 	const filter = req.params.filter;
+	const userId = req.params.userId;
 
 	if (req.params.id !== undefined && isValidMongoId(String(req.params.id))) {
 		match = { _id : new mongoose.Types.ObjectId(req.params.id) };
@@ -24,6 +25,8 @@ export async function find(req:Request, res:Response) {
 				{ type_cuisine: { $regex: new RegExp(`.*${filter}.*`, 'i') } }
 			]
 		};
+	} else if (userId !== undefined && isValidMongoId(String(userId))) {
+		match = { id_proprietaire: new mongoose.Types.ObjectId(userId) };
 	}
 
 	try {
