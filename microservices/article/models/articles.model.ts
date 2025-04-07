@@ -37,7 +37,7 @@ const articleSchema = new mongoose.Schema({
     required: false,
     default: true
   },
-  image_id: {
+  id_media: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Media',
     required: false

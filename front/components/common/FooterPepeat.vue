@@ -29,7 +29,7 @@ onMounted(async () => {
 <template>
     <div class="w-full bg-white pt-4 pb-2">
       <!-- Réseaux sociaux -->
-      <div class="flex gap-4 mb-2 ml-25">
+      <div class="flex gap-4 mb-2 ml-[7%]">
         <!-- Facebook -->
         <ULink to="https://facebook.com/" target="_blank" aria-label="Facebook">
           <UIcon name="i-garden-facebook-stroke-12" class="size-5" />

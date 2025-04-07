@@ -83,7 +83,7 @@ export async function update(req: Request, res: Response) {
     const updateData = req.body;
 
     if (!id) {
-      return res.status(400).json({ message: "Paramètre 'articleId' manquant." });
+      return res.status(400).json({ message: "Paramètre 'id' manquant." });
     }
 
     const updatedArticle = await articlesService.updateById(id, updateData);
