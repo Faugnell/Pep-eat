@@ -54,7 +54,7 @@ async function read(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
   const newPaniers = await paniersService.create({
-    "user_id": req.body.user_id,
+    "userId": req.body.userId,
     "articles": req.body.articles,
     "prixTotal": req.body.prixTotal
   })

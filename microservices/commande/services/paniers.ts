@@ -37,7 +37,7 @@ async function find(id: string) {
 
 async function create(newPanierData: panierType) {
   const newPanier = new Panier({
-    "user_id": newPanierData.user_id,
+    "userId": newPanierData.userId,
     "articles": newPanierData.articles,
     "prixTotal": newPanierData.prixTotal
   })
@@ -56,13 +56,13 @@ async function create(newPanierData: panierType) {
 
 async function update(id: string, updatedPanier: panierType) {
   try {
-    const exists = await Panier.countDocuments({ user_id: new mongoose.Types.ObjectId(id)})
+    const exists = await Panier.countDocuments({ userId: new mongoose.Types.ObjectId(id)})
     if(exists > 0) {
-      return await Panier.findOneAndUpdate({ user_id: new mongoose.Types.ObjectId(id) }, updatedPanier)
+      return await Panier.findOneAndUpdate({ userId: new mongoose.Types.ObjectId(id) }, updatedPanier)
     }
     else {
       const newPanier = new Panier({
-        "user_id": new mongoose.Types.ObjectId(id),
+        "userId": new mongoose.Types.ObjectId(id),
         "articles": updatedPanier.articles,
         "prixTotal": updatedPanier.prixTotal
       })

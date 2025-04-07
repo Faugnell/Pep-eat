@@ -9,7 +9,7 @@ const updatePanierBDD = useDebounce(async (panier: Panier) => {
             method: "PUT",
             body: panier
         });
-    } catch (err) {
+    } catch (err:any) {
         useToast().add({
             title: "Erreur lors de l'ajout de l'article au panier",
             description: err,
@@ -47,6 +47,7 @@ export const usePanierStore = defineStore("panier", {
             updatePanierBDD(this.$state);
         },
         addArticle(article: ArticlePanier) {
+
             const existingArticle = this.articles.find(a => a.id === article.id);
 
             if (existingArticle)
@@ -61,6 +62,7 @@ export const usePanierStore = defineStore("panier", {
             this._updatePanier();
         },
         updateArticleQuantity(articleId: string, quantity: number) {
+
             const existingArticle = this.articles.find(article => article.id === articleId);
 
             if (existingArticle) {
