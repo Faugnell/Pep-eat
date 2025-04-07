@@ -122,6 +122,9 @@ function addToPanier() {
             "
             @click="addToPanier()"
             :disabled="isArticleInPanier(id)"
+            :ui="{
+                base: 'disabled:opacity-100 disabled:border disabled:border-white'
+            }"
         />
     </div>
 </template>
