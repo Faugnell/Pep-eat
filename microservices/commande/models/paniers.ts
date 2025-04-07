@@ -9,13 +9,13 @@ type article= {
   quantity: number;
 }
 export type panierType = {
-  user_id: Types.ObjectId,
+  userId: Types.ObjectId,
   articles: article[]
-  prix_total: Types.Decimal128
+  prixTotal: Types.Decimal128
 }
 
 const articleSchema = new Schema({
-  article_id: {
+  id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
   },
@@ -34,7 +34,7 @@ const articleSchema = new Schema({
 }, { autoIndex: false })
 
 const panierSchema = new Schema({
-  user_id: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     unique: true,
@@ -44,7 +44,7 @@ const panierSchema = new Schema({
     type: articleSchema,
     required: true
   }],
-  prix_total: {
+  prixTotal: {
     type: Types.Decimal128,
     required: true
   }

@@ -2,14 +2,20 @@ import { defineStore } from "pinia";
 import type { Panier, ArticlePanier } from "~/utils/types/Panier";
 
 const updatePanierBDD = useDebounce(async (panier: Panier) => {
-    if (!panier.userId) return;
+    try {
+        if (!panier.userId) throw new Error("L'ID de l'utilisateur est requis");
 
-    await $fetch(`/api/paniers/${panier.userId}`, {
-        method: "PUT",
-        body: {
-            panier,
-        },
-    });
+        await $fetch(`/api/paniers/${panier.userId}`, {
+            method: "PUT",
+            body: panier
+        });
+    } catch (err:any) {
+        useToast().add({
+            title: "Erreur lors de l'ajout de l'article au panier",
+            description: err,
+            color: "error"
+        });
+    }
 }, 250);
 
 export const usePanierStore = defineStore("panier", {
@@ -35,12 +41,13 @@ export const usePanierStore = defineStore("panier", {
     actions: {
         /* Fonction à appeller lors de chaque mise à jour afin de recalculer les informations du panier et mettre à jour le panier dans la base de données */
         _updatePanier() {
-            updatePanierBDD(this.$state);
             this.nombreArticlesUnique = this.getNombreArticlesUnique();
             this.nombreArticles = this.getNombreArticles();
             this.prixTotal = this.getPrixTotal();
+            updatePanierBDD(this.$state);
         },
         addArticle(article: ArticlePanier) {
+
             const existingArticle = this.articles.find(a => a.id === article.id);
 
             if (existingArticle)
@@ -55,6 +62,7 @@ export const usePanierStore = defineStore("panier", {
             this._updatePanier();
         },
         updateArticleQuantity(articleId: string, quantity: number) {
+
             const existingArticle = this.articles.find(article => article.id === articleId);
 
             if (existingArticle) {

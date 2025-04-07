@@ -31,7 +31,7 @@ const {
     },
     image: {
         type: String,
-        required: true
+        default: "./articles/.default_plate.jpg"
     }    
 });
 
@@ -92,7 +92,7 @@ function addToPanier() {
 </script>
 
 <template>
-    <div class="w-[400px] flex flex-row gap-1 bg-white rounded-sm shadow-md aspect-6/2 px-7 py-4 gap-5 relative">
+    <div class="w-[400px] flex flex-row bg-white rounded-sm shadow-md aspect-6/2 px-7 py-4 gap-5 relative">
         <div class="flex flex-col w-full h-full">
             <div class="flex flex-col gap-1 h-3/4">
                 <div class="flex flex-row gap-2 items-center h-fit">
@@ -105,7 +105,7 @@ function addToPanier() {
                 <p class="text-xl font-thin">{{ prixFormat }}</p>
             </div>
         </div>
-        <img :src="image" alt="Article Image" class="rounded-sm aspect-square w-[50px] md:w-[75px] lg:w-[100px]"/>
+        <NuxtImg :src="image" alt="Article Image" class="rounded-sm aspect-square w-[50px] md:w-[75px] lg:w-[100px]"/>
         <UButton
             :icon="
                 !isArticleInPanier(id) ?
