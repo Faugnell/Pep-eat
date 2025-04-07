@@ -31,7 +31,7 @@ const {
     },
     image: {
         type: String,
-        required: true
+        default: "./articles/.default_plate.jpg"
     }    
 });
 
@@ -105,7 +105,7 @@ function addToPanier() {
                 <p class="text-xl font-thin">{{ prixFormat }}</p>
             </div>
         </div>
-        <img :src="image" alt="Article Image" class="rounded-sm aspect-square w-[50px] md:w-[75px] lg:w-[100px]"/>
+        <NuxtImg :src="image" alt="Article Image" class="rounded-sm aspect-square w-[50px] md:w-[75px] lg:w-[100px]"/>
         <UButton
             :icon="
                 !isArticleInPanier(id) ?
