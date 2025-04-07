@@ -39,7 +39,7 @@ async function create(newPanierData: panierType) {
   const newPanier = new Panier({
     "user_id": newPanierData.user_id,
     "articles": newPanierData.articles,
-    "prix_total": newPanierData.prix_total
+    "prixTotal": newPanierData.prixTotal
   })
   try {
     let output: panierType = await newPanier.save()
@@ -64,7 +64,7 @@ async function update(id: string, updatedPanier: panierType) {
       const newPanier = new Panier({
         "user_id": new mongoose.Types.ObjectId(id),
         "articles": updatedPanier.articles,
-        "prix_total": updatedPanier.prix_total
+        "prixTotal": updatedPanier.prixTotal
       })
       try {
         let output: panierType = await newPanier.save()
