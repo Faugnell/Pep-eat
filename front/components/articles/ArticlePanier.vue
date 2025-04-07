@@ -1,34 +1,51 @@
 <script setup lang='ts'>
-const emit = defineEmits<{ close: [boolean] }>();
 import { usePanierStore } from '~/stores/panierStore';
-import ArticlePanier from '~/components/articles/ArticlePanier.vue';
+
+const {
+    id,
+    name,
+    price
+} = defineProps({
+    id: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+});
 
 /* -------------------------------------------------------------------------
 --------------------------------- STORES -----------------------------------
 ------------------------------------------------------------------------- */
 const {
-    getArticles,
-    getNombreArticles,
-    getPrixTotal
+    getArticleById,
+    updateArticleQuantity
 } = usePanierStore();
 
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const articles = computed(() => getArticles());
-const nombreArticles = computed(() => getNombreArticles());
+const article = computed(() => getArticleById(id));
+const prixTotal = computed(() => price * article.value.quantity);
 const prixTotalFormat = computed(() => {
-    const total = getPrixTotal();
-
     return new Intl.NumberFormat('fr-FR', {
         style: 'currency',
         currency: 'EUR'
-    }).format(total);
-});
+    }).format(prixTotal.value);
+})
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
+const updateQuantity = (quantity: number) => {
+    updateArticleQuantity(id, quantity);
+}
 
 /* -------------------------------------------------------------------------
 ------------------------------- WATCHERS -----------------------------------
@@ -40,25 +57,19 @@ const prixTotalFormat = computed(() => {
 </script>
 
 <template>
-    <USlideover :close="{ onClick: () => emit('close', false) }">
-        <template #header>
-            <h2 class="text-2xl">Mon panier</h2>
-        </template>
-        <template #body>
-            <div class="flex flex-col gap-5">
-                <div v-for="article in articles">
-                    <ArticlePanier :key="article.id" :id="article.id" :name="article.name" :price="article.price" :quantity="article.quantity"/>
-                </div>
+    <div class="grid grid-cols-[1fr_25%_15%] gap-4 items-center justify-between">
+        <div class="flex flex-row gap-4 items-center">
+            <NuxtImg src="https://placehold.co/50x50" width="50" height="50" class="rounded-sm"/>
+            <div class="flex flex-col">
+                <p class="font-bold text-xl truncate">{{ name }}</p>
+                <p class="text-sm text-neutral-500">{{ price }} €</p>
             </div>
-        </template>
-        <template #footer>
-            <div class="flex flex-col w-full items-end">
-                <div class="flex justify-between items-center gap-3">
-                    <p class="text-lg">Total : {{ prixTotalFormat }}</p>
-                    <p class="text-lg">Nombre d'articles : {{ nombreArticles }}</p>
-                </div>
-                <UButton label="Finaliser ma commande" color="neutral" trailing-icon="i-lucide-arrow-right"/>
-            </div>
-        </template>
-    </USlideover>
+        </div>
+        <div class="flex flex-row gap-2 items-center">
+            <UButton icon="i-lucide-minus" color="neutral" variant="outline" class="rounded-fulL" size="sm" @click="updateQuantity(--article.quantity)"/>
+            <p>{{ article.quantity }}</p>
+            <UButton icon="i-lucide-plus" color="neutral" variant="outline" class="rounded-fulL" size="sm" @click="updateQuantity(++article.quantity)"/>
+        </div>
+        <p class="text-lg">{{ prixTotalFormat }}</p>
+    </div>
 </template>

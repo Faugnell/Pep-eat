@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { buildSuccessResponse, buildErrorResponse } from '../utils/responseBuilder';
+import { isValidMongoId } from '../utils/functions';
 
 const Restaurant = require("../models/restaurants");
 
@@ -11,19 +12,29 @@ const Restaurant = require("../models/restaurants");
  * @throws {Error} - Erreur lors de la récupération des restaurants
  */
 export async function find(req:Request, res:Response) {
-	const id = req.params.id;
+	let match = {};
+	const filter = req.params.filter;
+	const userId = req.params.userId;
+
+	if (req.params.id !== undefined && isValidMongoId(String(req.params.id))) {
+		match = { _id : new mongoose.Types.ObjectId(req.params.id) };
+	} else if (filter !== undefined) {
+		match = {
+			$or: [
+				{ nom: { $regex: new RegExp(`.*${filter}.*`, 'i') } },
+				{ type_cuisine: { $regex: new RegExp(`.*${filter}.*`, 'i') } }
+			]
+		};
+	} else if (userId !== undefined && isValidMongoId(String(userId))) {
+		match = { id_proprietaire: new mongoose.Types.ObjectId(userId) };
+	}
 
 	try {
 		const restaurants =
 			/* Si un identifiant est fourni, on récupère le restaurant correspondant */
 			await Restaurant.aggregate([
 				{
-					$match: {
-						$or: [
-							{ _id: new mongoose.Types.ObjectId(id) }, /* Si l'identifiant est fourni, récupérer le restaurant correspondant */
-							{ _id: { $exists: true } } /* Sinon, récupérer tous les restaurants */
-						  ]
-					}
+					$match: match
 				},
 				{
 					$lookup: {
@@ -88,11 +99,6 @@ export async function find(req:Request, res:Response) {
  * @throws {Error} - Erreur lors de la création du restaurant
  */
 export async function create(req:Request, res:Response) {
-	// TODO: Supprimer la ligne ci-dessous
-	if (req.body.id_proprietaire === undefined) {
-		req.body.id_proprietaire = '660c1a1e2f5a5b1a4b8e4c21';
-	}
-
 	try {
 		const restaurant = await Restaurant.findOne({ siret: req.body.siret });
 

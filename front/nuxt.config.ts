@@ -2,7 +2,7 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-	modules: ['@nuxt/icon', '@nuxt/ui', '@nuxt/image', '@pinia/nuxt'],
+	modules: ['@nuxt/icon', '@nuxt/ui', '@nuxt/image', '@pinia/nuxt', 'nuxt-lodash'],
 	app: {
 		head: {
 			title: 'Pep\'eat',
@@ -14,6 +14,11 @@ export default defineNuxtConfig({
 				{
 					rel: 'stylesheet',
 					href: 'https://fonts.googleapis.com/css2?family=Zain&display=swap'
+				},
+				{
+					rel: 'icon',
+					type: 'image/x-icon',
+					href: '/favicons/favicon_16.ico'
 				}
 			]
 		}
@@ -33,6 +38,6 @@ export default defineNuxtConfig({
 	},
 	compatibilityDate: '2024-11-01',
 	devtools: {
-		enabled: true
+		enabled: false
 	}
 })

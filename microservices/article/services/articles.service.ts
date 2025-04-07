@@ -1,12 +1,13 @@
 // services/articles.service.ts
 import { Article } from "../models/articles.model";
+import mongoose from "mongoose"; 
 
 export async function findAll() {
   return await Article.find();
 }
 
 export async function findByRestaurant(restaurantId: string) {
-  return await Article.find({ restaurant_id: restaurantId });
+  return await Article.find({ restaurant_id: new mongoose.Types.ObjectId(restaurantId) });
 }
 
 export async function findByCategory(category: string) {
