@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: './secret/.env' })
 
 import { Request, Response, NextFunction } from 'express';
 
