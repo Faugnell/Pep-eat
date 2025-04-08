@@ -205,14 +205,7 @@ function validateArticle() {
   if (article.price < 0) errors.push({name: 'price', message: 'Price must be greater than or equal to 0'});
   if (article.price > 1000) errors.push({name: 'price', message: 'Price must be less than or equal to 1000'});
   if (!article.available) errors.push({name: 'available', message: 'Available is required'});
-  if (errors.length > 0) {
-    useToast().add({
-      title: 'Erreur dans le formulaire',
-      description: errors.map(e => e.message).join('\n'),
-      color: 'error',
-      icon: 'i-heroicons-x-mark'
-    });
-  }
+
   return errors;
 }
 
@@ -303,7 +296,16 @@ async function updateArticle() {
         if (!restaurant) {
             return
         }
-        restaurant.articles = restaurant.articles.filter((article) => article._id != selectedArticle.value._id);
+
+        const updatedArticle = response.data;
+
+        // Supprime l'ancien s’il existe (en cas de mise à jour)
+        restaurant.articles = restaurant.articles.filter(
+          (a) => a._id !== updatedArticle._id
+        );
+
+        // Ajoute le nouvel article
+        restaurant.articles.push(updatedArticle);
 
         useToast().add({
           title: 'Article modifié',
@@ -328,12 +330,16 @@ async function updateArticle() {
             },
         });
 
+        console.log('response', response);
+
         if (response.ok && response.data) {
           const restaurant = listeRestaurants.value.find((resto) => resto._id == selectedArticle.value.restaurant_id);
           if (!restaurant) {
               return
           }
           restaurant.articles = restaurant.articles.filter((article) => article._id != selectedArticle.value._id);
+
+          restaurant.articles.push(updatedArticle);
 
           useToast().add({
               title: 'Article créé',
@@ -571,7 +577,7 @@ onMounted(async () => {
                             #[restaurant._id]="{ item }"
                             >
                             <div class="relative pt-10">
-                                <UButton color="primary" variant="outline"  icon="i-material-symbols-add-2-rounded" :ui="{base: 'text-lg'}" @click="selectedArticle = {insertion: true}">Ajouter un plat</UButton>
+                                <UButton color="primary" variant="outline"  icon="i-material-symbols-add-2-rounded" :ui="{base: 'text-lg'}" @click="selectedArticle = {insertion: true, restaurant_id: restaurant._id}">Ajouter un plat</UButton>
                                 <!-- Grille d'articles -->
                                 <div
                                 class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-5 gap-4 m-2"
