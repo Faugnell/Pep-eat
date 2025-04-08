@@ -26,7 +26,8 @@ const userConnected = computed<boolean>(() => isConnected())
 
 const { data: commande } = await useAsyncData<fetchedDataType>(
   'posts',
-  () => $fetch(`http://localhost:3102/commandes/user/${userId.value}`), {
+  () => 
+  $fetch<fetchedDataType>(`/api/commandes/user/${userId.value}`), {
     watch: [userId]
   }
 )

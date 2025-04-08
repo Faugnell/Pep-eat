@@ -1,17 +1,44 @@
 <script setup lang="ts">
 import type { StepperItem } from '@nuxt/ui'
 import { usePanierStore } from '~/stores/panierStore';
+import type { fetchedDataType as commandeFetch } from '../../server/api/commandes/index.post';
+import type { fetchedDataType as livraisonFetch } from '../../server/api/livraison/index.post';
 
-const { getArticles, getNombreArticles,getPrixTotal } = usePanierStore();
+/* -------------------------------------------------------------------------
+--------------------------------- STORES -----------------------------------
+------------------------------------------------------------------------- */
+
+//  ---- Articles ----
+const { 
+    getArticles,
+    getNombreArticles,
+    getPrixTotal ,
+} = usePanierStore();
+
+
 
 const articles = computed(() => getArticles());
 const nombreArticles = computed(() => getNombreArticles());
-const prixTotalFormat = computed(() => {
-    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(getPrixTotal());
-})
+const prixTotal = computed(() => getPrixTotal());
+
+
+//  ---- Utilisateur ----
+const {
+    getId,
+    isConnected
+} = useUserStore();
+
+const userId = computed<string>(() => getId());
+const userConnected = computed<boolean>(() => isConnected())
+
+/* -------------------------------------------------------------------------
+------------------------------- VARIABLES ----------------------------------
+------------------------------------------------------------------------- */
 
 const router = useRouter()
 const stepper = useTemplateRef('stepper')
+
+const prixTotalFormat = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(prixTotal.value)
 
 const tabs: StepperItem[] = [
     { slot: "recapitulatif", title: "Récapitulatif", description: "Résumé de la commande", icon: "i-lucide-shopping-cart" },
@@ -19,6 +46,9 @@ const tabs: StepperItem[] = [
     { slot: "paiement", title: "Paiement", description: "Informations de paiement", icon: "i-lucide-credit-card" },
     { slot: "finalisation", title: "Finalisation", description: "Valider votre commande", icon: "i-lucide-check" }
 ]
+
+// TODO: Ajouté un champ pour le code promotions
+const promotions = <Array<string>>[]
 
 const adress_number: Ref<number | undefined> = ref();
 const adress_street: Ref<string> = ref('');
@@ -35,6 +65,59 @@ const cryptogramme: Ref<string> = ref('');
 const paymentMessageVisible: Ref<boolean> = ref(false);
 const paymentErrorVisible: Ref<boolean> = ref(false);
 
+/* -------------------------------------------------------------------------
+------------------------------- FONCTIONS ----------------------------------
+------------------------------------------------------------------------- */
+
+//* TODO: Création de la commandes avec retour de l'id
+//* TODO:  Utiliser ll'id retourné à la création pour créer la livraison
+// const { data } = await $fetch<Response<Array<Restaurant>>>(`/api/restaurants/${restaurantId}`);
+
+const createCommand = async () => {
+    const billing_details = articles.value.map((article) => 
+        ({
+            quantity: article.quantity,
+            article_data: {
+                article_id: article.id,
+                name: article.name,
+                price: article.price
+            }
+        })
+    )
+    return await $fetch<commandeFetch>(`/api/commandes/`, {
+        method: "POST",
+        body: {
+            user_id: userId.value,
+            restaurant_id: "67e65ad6224030298c111dcc",
+            billing_details: billing_details,
+            date: new Date(),
+            price: prixTotal.value,
+            promotions: promotions,
+            status: "en cours",
+            comment: "Est ce que ca marche"
+        }
+    });
+}
+
+const createLivraison = async (orderId:string) => {
+    const newLivraison = await $fetch<livraisonFetch>(`/api/livraison/`, {
+        method: "POST",
+        body: {
+            order_id: orderId,
+            restaurant_id: "65e63d6242030298c111dccb",      // TEST
+            user_id: userId.value,
+            status: "Prise en charge de la commande.",
+            address_number: adress_number.value,
+            address_street: adress_street.value,
+            postal_code: postal_code.value,
+            city: city.value,
+            phone: phone.value,
+            order_information: "OUFEHIOFISHDFKIHSBDFIHBSQFIHSDOGHDSOUHOHb",
+        }
+    });
+    return newLivraison
+}
+
 const completePayment = async (): Promise<void> => {
     if (!numCard.value || !dateExpiration.value || !cryptogramme.value) {
         paymentErrorVisible.value = true;
@@ -42,32 +125,34 @@ const completePayment = async (): Promise<void> => {
     } else {
         paymentMessageVisible.value = true;
         paymentErrorVisible.value = false;
-
         try {
-            const response = await fetch('http://localhost:3105/livraisons', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    order_id: "65e63d6242030298c111dcca",           // TEST
-                    restaurant_id: "65e63d6242030298c111dccb",      // TEST
-                    user_id: "65e63d6242030298c111dccc",            // TEST
+            const newCommande = await createCommand()
+            // if(!newCommande.ok){
+            //     throw new Error("Erreur lors de la création de la commande")
+            // }
+            // const response = await fetch('http://localhost:3105/livraisons', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         order_id: "65e63d6242030298c111dcca",           // TEST
+            //         restaurant_id: "65e63d6242030298c111dccb",      // TEST
+            //         user_id: "65e63d6242030298c111dccc",            // TEST
 
-                    status: "Prise en charge de la commande.",
-                    address_number: adress_number.value,
-                    address_street: adress_street.value,
-                    postal_code: postal_code.value,
-                    city: city.value,
-                    phone: phone.value,
-                    order_information: order_information.value,
-                }),
-            });
+            //         status: "Prise en charge de la commande.",
+            //         address_number: adress_number.value,
+            //         address_street: adress_street.value,
+            //         postal_code: postal_code.value,
+            //         city: city.value,
+            //         phone: phone.value,
+            //         order_information: order_information.value,
+            //     }),
+            // });
+            const response = await createLivraison(newCommande?.data._id)
 
-            const result = await response.json();
-
-            if (!response.ok) {
-                console.error('Erreur côté serveur:', result.error);
+            if (!response.ok && response?.error) {
+                console.error('Erreur côté serveur:', response.error);
             }
         } catch (error) {
             console.error("Erreur lors de l'envoi des données:", error);
@@ -80,7 +165,10 @@ const completePayment = async (): Promise<void> => {
     <div class="w-full flex justify-center mt-6">
         <UStepper ref="stepper" :items="tabs" class="w-4/5 xl:w-3/5">
 
-            <!-- Page de récapitulatif de commande -->
+<!-- * =============================================================================================================== -->
+<!-- * ==============================================    RECAP COMMANDE    =========================================== -->
+<!-- * =============================================================================================================== -->
+
             <template #recapitulatif>
                 <UCard class="w-full min-h-[400px] mt-6">
                     <p class="text-xl font-semibold text-center mb-4">Votre commande</p>
@@ -105,7 +193,10 @@ const completePayment = async (): Promise<void> => {
                 </UCard>
             </template>
 
-            <!-- Page de validation d'adresse -->
+<!-- * =============================================================================================================== -->
+<!-- * ==================================================    ADRESSE   =============================================== -->
+<!-- * =============================================================================================================== -->
+ 
             <template #informations>
                 <UCard class="w-full min-h-[400px] mt-6">
                     <div class="flex justify-center">
@@ -146,7 +237,10 @@ const completePayment = async (): Promise<void> => {
                 </UCard>
             </template>
 
-            <!-- Page de validation d'info de paiement -->
+<!-- * =============================================================================================================== -->
+<!-- * =================================================    PAIEMENT   =============================================== -->
+<!-- * =============================================================================================================== -->
+
             <template #paiement>
                 <UCard class="w-full min-h-[400px] mt-6">
                     <div class="flex flex-col items-center">
@@ -182,7 +276,10 @@ const completePayment = async (): Promise<void> => {
                 </UCard>
             </template>
 
-            <!-- Page de finalisation -->
+<!-- * =============================================================================================================== -->
+<!-- * ===============================================    FINALISATION   ============================================= -->
+<!-- * =============================================================================================================== -->
+
             <template #finalisation>
                 <UCard class="w-full min-h-[400px] mt-6">
                     <div class="flex flex-col items-center text-center">
@@ -201,7 +298,11 @@ const completePayment = async (): Promise<void> => {
             </template>
         </UStepper>
     </div>
-    <!-- Boutons de navigation -->
+
+<!-- * =============================================================================================================== -->
+<!-- * ================================================    NAVIGATION   ============================================== -->
+<!-- * =============================================================================================================== -->
+
     <div class="fixed top-1/2 flex justify-between w-full px-2">
         <UButton leading-icon="i-lucide-arrow-left" :disabled="!stepper?.hasPrev" @click="stepper?.prev()"></UButton>
         <UButton trailing-icon="i-lucide-arrow-right" :disabled="!stepper?.hasNext" @click="stepper?.next()"></UButton>

@@ -20,10 +20,7 @@ export type commandeType = {
 type articleType= {
   article_id: string,
   name: string,
-  description: string,
   price: number,
-  nutriscore: string,
-  category: string
 }
 
 const promotionSchema = new Schema({
@@ -51,20 +48,8 @@ const platSchema = new Schema({
     type: String,
     required: true
   },
-  description: {
-    type: String,
-    default: ""
-  },
   price: {
     type: mongoose.Schema.Types.Decimal128,
-    required: true
-  },
-  nutriscore: {
-    type: String,
-    default: "NA"
-  },
-  category: {
-    type: String,
     required: true
   }
 }, { autoIndex: false })
