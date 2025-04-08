@@ -1,12 +1,14 @@
 export type Article = {
-    _id: string,
-    image: string,
-    name: string,
-    description: string,
-    price: number,
-    category: string,
-    nutriscore: string,
-    image_id: string,
-    restaurant_id: string,
-    available: boolean,
+  _id: string
+  name: string
+  price: number
+  nutriscore: string
+  category: string
+  available: Boolean
+  restaurant_id: string
+  description?: string;
+  image?: string;
+  id_media?: string;
+  updatedImage?: string;
+  insertion?: boolean;
 }

@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "verbatimModuleSyntax": false,
+      "allowJs": false,
+      "typeRoots": [
+        "./node_modules/@types",
+        "../node_modules/@types"
+      ]
+    },
+    "include": [
+      "../microservices"
+    ]
+  }
+  

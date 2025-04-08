@@ -11,6 +11,9 @@ const app = express();
 const multer = require('multer');
 const upload = multer({limits: { fieldSize: 5 * 1024 * 1024 }}); // Middleware pour gérer les fichiers uploadés
 
+app.use("/medias", upload.any(), routes)
+app.use(express.json({ limit: '50mb' })); // Limite de 50 Mo pour le corps de la requête
+app.use(express.urlencoded({ limit: '50mb', extended: true })); // Limite de 50 Mo pour les données URL-encoded
 
 /* Middleware pour gérer les CORS */
 app.use((req:Request, res:Response, next:NextFunction) => {
@@ -24,10 +27,6 @@ app.use((req:Request, res:Response, next:NextFunction) => {
 
     next();
 });
-
-app.use("/medias", upload.any(), routes)
-app.use(express.json({ limit: '50mb' })); // Limite de 50 Mo pour le corps de la requête
-app.use(express.urlencoded({ limit: '50mb', extended: true })); // Limite de 50 Mo pour les données URL-encoded
 
 async function main() {
     try {
