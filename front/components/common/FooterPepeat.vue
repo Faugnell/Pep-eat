@@ -25,10 +25,10 @@ const {
 onMounted(async () => {
 });
 </script>
-
 <template>
-    <div class="flex justify-around items-center w-full bg-white h-[7vh] min-h-10 sticky mb-2">
-        <div class="grid grid-cols-3 justify-items-center gap-x-4">
+    <div class="flex flex-col md:flex-row justify-around items-center w-full bg-white h-fit min-h-10 sticky mb-2 px-4 py-2">
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 gap-2 justify-items-center text-xs sm:text-sm md:text-base text-center">
             <NuxtLink to="/legal/copyright">© Droits d'auteur</NuxtLink>
             <NuxtLink to="/legal/terms">Conditions d’utilisation</NuxtLink>
             <NuxtLink to="/legal/privacy-policy">Politique de confidentialité</NuxtLink>
@@ -36,23 +36,17 @@ onMounted(async () => {
             <NuxtLink to="/legal/cgv">Conditions générales de vente</NuxtLink>
             <NuxtLink to="/legal/cookies">Cookies</NuxtLink>
         </div>
-        <div class="flex justify-center gap-4">
-            <!-- Facebook -->
+
+        <div class="flex justify-center gap-4 mt-2 md:mt-0">
             <ULink to="https://facebook.com/" target="_blank" aria-label="Facebook">
                 <UIcon name="i-garden-facebook-stroke-12" class="size-5" />
             </ULink>
-
-            <!-- Instagram -->
             <ULink to="https://instagram.com/" target="_blank" aria-label="Instagram">
                 <UIcon name="i-gg-instagram" class="size-5" />
             </ULink>
-
-            <!-- Twitter -->
             <ULink to="https://twitter.com/" target="_blank" aria-label="Twitter">
                 <UIcon name="i-garden-twitter-stroke-12" class="size-5" />
             </ULink>
-
-            <!-- LinkedIn -->
             <ULink to="https://www.linkedin.com/company/pep-eat" target="_blank" aria-label="LinkedIn">
                 <UIcon name="i-garden-linkedin-stroke-12" class="size-5" />
             </ULink>

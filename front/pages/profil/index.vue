@@ -100,11 +100,11 @@ async function disableAccount() {
             <template #content="{ item }">
                 <!--    PARTIE ÉDITEUR DE PROFIL    -->
                 <div v-if="item.label === 'Mon compte'" class="min-h-max flex items-center justify-center py-10">
-                    <UCard class="w-full max-w-2xl p-6">
-                        <h2 class="text-xl mb-6">Votre code de parrainage :
+                    <UCard class="w-full max-w-2xl p-4">
+                        <h2 class="text-xl mb-4">Code de parrainage :
                             <span class="font-semibold text-2xl px-2">{{ userInfo.referral_link }}</span>
                         </h2>
-                        <h2 class="text-xl mb-6">Votre rôle :
+                        <h2 class="text-xl mb-2">Vous êtes :
                             <span class="font-semibold text-2xl px-2">{{ userInfo.role }}</span>
                         </h2>
                         <USeparator class="my-4" />
