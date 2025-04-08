@@ -2,6 +2,8 @@ import { H3Event } from "h3";
 import { Response } from "~/utils/types/Response";
 
 export default defineEventHandler(async (event : H3Event) => {
+    console.log(process.env);
+
     try {
         return {
             code: 200,
