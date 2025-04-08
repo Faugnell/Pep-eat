@@ -1,0 +1,16 @@
+{
+    "entryPoints": [
+      "../microservices"
+    ],
+    "entryPointStrategy": "expand",
+    "exclude": [
+      "**/*.test.ts",
+      "**/node_modules/**"
+    ],
+    "out": "./docs",
+    "tsconfig": "./tsconfig.typedoc.json",
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "includeVersion": true
+}
