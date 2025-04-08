@@ -8,7 +8,7 @@ export default defineEventHandler(async (event : H3Event) => {
             ok: true,
             data: {
                 serviceHost: "api-notification",
-                servicePort: "3109",
+                servicePort: "80",
             }
         } as Response<any>;
     } catch (error) {
