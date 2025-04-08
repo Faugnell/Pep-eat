@@ -132,6 +132,12 @@ const itemsRestaurant = computed(() => listeRestaurants.value.map(restaurant => 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
+/**
+ * Fonction pour récupérer les articles d'un restaurant
+ * @param {string} restaurantId - L'ID du restaurant
+ * @return {Promise<Article[]>} - La liste des articles du restaurant
+ * @throws {Error} - Si une erreur se produit lors de la récupération des articles
+ */
 async function fetchArticlesByRestaurant(restaurantId: string) {
   try {
     const response = await $fetch<Article[]>(
@@ -143,6 +149,11 @@ async function fetchArticlesByRestaurant(restaurantId: string) {
   }
 }
 
+/**
+ * Fonction pour supprimer un article
+ * @returns {Promise<void>}
+ * @throws {Error} - Si une erreur se produit lors de la suppression de l'article
+ */
 async function deleteArticle() {
   if (!selectedArticle.value?._id) return;
 
@@ -242,6 +253,11 @@ function handleImageUpdate(event: Event) {
     fileReader.readAsDataURL(file);
 }
 
+/**
+ * Fonction pour mettre à jour ou créer un article
+ * @returns {Promise<void>}
+ * @throws {Error} Si une erreur se produit lors de la mise à jour ou de la création de l'article
+ */
 async function updateArticle() {
   
   if (!selectedArticle.value) return;
