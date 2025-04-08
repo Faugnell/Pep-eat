@@ -6,37 +6,30 @@
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
-const restaurants = ref();
+const notifications = ref();
 
 /* -------------------------------------------------------------------------
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
-async function fetchRestaurants() {
-    const response = await $fetch(`http://localhost:3101/restaurants/get`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        retry: 3,
-        retryDelay: 1000,
-    });
+async function fetctNotification() {
+    const response = await $fetch(`/api/notifications`);
 
     if (response.ok) {
         useToast().add({
-            title: 'Restaurants fetched !',
+            title: 'Notifications fetched !',
             color: 'success',
             icon: 'i-heroicons-check-circle'
         });
 
-        restaurants.value = response.data;
+        notifications.value = response.data;
     } else {
         useToast().add({
-            title: 'Error while fetching restaurants !',
+            title: 'Error while fetching notifications !',
             color: 'error',
             icon: 'x-mark'
         });
 
-        console.error('Error while fetching restaurants', response);
+        console.error('Error while fetching notifications', response);
     }
 }
 
@@ -50,6 +43,6 @@ async function fetchRestaurants() {
 </script>
 
 <template>
-    <UButton @click="fetchRestaurants">Fetch restaurants</UButton>
-    <pre>{{ restaurants }}</pre>
+    <UButton @click="fetctNotification">Fetch notification</UButton>
+    <pre>{{ notifications }}</pre>
 </template>

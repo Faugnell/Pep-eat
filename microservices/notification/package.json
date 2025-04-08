@@ -1,0 +1,29 @@
+{
+  "name": "microservice-notification",
+  "version": "1.0.0",
+  "description": "Microservice gérant les notifications de l'application Pep'eat",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "ip": "^2.0.1",
+    "mongoose": "^8.13.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.1",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
