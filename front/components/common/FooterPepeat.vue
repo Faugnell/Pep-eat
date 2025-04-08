@@ -25,7 +25,6 @@ const {
 onMounted(async () => {
 });
 </script>
-
 <template>
     <div class="w-full bg-white pt-4 pb-2">
       <!-- Réseaux sociaux -->

@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import type { Notification } from './utils/types/Notification';
 import { useUserStore } from '~/stores/userStore';
+import { usePanierStore } from '~/stores/panierStore';
 
 const {
     setUserInfo
 } = useUserStore();
+
+const {
+    setUserId
+} = usePanierStore();
 
 const appConfig = useAppConfig();
 
@@ -26,7 +32,21 @@ onMounted(() => {
             referral_link: parsedUser.referral_link,
             is_suspended: parsedUser.is_suspended
         });
+
+        setUserId(parsedUser._id);
     }
+});
+
+/* Gestion des notifications */
+
+const { $socket } = useNuxtApp();
+
+$socket.on('new-notification', (notification: Notification) => {
+    useToast().add({
+        title: notification.titre,
+        description: notification.description,
+        color: notification.couleur ?? notification.type
+    })
 });
 </script>
  
