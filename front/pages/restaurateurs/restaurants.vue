@@ -17,6 +17,8 @@ const {
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
+const userId = computed(() => getId());
+
 const activeTab = ref('0');
 const category = ref("");
 const articles = ref<Article[]>([]);
@@ -80,29 +82,38 @@ const nutriscore = ref('')
 const available = ref(true)
 const isSubmitting = ref(false)
 
-const {
-    data : listeRestaurants
-} = await useAsyncData(
-    'liste-restaurants',
-    () =>
-        $fetch<Response<Restaurant[]>>(`/api/restaurants`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            retry: 3,
-            retryDelay: 1000
-        }).then((response: Response<Restaurant[]>) => {
-            if (response.ok) {
-                return response.data;
-            } else {
-                throw new Error('Error while fetching restaurants');
-            }
-        }).catch((error => {
-            console.error('Error while fetching restaurants:', error);
-            return [];
-        }))
-);
+const listeRestaurants = ref<Restaurant[]>([]);
+
+// const {
+//     data : listeRestaurants
+// } = await useAsyncData(
+//     'liste-restaurants',
+//     () =>
+//         $fetch<Response<Restaurant[]>>(`/api/restaurants/user/${userId.value}`, {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             retry: 3,
+//             retryDelay: 1000
+//         }).then((response: Response<Restaurant[]>) => {
+//             console.log(`/api/restaurants/user/${userId.value}`, response.data);
+
+//             if (response.ok) {
+//                 return response.data;
+//             } else {
+//                 throw new Error('Error while fetching restaurants');
+//             }
+//         }).catch((error => {
+//             console.error('Error while fetching restaurants:', error);
+//             return [];
+//         })),
+//         {
+//             watch: [
+//                 userId
+//             ]
+//         }
+// );
 
 const selectedRestaurant = ref<Restaurant | null>(null)
 
@@ -209,9 +220,7 @@ function handleImageUpdate(event: Event) {
 async function updateRestaurant() {
     if (!selectedRestaurant.value) return;
 
-    const userId = getId();
-
-    if (!userId) return;
+    if (!userId.value) return;
 
     const body = {
         nom: selectedRestaurant.value.nom,
@@ -222,7 +231,7 @@ async function updateRestaurant() {
         horaires: selectedRestaurant.value.horaires,
         type_cuisine: selectedRestaurant.value.type_cuisine,
         sponsorise: selectedRestaurant.value.sponsorise,
-        id_proprietaire: userId
+        id_proprietaire: userId.value
     };
 
     if (selectedRestaurant.value._id) {
@@ -324,9 +333,26 @@ watch(
   },
   { immediate: true } // facultatif si tu veux relancer à la 1ère assignation
 )
+
 /* -------------------------------------------------------------------------
 ---------------------------- LIFECYCLE HOOKS -------------------------------
 ------------------------------------------------------------------------- */
+onMounted(async () => {
+    const response = await $fetch<Response<Restaurant[]>>(`/api/restaurants/user/${userId.value}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        retry: 3,
+        retryDelay: 1000
+    });
+
+    if (response.ok && response.data) {
+        listeRestaurants.value = response.data;
+    } else {
+        console.error('Error while fetching restaurants:', response.error);
+    }
+});
 </script>
 
 <template>

@@ -44,7 +44,8 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
     },
     {
       label: 'Restaurant',
-      icon: 'i-uil-restaurant'
+      icon: 'i-uil-restaurant',
+      to: '/restaurateurs/restaurants'
     },
     {
       label: 'Coursier',
