@@ -10,6 +10,8 @@ const Notification = require("../models/notifications");
  * @throws {Error} - Erreur lors de la récupération des notifications
  */
 export async function find(req:Request, res:Response) {
+	console.log("Récupération des notifications");
+
 	const userId = req.params.userId;
 
 	let match = {};
