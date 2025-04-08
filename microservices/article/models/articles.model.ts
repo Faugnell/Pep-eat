@@ -2,7 +2,6 @@
 import mongoose from "mongoose";
 
 const articleSchema = new mongoose.Schema({
-    _id: String,
     restaurant_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',

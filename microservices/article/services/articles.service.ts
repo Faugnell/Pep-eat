@@ -14,8 +14,8 @@ export async function findByCategory(category: string) {
   return await Article.find({ category: category})
 }
 
-export async function findById(articleId: string) {
-  return await Article.findById({ _id: articleId});
+export async function findById(id: string) {
+  return await Article.findById({ id });
 }
 
 async function create(data: any) {
