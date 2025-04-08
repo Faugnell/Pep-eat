@@ -12,6 +12,8 @@ const notifications = ref();
 ------------------------------- FONCTIONS ----------------------------------
 ------------------------------------------------------------------------- */
 async function fetctNotification() {
+    console.log(useRuntimeConfig());
+
     const response = await $fetch(`/api/notifications`);
 
     if (response.ok) {

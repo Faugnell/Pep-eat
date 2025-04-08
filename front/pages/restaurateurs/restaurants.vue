@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import type { TabsItem } from '@nuxt/ui'
 import type { Restaurant } from '~/utils/types/Restaurant.ts';
+import type { Article } from '~/utils/types/Article.ts';
 import type { Media } from '~/utils/types/Media.ts';
 import type { Response } from '~/utils/types/Response';
 import Restaurants from '~/components/restaurateurs/restaurants.vue';
@@ -20,8 +21,8 @@ const {
 const userId = computed(() => getId());
 
 const activeTab = ref('0');
-const category = ref("");
-const articles = ref<Article[]>([]);
+let showDeleteConfirm = ref(false);
+
 
 const nutriscoreOptions = ref([
   { label: 'A', value: 'A' },
@@ -66,14 +67,6 @@ const foodCategoryOptions = ref([
   { label: 'Poulet frit', value: 'wings' },
 ])
 
-interface Article {
-  _id: string
-  name: string
-  price: number
-  nutriscore: string
-  category: string
-}
-
 // Champs du formulaire
 const name = ref('')
 const description = ref('')
@@ -116,6 +109,7 @@ const listeRestaurants = ref<Restaurant[]>([]);
 // );
 
 const selectedRestaurant = ref<Restaurant | null>(null)
+const selectedArticle = ref<Article | null>(null)
 
 const items = ref<TabsItem[]>([
     {
@@ -130,6 +124,14 @@ const items = ref<TabsItem[]>([
     }
 ]);
 
+const itemsRestaurant = computed(() => listeRestaurants.value.map(restaurant => ({
+  label: restaurant.nom,
+  slot: restaurant._id as const,
+  content: ''
+})) satisfies AccordionItem[])
+/* -------------------------------------------------------------------------
+------------------------------- FONCTIONS ----------------------------------
+------------------------------------------------------------------------- */
 async function fetchArticlesByRestaurant(restaurantId: string) {
   try {
     const response = await $fetch<Article[]>(
@@ -141,52 +143,41 @@ async function fetchArticlesByRestaurant(restaurantId: string) {
   }
 }
 
-async function handleSubmit(restaurantId: string) {
-  isSubmitting.value = true
+async function deleteArticle() {
+  if (!selectedArticle.value?._id) return;
+
+    const id = selectedArticle.value._id;
 
   try {
-    const newArticle = {
-      restaurant_id: restaurantId,
-      name: name.value,
-      description: description.value,
-      price: price.value,
-      category: category.value,
-      nutriscore: nutriscore.value,
-      available: available.value,
+    await $fetch(`http://localhost:3103/articles/${id}`, {
+      method: 'DELETE',
+    });
+
+    const restaurant = listeRestaurants.value.find((resto) => resto._id == selectedArticle.value.restaurant_id);
+    if (!restaurant) {
+        return
     }
+    restaurant.articles = restaurant.articles.filter((article) => article._id != selectedArticle.value._id);
 
-    await $fetch('http://localhost:3103/articles/', {
-      method: 'POST',
-      body: newArticle,
-    })
+    showDeleteConfirm = ref(false);
+    selectedArticle.value = null;
 
     useToast().add({
-      title: 'Article créé !',
-      color: 'primary',
+      title: 'Article supprimé',
       icon: 'i-heroicons-check-badge',
-    })
-
-    // Réinitialiser le formulaire
-    name.value = ''
-    description.value = ''
-    price.value = 0
-    nutriscore.value = ''
-    available.value = true
+      color: 'primary'
+    });
   } catch (error) {
+    console.error('Erreur lors de la suppression de l’article :', error);
     useToast().add({
-      title: 'Erreur lors de la création',
+      title: 'Erreur',
+      description: 'Impossible de supprimer cet article',
       color: 'error',
-      icon: 'i-heroicons-x-mark',
-    })
-    console.error('Erreur création article :', error)
-  } finally {
-    isSubmitting.value = false
-    await fetchArticlesByRestaurant(restaurantId)
+      icon: 'i-heroicons-x-mark'
+    });
   }
 }
-/* -------------------------------------------------------------------------
-------------------------------- FONCTIONS ----------------------------------
-------------------------------------------------------------------------- */
+
 function validate() {
     const errors = [];
 
@@ -198,6 +189,40 @@ function validate() {
     if (!selectedRestaurant.value.type_cuisine) errors.push({name: 'type_cuisine', message: 'Type de cuisine is required'});
 
     return errors;
+}
+
+function validateArticle() {
+  const errors = [];
+  
+  if (!selectedArticle.value) return errors;
+
+  const article = selectedArticle.value;
+  if (!article.name) errors.push({name: 'name', message: 'Nom is required'});
+  if (!article.description) errors.push({name: 'description', message: 'Description is required'});
+  if (!article.price) errors.push({name: 'price', message: 'Price is required'});
+  if (!article.category) errors.push({name: 'category', message: 'Category is required'});
+  if (!article.nutriscore) errors.push({name: 'nutriscore', message: 'Nutri-Score is required'});
+  if (article.price < 0) errors.push({name: 'price', message: 'Price must be greater than or equal to 0'});
+  if (article.price > 1000) errors.push({name: 'price', message: 'Price must be less than or equal to 1000'});
+  if (!article.available) errors.push({name: 'available', message: 'Available is required'});
+
+  return errors;
+}
+
+function handleArticleImageUpdate(event: Event) {
+    const fileReader = new FileReader();
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (!file) return;
+
+    fileReader.onloadend = () => {
+        if (!selectedArticle.value) return;
+
+        selectedArticle.value.updatedImage = fileReader.result as string;
+        selectedArticle.value.image = fileReader.result as string;
+    };
+
+    fileReader.readAsDataURL(file);
 }
 
 function handleImageUpdate(event: Event) {
@@ -215,6 +240,131 @@ function handleImageUpdate(event: Event) {
 
     /* Lire le fichier en tant que Data URL (base64) */
     fileReader.readAsDataURL(file);
+}
+
+async function updateArticle() {
+  
+  if (!selectedArticle.value) return;
+
+  const body = {
+    restaurant_id: selectedArticle.value.restaurant_id,
+    name: selectedArticle.value.name,
+    description: selectedArticle.value.description,
+    price: selectedArticle.value.price,
+    category: selectedArticle.value.category,
+    nutriscore: selectedArticle.value.nutriscore,
+    available: selectedArticle.value.available
+  };
+
+  try {
+    if (selectedArticle.value._id) {
+      /* Mise à jour d'un article existant */
+
+      /* Si l'image de l'article a été modifiée, on l'envoie au serveur */
+      if (selectedArticle.value.updatedImage) {
+        const formData = new FormData();
+        formData.append('buffer', selectedArticle.value.image);
+
+        const imageResponse: Response<Media> = await $fetch<Response<Media>>(`/api/medias/${selectedArticle.value.id_media ?? ''}`, {
+          method: selectedArticle.value.id_media ? 'PUT' : 'POST', // PUT si l'image existe déjà, sinon POST
+          body: formData
+        });
+
+        if (imageResponse.ok && imageResponse.data) {
+          selectedArticle.value.id_media = imageResponse.data._id; // Mettre à jour l'ID de l'image dans le restaurant
+            body.id_media = imageResponse.data._id; // Ajouter l'ID de l'image au corps de la requête
+            delete selectedArticle.value.updatedImage; // Supprimer le champ updatedImage du restaurant
+        } else {
+          useToast().add({
+            title: 'Erreur',
+            description: 'Une erreur est survenue lors de la mise à jour de l\'image.',
+            color: 'error',
+            icon: 'i-heroicons-x-mark'
+          });
+        }
+      }
+
+      const response: Response<Article> = await $fetch<Response<Article>>(`/api/articles/${selectedArticle.value._id}`, {
+        method: 'PUT',
+        body,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const restaurant = listeRestaurants.value.find((resto) => resto._id == selectedArticle.value.restaurant_id);
+        if (!restaurant) {
+            return
+        }
+
+        const updatedArticle = response.data;
+
+        // Supprime l'ancien s’il existe (en cas de mise à jour)
+        restaurant.articles = restaurant.articles.filter(
+          (a) => a._id !== updatedArticle._id
+        );
+
+        // Ajoute le nouvel article
+        restaurant.articles.push(updatedArticle);
+
+        useToast().add({
+          title: 'Article modifié',
+          icon: 'i-heroicons-check-badge',
+          color: 'primary'
+        });
+        } else {
+          useToast().add({
+            title: 'Erreur',
+            description: 'Une erreur est survenue lors de la mise à jour du plat.',
+            color: 'error',
+            icon: 'i-heroicons-x-mark'
+          });
+        }
+    } else {
+        /* Création d'un nouveau article */
+        const response: Response<Article> = await $fetch(`/api/articles`, {
+            method: 'POST',
+            body,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        console.log('response', response);
+
+        if (response.ok && response.data) {
+          const restaurant = listeRestaurants.value.find((resto) => resto._id == selectedArticle.value.restaurant_id);
+          if (!restaurant) {
+              return
+          }
+          restaurant.articles = restaurant.articles.filter((article) => article._id != selectedArticle.value._id);
+
+          restaurant.articles.push(updatedArticle);
+
+          useToast().add({
+              title: 'Article créé',
+              description: 'Le plat a été créé avec succès.',
+              icon: 'i-heroicons-check-badge',
+              color: 'primary'
+          });
+        } else {
+            useToast().add({
+                title: 'Erreur',
+                description: 'Une erreur est survenue lors de la création du restaurant.',
+                color: 'error',
+                icon: 'i-heroicons-x-mark'
+            });
+        }
+    }
+  } catch (error) {
+    console.error('Erreur lors de la modification de l’article :', error);
+    useToast().add({
+      title: 'Erreur',
+      description: 'Impossible de modifier cet article',
+      color: 'error',
+      icon: 'i-heroicons-x-mark'
+    });
+  }
 }
 
 async function updateRestaurant() {
@@ -366,7 +516,7 @@ onMounted(async () => {
 
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col gap-4 w-full">
-                        <div v-for="restaurant in listeRestaurants" :key="restaurant.nom">
+                        <div v-for="restaurant in listeRestaurants" :key="restaurant._id">
                             <Restaurants :id="restaurant._id" :nom="restaurant.nom" :adresse="restaurant.adresse" :image="restaurant.image" @click="selectedRestaurant = restaurant"/>
                         </div>
                     </div>
@@ -418,96 +568,88 @@ onMounted(async () => {
             </template>
             <template #plats="{ item }">
                 <p class="text-black text-4xl font-bold">Gérer mes plats</p>
-
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col gap-4 w-full">
-                        <div v-for="restaurant in listeRestaurants" :key="restaurant._id">
-                            <h2 class="text-xl font-semibold">{{ restaurant.nom }}</h2>
-                            <div class="flex">
-                                <UCarousel
-                                    v-if="restaurant.articles?.length"
-                                    :items="restaurant.articles"
-                                    v-slot="{ item: article }"
-                                    :ui="{
-                                        container: 'flex gap-4',
-                                        item: 'basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4',
-                                    }"
-                                    class="w-full"
-                                    >
-                                    <ArticleTile
-                                        :key="article._id"
-                                        :title="article.name"
-                                        :nutriscore="article.nutriscore"
-                                        :price="article.price.toFixed(2)"
-                                        :badgeText="article.nutriscore"
-                                    />
-                                </UCarousel>
-                                <UButton
-                                    icon="i-heroicons-plus"
-                                    color="primary"
-                                    variant="soft"
-                                    @click="selectedRestaurant = restaurant"
-                                    >
-                                </UButton>
+                        <UAccordion :items="itemsRestaurant" multiple>
+                            <template
+                            v-for="restaurant in listeRestaurants"
+                            :key="restaurant._id"
+                            #[restaurant._id]="{ item }"
+                            >
+                            <div class="relative pt-10">
+                                <UButton color="primary" variant="outline"  icon="i-material-symbols-add-2-rounded" :ui="{base: 'text-lg'}" @click="selectedArticle = {insertion: true, restaurant_id: restaurant._id}">Ajouter un plat</UButton>
+                                <!-- Grille d'articles -->
+                                <div
+                                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-5 gap-4 m-2"
+                                >
+                                <ArticleTile
+                                    v-for="article in restaurant.articles"
+                                    :key="article._id"
+                                    :image-url="article.image"
+                                    :title="article.name"
+                                    :nutriscore="article.nutriscore"
+                                    :price="article.price ? article.price.toFixed(2) : '0.00'"
+                                    :badgeText="article.nutriscore"
+                                    @click="selectedArticle = article"
+                                />
+                                </div>
                             </div>
-                        </div>
+                            </template>
+                        </UAccordion>
                     </div>
-                    <div v-if="selectedRestaurant" class="w-3/5">
+                    <div v-if="selectedArticle" class="w-3/5">
                         <UCard>
                             <template #header>
                                 <div class="flex flex-row justify-between">
-                                    <p class="font-bold text-2xl">Créer un article</p>
-                                    <UButton color="neutral" variant="ghost"  icon="i-fluent-emoji-high-contrast-cross-mark" @click="selectedRestaurant = null"/>
+                                    <p class="font-bold text-2xl"> {{ selectedArticle.insertion ? 'Créer un article' : 'Modifier ' + selectedArticle.name }}</p>
+                                    <UButton color="neutral" variant="ghost"  icon="i-fluent-emoji-high-contrast-cross-mark" @click="selectedArticle = null"/>
                                 </div>
                             </template>
-                            <form @submit.prevent="handleSubmit(selectedRestaurant._id)" class="flex flex-col gap-4">
-                                <UInput v-model="name" placeholder="Nom de l'article" label="Nom" required />
-                                <UTextarea v-model="description" placeholder="Description" label="Description" />
-                                <UInput v-model="price" label="Prix (€)" type="number" min="0" required />
-                                <USelect
-                                v-model="category"
-                                label="Catégorie"
-                                :items="foodCategoryOptions"
-                                placeholder="Choisir une catégorie"
-                                required />
-                                <USelect
-                                v-model="nutriscore"
-                                label="Nutri-Score"
-                                :items="nutriscoreOptions"
-                                placeholder="Choisir un score"
-                                />
+
+                            <UForm class="grid grid-cols-2 gap-4" :validate="validateArticle" enctype="multipart/form-data">
                                 <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium">Image</label>
-
-                                <!-- Bouton stylé -->
-                                <label
-                                    for="image-upload"
-                                    class="inline-block px-4 py-2 border border-gray-300 text-sm rounded cursor-pointer hover:bg-gray-100 bg-white text-gray-700 w-fit"
-                                >
-                                    📸 Choisir une image
-                                </label>
-
-                                <!-- Input invisible -->
-                                <input
-                                    id="image-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    class="hidden"
-                                />
-                                </div>
-                                <UCheckbox v-model="available" label="Disponible" />
-                                <div class="flex justify-end">
+                                    <UFormField label="Nom" class="w-full" name="nom">
+                                        <UInput v-model="selectedArticle.name" type="text" class="w-full"/>
+                                    </UFormField>
+                                    <UTextarea v-model="selectedArticle.description" label="Description" class="w-full"/>
+                                    <UInput v-model="selectedArticle.price" label="Prix (€)" type="number" min="0" step="0.01" required class="w-full"/>
+                                    <USelect
+                                        v-model="selectedArticle.category"
+                                        label="Catégorie"
+                                        :items="foodCategoryOptions"
+                                        placeholder="Choisir une catégorie"
+                                        required
+                                        class="w-full"
+                                    />
+                                    <USelect
+                                        v-model="selectedArticle.nutriscore"
+                                        label="Nutri-Score"
+                                        :items="nutriscoreOptions"
+                                        placeholder="Choisir un score"
+                                        class="w-full"
+                                    />
+                                    <div class="flex">
+                                        <UCheckbox v-model="selectedArticle.available" label="Disponible" />
+                                    </div>
+                                    <UButton color="primary" type="submit" @click="updateArticle">Enregistrer</UButton>
                                     <UButton
-                                        type="submit"
-                                        :loading="isSubmitting"
-                                        color="primary"
-                                        size="md"
-                                        class="px-4 py-2"
-                                    >
-                                        Créer
-                                    </UButton>
+                                        v-if="!selectedArticle.insertion"
+                                        color="error"
+                                        variant="outline"
+                                        icon="i-material-symbols-delete-outline-rounded"
+                                        @click="deleteArticle"
+                                        label="Supprimer l'article"
+                                    />
                                 </div>
-                            </form>
+                                <!-- Image -->
+                                <div class="flex flex-col gap-4 items-center">
+                                    <div v-if="!selectedArticle.insertion && selectedArticle.image">
+                                    <NuxtImg :src="selectedArticle.image" fit="cover" class="aspect-square rounded-md" />
+                                    </div>
+                                    <label class="text-sm font-medium">Image</label>
+                                    <UInput type="file" id="image" name="image" accept="image/*" @change="handleArticleImageUpdate" placeholder="Choisir une image" />
+                                </div>
+                            </UForm>
                         </UCard>
                     </div>
                 </div>
