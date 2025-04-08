@@ -7,8 +7,8 @@ export default defineEventHandler(async (event : H3Event) => {
             code: 200,
             ok: true,
             data: {
-                serviceHost: "209.38.179.125",
-                servicePort: "80",
+                serviceHost: process.env.API_NOTIFICATION_SERVICE_HOST,
+                servicePort: process.env.API_NOTIFICATION_SERVICE_PORT,
             }
         } as Response<any>;
     } catch (error) {
