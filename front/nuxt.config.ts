@@ -39,5 +39,11 @@ export default defineNuxtConfig({
 	compatibilityDate: '2024-11-01',
 	devtools: {
 		enabled: false
+	},
+	runtimeConfig: {
+		public: {
+			API_NOTIFICATION_SERVICE_HOST: process.env.API_NOTIFICATION_SERVICE_HOST,
+			API_NOTIFICATION_SERVICE_PORT: process.env.API_NOTIFICATION_SERVICE_PORT
+		}
 	}
 })

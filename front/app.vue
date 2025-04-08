@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Notification } from './utils/types/Notification';
 import { useUserStore } from '~/stores/userStore';
 import { usePanierStore } from '~/stores/panierStore';
 
@@ -34,6 +35,18 @@ onMounted(() => {
 
         setUserId(parsedUser._id);
     }
+});
+
+/* Gestion des notifications */
+
+const { $socket } = useNuxtApp();
+
+$socket.on('new-notification', (notification: Notification) => {
+    useToast().add({
+        title: notification.titre,
+        description: notification.description,
+        color: notification.couleur ?? notification.type
+    })
 });
 </script>
  
