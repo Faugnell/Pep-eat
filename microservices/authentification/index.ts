@@ -29,7 +29,7 @@ async function main() {
         console.log("Connexion à MongoDB réussie");
         // Attendre la connexion à la base de données avant de lancer le serveur
         app.listen(process.env.PORT, () => {
-            console.log(`Lancement du micro-service gérant les commandes sur le port : `+ process.env.PORT);
+            console.log(`Lancement du micro-service gérant les authentifications sur le port : `+ process.env.PORT);
         })
     }
     catch (error) {

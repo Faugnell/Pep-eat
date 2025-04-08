@@ -23,7 +23,7 @@ spec:
       - name: notification
         image: <IMAGE>
         ports:
-        - containerPort: 80
+        - containerPort: 3109
         resources:
           requests:
             cpu: 100m
