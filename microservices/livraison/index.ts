@@ -1,7 +1,7 @@
+require('dotenv').config({ path: './secret/.env' })
+
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
-
-require('dotenv').config();
 
 const express = require('express');
 const routes = require("./routes");

@@ -38,7 +38,6 @@ async function findAll() {
             },
             { $unwind: { path: "$user_data", preserveNullAndEmptyArrays: true } },
         ]);
-console.log("Livraisons après agrégation:", livraisons);
 
         return livraisons;
     } catch (error) {

@@ -15,6 +15,8 @@ const {
 /* -------------------------------------------------------------------------
 ------------------------------- VARIABLES ----------------------------------
 ------------------------------------------------------------------------- */
+const router = useRouter()
+
 const articles = computed(() => getArticles());
 const nombreArticles = computed(() => getNombreArticles());
 const prixTotalFormat = computed(() => {
@@ -47,7 +49,8 @@ const prixTotalFormat = computed(() => {
         <template #body>
             <div class="flex flex-col gap-5">
                 <div v-for="article in articles">
-                    <ArticlePanier :key="article.id" :id="article.id" :name="article.name" :price="article.price" :quantity="article.quantity"/>
+                    <ArticlePanier :key="article.id" :id="article.id" :name="article.name" :price="article.price"
+                        :quantity="article.quantity" />
                 </div>
             </div>
         </template>
@@ -57,7 +60,8 @@ const prixTotalFormat = computed(() => {
                     <p class="text-lg">Total : {{ prixTotalFormat }}</p>
                     <p class="text-lg">Nombre d'articles : {{ nombreArticles }}</p>
                 </div>
-                <UButton label="Finaliser ma commande" color="neutral" trailing-icon="i-lucide-arrow-right"/>
+                <UButton label="Finaliser ma commande" color="neutral" trailing-icon="i-lucide-arrow-right"
+                    @click="router.push('/commande')" />
             </div>
         </template>
     </USlideover>

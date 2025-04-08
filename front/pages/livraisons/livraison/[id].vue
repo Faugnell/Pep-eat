@@ -1,7 +1,28 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { Order } from '../livraisons.type'
+
+type Order = {
+    _id: string
+    user_id: string
+    date: string
+    status: string
+    comment: string
+    price: {
+        $numberDecimal: string
+    }
+    restaurant_data?: {
+        nom: string
+    }
+    user_data?: {
+        first_name: string
+        last_name: string
+        address: string
+        city: string
+        postal_code: string
+        phone: string
+    }
+}
 
 const route = useRoute();
 const delivery = ref<Order | null>(null);
@@ -71,7 +92,7 @@ onMounted(() => {
                     <p><strong>Ville de la livraison :</strong> {{ delivery.user_data?.postal_code }}, {{ delivery.user_data?.city }}</p>
                     <p><strong>Adresse de livraison :</strong> {{ delivery.user_data?.address }}</p>
                     <p><strong>Contact du client :</strong> {{ delivery.user_data?.phone }}</p>
-                    <p><strong>Information :</strong> {{ delivery?.comment ? delivery?.comment : "-" }}</p>
+                    <p><strong>Information(s) :</strong> {{ delivery?.comment ? delivery?.comment : "-" }}</p>
                 </div>
                 <template #footer>
                     <p class="text-lg font-semibold">Status : {{ displayStatus }}</p>

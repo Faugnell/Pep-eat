@@ -12,6 +12,11 @@ export type LivraisonType = {
     delivery_departure_time?: Date,
     delivery_estimated_arrival_time?: Date,
     delivery_lastest_arrival_time?: Date,
+    address_number: string | number,
+    address_street: string,
+    postal_code: string,
+    city: string,
+    phone: string,
     is_finish: boolean,
     in_progress: boolean,
 };
@@ -52,6 +57,29 @@ module.exports = mongoose.model("Livraison", new mongoose.Schema({
     delivery_departure_time: { type: Date },
     delivery_estimated_arrival_time: { type: Date },
     delivery_lastest_arrival_time: { type: Date },
+    address_number: {
+        type: String,
+        required: true
+    },
+    address_street: {
+        type: String,
+        required: true
+    },
+    postal_code: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    order_information: {
+        type: String,
+    },
     is_finish: {
         type: Boolean,
         default: false

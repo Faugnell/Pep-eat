@@ -1,12 +1,32 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import type { Order } from './livraisons.type'
+
+type Order = {
+    _id: string
+    user_id: string
+    date: string
+    status: string
+    comment: string
+    price: {
+        $numberDecimal: string
+    }
+    restaurant_data?: {
+        nom: string
+    }
+    user_data?: {
+        first_name: string
+        last_name: string
+        address: string
+        city: string
+        postal_code: string
+        phone: string
+    }
+}
 
 const deliveries = ref<Order[]>([]);
 
 const getRandomDistance = (): number => {
-    const randomValue: number = Math.random() * (10 - 0.5) + 0.5;
-    return parseFloat(randomValue.toFixed(2));
+    return parseFloat((Math.random() * (10 - 0.5) + 0.5).toFixed(2));
 }
 
 const fetchDeliveries = async () => {

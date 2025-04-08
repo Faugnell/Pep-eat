@@ -1,69 +1,79 @@
 <script setup lang="ts">
 import type { StepperItem } from '@nuxt/ui'
+import { usePanierStore } from '~/stores/panierStore';
+
+const { getArticles, getNombreArticles,getPrixTotal } = usePanierStore();
+
+const articles = computed(() => getArticles());
+const nombreArticles = computed(() => getNombreArticles());
+const prixTotalFormat = computed(() => {
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(getPrixTotal());
+})
+
+const router = useRouter()
+const stepper = useTemplateRef('stepper')
 
 const tabs: StepperItem[] = [
     { slot: "recapitulatif", title: "Récapitulatif", description: "Résumé de la commande", icon: "i-lucide-shopping-cart" },
-    { slot: "adresse", title: "Adresse", description: "Confirmer votre adresse", icon: "i-lucide-house" },
+    { slot: "informations", title: "Informations", description: "Informations de livraison", icon: "i-lucide-house" },
     { slot: "paiement", title: "Paiement", description: "Informations de paiement", icon: "i-lucide-credit-card" },
     { slot: "finalisation", title: "Finalisation", description: "Valider votre commande", icon: "i-lucide-check" }
 ]
 
-const numDeVoie: Ref<number | undefined> = ref();
-const nomDeVoie: Ref<string> = ref('');
-const complementAdresse: Ref<string> = ref('');
-const codePostal: Ref<number | undefined> = ref();
-const ville: Ref<string> = ref('');
-const telephone: Ref<string> = ref('');
+const adress_number: Ref<number | undefined> = ref();
+const adress_street: Ref<string> = ref('');
+const adress_complementary: Ref<string> = ref('');
+const postal_code: Ref<number | undefined> = ref();
+const city: Ref<string> = ref('');
+const phone: Ref<string> = ref('');
+const order_information: Ref<string> = ref('');
 
 const numCard: Ref<string> = ref('');
 const dateExpiration: Ref<string> = ref('');
 const cryptogramme: Ref<string> = ref('');
+
 const paymentMessageVisible: Ref<boolean> = ref(false);
+const paymentErrorVisible: Ref<boolean> = ref(false);
 
-const stepper = useTemplateRef('stepper')
+const completePayment = async (): Promise<void> => {
+    if (!numCard.value || !dateExpiration.value || !cryptogramme.value) {
+        paymentErrorVisible.value = true;
+        paymentMessageVisible.value = false;
+    } else {
+        paymentMessageVisible.value = true;
+        paymentErrorVisible.value = false;
 
-const route = useRoute();
-const router = useRouter()
+        try {
+            const response = await fetch('http://localhost:3105/livraisons', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    order_id: "65e63d6242030298c111dcca",           // TEST
+                    restaurant_id: "65e63d6242030298c111dccb",      // TEST
+                    user_id: "65e63d6242030298c111dccc",            // TEST
 
-const delivery = ref(null);
+                    status: "Prise en charge de la commande.",
+                    address_number: adress_number.value,
+                    address_street: adress_street.value,
+                    postal_code: postal_code.value,
+                    city: city.value,
+                    phone: phone.value,
+                    order_information: order_information.value,
+                }),
+            });
 
-// Initialiser items pour stocker les éléments de la commande et leurs prix
-const items: Ref<{ item: string; price: number }[]> = ref([]);
+            const result = await response.json();
 
-// Calcule le prix total de la commande
-const totalPrice = computed<number>(() =>
-    parseFloat(items.value.reduce((total, product) => total + product.price, 0).toFixed(2))
-);
-
-const completePayment = (): void => {
-    paymentMessageVisible.value = true;
-}
-
-const fetchDelivery = async () => {
-    try {
-        const response = await fetch(`http://localhost:3102/commandes/${route.params.id}`); // 67ed303d07fdf33c8fda5ceb
-        const data = await response.json();
-        console.log(data.data);
-
-        if (data.ok && data.data) {
-            delivery.value = data.data;
-
-            // Récupérer les articles et leurs prix depuis billing_details
-            const fetchedItems = data.data.billing_details.map((item: any) => ({
-                item: item.article_data.name,
-                price: parseFloat(item.article_data.price.$numberDecimal)
-            }));
-
-            items.value = fetchedItems;
+            if (!response.ok) {
+                console.error('Erreur côté serveur:', result.error);
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'envoi des données:", error);
         }
-    } catch (err) {
-        console.error('Erreur lors de la récupération de la commande :', err);
     }
 }
-
-onMounted(() => {
-    fetchDelivery();
-})
 </script>
 
 <template>
@@ -73,51 +83,62 @@ onMounted(() => {
             <!-- Page de récapitulatif de commande -->
             <template #recapitulatif>
                 <UCard class="w-full min-h-[400px] mt-6">
-                    <p class="text-xl font-semibold mb-4">Votre commande</p>
-                    <ul class="space-y-3 w-full">
-                        <li v-for="(product, index) in items" :key="index"
-                            class="flex justify-between items-center border-b pb-2">
-                            <div class="flex items-center">
-                                <p>{{ product.item }}</p>
-                            </div>
-                            <p>{{ product.price }} €</p>
-                        </li>
-                    </ul>
-                    <div class="mt-4 flex justify-between text-lg font-semibold">
-                        <p>Total :</p>
-                        <p>{{ totalPrice }} €</p>
-                    </div>
+                    <p class="text-xl font-semibold text-center mb-4">Votre commande</p>
+                    <table class="w-full table-auto border-collapse mb-4">
+                        <thead>
+                            <tr class="text-left border-b">
+                                <th class="py-2">Article</th>
+                                <th class="py-2">Quantité</th>
+                                <th class="py-2">Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="article in articles" :key="article.name" class="border-b">
+                                <td class="py-2">{{ article.name }}</td>
+                                <td class="py-2">{{ article.quantity }}</td>
+                                <td class="py-2">{{ article.price }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xl font-semibold mt-2">Nombre d'articles : {{ nombreArticles }}</p>
+                    <p class="text-xl font-semibold mt-2">Total : {{ prixTotalFormat }}</p>
                 </UCard>
             </template>
 
             <!-- Page de validation d'adresse -->
-            <template #adresse>
+            <template #informations>
                 <UCard class="w-full min-h-[400px] mt-6">
                     <div class="flex justify-center">
                         <div class="w-full max-w-xl">
-                            <p class="text-xl font-semibold mb-6 text-center">Adresse de livraison</p>
+                            <p class="text-xl font-semibold mb-6 text-center">Informations de livraison</p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <UFormField label="N°" required>
-                                    <UInput v-model="numDeVoie" type="text" placeholder="8" class="w-[200px]" />
+                                    <UInput v-model="adress_number" type="text" placeholder="8" class="w-[200px]" />
                                 </UFormField>
                                 <UFormField label="Rue" required>
-                                    <UInput v-model="nomDeVoie" type="text" placeholder="Rue Isabelle Autissier"
+                                    <UInput v-model="adress_street" type="text" placeholder="Rue Isabelle Autissier"
                                         icon="i-lucide-compass" />
                                 </UFormField>
                                 <UFormField label="Complément (optionnel)">
-                                    <UInput v-model="complementAdresse" type="text" placeholder="Bâtiment B, Appt 45"
+                                    <UInput v-model="adress_complementary" type="text" placeholder="Bâtiment B, Appt 45"
                                         icon="i-lucide-home" />
                                 </UFormField>
                                 <UFormField label="Code Postal" required>
-                                    <UInput v-model="codePostal" type="text" placeholder="17140"
+                                    <UInput v-model="postal_code" type="text" placeholder="17140"
                                         icon="i-lucide-map-pin" />
                                 </UFormField>
-                                <UFormField label="Ville" required>
-                                    <UInput v-model="ville" type="text" placeholder="Lagord" icon="i-lucide-building" />
+                                <UFormField label="city" required>
+                                    <UInput v-model="city" type="text" placeholder="Lagord" icon="i-lucide-building" />
                                 </UFormField>
                                 <UFormField label="Téléphone (pour le livreur)" required>
-                                    <UInput v-model="telephone" type="tel" placeholder="+33 6 66 66 66 66"
+                                    <UInput v-model="phone" type="tel" placeholder="+33 6 66 66 66 66"
                                         icon="i-lucide-phone" />
+                                </UFormField>
+                            </div>
+                            <div class="mt-6">
+                                <UFormField label="Instructions de commande (optionnel)">
+                                    <UTextarea class="w-[86%]" v-model="order_information" :rows="3"
+                                        placeholder="Indiquez ici les détails importants pour la livraison, les allergies, préférences, etc." />
                                 </UFormField>
                             </div>
                         </div>
@@ -150,6 +171,9 @@ onMounted(() => {
                             </div>
                             <UButton label="Payer" color="primary" variant="solid"
                                 class="w-full h-full flex items-center justify-center" @click="completePayment" />
+                            <div v-if="paymentErrorVisible" class="mt-4 text-center text-red-500">
+                                <p>Veuillez remplir tous les champs de paiement pour continuer.</p>
+                            </div>
                             <div v-if="paymentMessageVisible" class="mt-4 text-center text-primary-500">
                                 <p>Votre paiement a été effectué avec succès !</p>
                             </div>
@@ -167,9 +191,10 @@ onMounted(() => {
                         <p class="text-gray-600 mb-6">Vous recevrez une notification de confirmation sous peu.
                         </p>
                         <div class="flex space-x-4">
-                            <UButton label="Retourner à l'accueil" color="primary" variant="outline" @click="router.push('/')" />
-                            <UButton label="Suivre la commande" color="primary" variant="solid" 
-                            @click="router.push(`/commande/avancement`)" />
+                            <UButton label="Retourner à l'accueil" color="primary" variant="outline"
+                                @click="router.push('/')" />
+                            <UButton label="Suivre la commande" color="primary" variant="solid"
+                                @click="router.push(`/commande/avancement`)" />
                         </div>
                     </div>
                 </UCard>
