@@ -1,0 +1,18 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": [
+            "./server/api",
+            "../microservices"
+        ],
+        "exclude": ["node_modules", "dist"],
+        "includePattern": ".+\\.(js(doc|x)?)$"
+    },
+    "opts": {
+        "destination": "./docs",
+        "recurse": true,
+        "template": "default"
+    }
+}
