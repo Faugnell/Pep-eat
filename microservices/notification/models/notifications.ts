@@ -14,7 +14,8 @@ module.exports = mongoose.model('Notification', new mongoose.Schema({
         required: true,
     },
     utilisateurs: {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'utilisateurs',
         required: true,
     },
     type: {

@@ -4,13 +4,8 @@ import type { ApiResponse, FormFieldLogin, Data } from './types';
 import { useUserStore } from '~/stores/userStore';
 import { usePanierStore } from '~/stores/panierStore';
 
-const {
-    setUserInfo
-} = useUserStore();
-
-const {
-    setUserId
-} = usePanierStore();
+const { setUserInfo } = useUserStore();
+const { setUserId } = usePanierStore();
 
 const email = ref<string>('');
 const password = ref<string>('');
@@ -31,40 +26,35 @@ const handleLogIn = async (): Promise<void> => {
         return;
     }
 
-    const loginData = {
-        email: email.value,
-        password: password.value
-    };
-
     try {
-        const response = await fetch("http://localhost:3104/login", {
+        const data = await $fetch<ApiResponse<Data>>("/api/authentification/connexion", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(loginData)
+            body: {
+                email: email.value,
+                password: password.value
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
-        const data: ApiResponse<Data> = await response.json();
-
-        if (response.ok) {
-            // Stockage du token JWT
+        if (data.ok) {
             localStorage.setItem("token", data.data.token);
             localStorage.setItem("user", JSON.stringify(data.data.user));
 
-            setUserInfo(
-                {
-                    id: data.data.user._id,
-                    firstName: data.data.user.first_name,
-                    lastName: data.data.user.last_name,
-                    role: data.data.user.role,
-                    city: data.data.user.city,
-                    postalCode: data.data.user.postal_code,
-                    address: data.data.user.address,
-                    email: data.data.user.email,
-                    phone: data.data.user.phone,
-                    referral_link: data.data.user.referral_link,
-                    is_suspended: data.data.user.is_suspended
-                }
-            );
+            setUserInfo({
+                id: data.data.user._id,
+                firstName: data.data.user.first_name,
+                lastName: data.data.user.last_name,
+                role: data.data.user.role,
+                city: data.data.user.city,
+                postalCode: data.data.user.postal_code,
+                address: data.data.user.address,
+                email: data.data.user.email,
+                phone: data.data.user.phone,
+                referral_link: data.data.user.referral_link,
+                is_suspended: data.data.user.is_suspended
+            });
 
             setUserId(data.data.user._id);
         } else {
@@ -73,11 +63,8 @@ const handleLogIn = async (): Promise<void> => {
                 description: data.message,
                 color: "error"
             });
-
-            return;
         }
     } catch (error) {
-        console.error(error);
         errorMessage.value = "Erreur lors de la connexion.";
     }
 };

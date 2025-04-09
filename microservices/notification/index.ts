@@ -42,12 +42,10 @@ const io = new Server(server, {
 });
 
 Notification.watch().on('change', (change:any) => {
-    console.log("Changement détecté dans la collection notifications : ", change);
-
-    if (change.operationType === 'insert') {
-        const notification = change.fullDocument;
-        io.emit('new-notification', notification);
-    }
+    change.fullDocument?.utilisateurs?.forEach((utilisateur: any) => {
+        console.log('envoi à user:', utilisateur.toString())
+        io.to(`user:${utilisateur.toString()}`).emit('new-notification', change.fullDocument);
+    });
 });
 
 async function main() {
@@ -57,6 +55,18 @@ async function main() {
     } catch(err) {
         console.log(err)
     }
+
+    io.on('connection', (socket: any) => {
+        // L’utilisateur doit s’authentifier ou s’identifier
+        socket.on('register', (userId: any) => {
+            console.log(`Socket ${socket.id} enregistré pour l'utilisateur ${userId}`);
+            socket.join(`user:${userId}`); // Le socket rejoint une room spécifique
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Un utilisateur s\'est déconnecté du micro-service de notifications : ' + socket.id);
+        });
+    });
 
     server.listen(process.env.PORT, '0.0.0.0', () => {
         console.log(`Lancement de du micro-service gérant les notifications sur le port : ${process.env.PORT}`);
