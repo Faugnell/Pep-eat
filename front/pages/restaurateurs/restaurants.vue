@@ -158,6 +158,34 @@ async function deleteArticle() {
   }
 }
 
+function deleteRestaurant() {
+    if (!selectedRestaurant.value?._id) return;
+
+    const id = selectedRestaurant.value._id;
+
+    $fetch(`/api/restaurants/${id}`, {
+        method: 'DELETE',
+    })
+        .then(() => {
+            listeRestaurants.value = listeRestaurants.value.filter((restaurant) => restaurant._id !== id);
+            selectedRestaurant.value = null;
+            useToast().add({
+                title: 'Restaurant supprimé',
+                icon: 'i-heroicons-check-badge',
+                color: 'primary'
+            });
+        })
+        .catch((error) => {
+            console.error('Erreur lors de la suppression du restaurant :', error);
+            useToast().add({
+                title: 'Erreur',
+                description: 'Impossible de supprimer ce restaurant',
+                color: 'error',
+                icon: 'i-heroicons-x-mark'
+            });
+        });
+}
+
 function validate() {
     const errors = [];
 
@@ -542,6 +570,14 @@ onMounted(async () => {
                                         <UCheckbox v-model="selectedRestaurant.sponsorise" class="w-full"/>
                                     </UFormField>
                                     <UButton color="primary" type="submit" @click="updateRestaurant">Enregistrer</UButton>
+                                    <UButton
+                                        v-if="!selectedRestaurant.insertion"
+                                        color="error"
+                                        variant="outline"
+                                        icon="i-material-symbols-delete-outline-rounded"
+                                        @click="deleteRestaurant"
+                                        label="Supprimer restaurant"
+                                    />
                                 </div>
                                 <div v-if="!selectedRestaurant?.insertion" class="flex flex-col gap-4 items-center">
                                     <NuxtImg :src="selectedRestaurant.image" fit="cover" class="aspect-square rounded-md"/>
