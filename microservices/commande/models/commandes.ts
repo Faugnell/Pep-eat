@@ -13,17 +13,14 @@ export type commandeType = {
     value: number,
     code: string
   },
-  status: 'en cours'|'livrée'|'annulée',
-  comment: String,
+  status: 'en attente'|'en cours'|'livrée'|'annulée',
+  comment: string,
 }
 
 type articleType= {
   article_id: string,
   name: string,
-  description: string,
   price: number,
-  nutriscore: string,
-  category: string
 }
 
 const promotionSchema = new Schema({
@@ -51,20 +48,8 @@ const platSchema = new Schema({
     type: String,
     required: true
   },
-  description: {
-    type: String,
-    default: ""
-  },
   price: {
     type: mongoose.Schema.Types.Decimal128,
-    required: true
-  },
-  nutriscore: {
-    type: String,
-    default: "NA"
-  },
-  category: {
-    type: String,
     required: true
   }
 }, { autoIndex: false })
@@ -111,7 +96,7 @@ const commandeSchema = new Schema({
   ],
   status: {
     type: String,
-    enum: ['en cours', 'livrée', 'annulée'],
+    enum: ['en attente', 'en cours', 'livrée', 'annulée'],
     default: 'en cours'
   },
   comment: {
