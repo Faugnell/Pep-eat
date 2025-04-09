@@ -77,37 +77,6 @@ const isSubmitting = ref(false)
 
 const listeRestaurants = ref<Restaurant[]>([]);
 
-// const {
-//     data : listeRestaurants
-// } = await useAsyncData(
-//     'liste-restaurants',
-//     () =>
-//         $fetch<Response<Restaurant[]>>(`/api/restaurants/user/${userId.value}`, {
-//             method: 'GET',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             retry: 3,
-//             retryDelay: 1000
-//         }).then((response: Response<Restaurant[]>) => {
-//             console.log(`/api/restaurants/user/${userId.value}`, response.data);
-
-//             if (response.ok) {
-//                 return response.data;
-//             } else {
-//                 throw new Error('Error while fetching restaurants');
-//             }
-//         }).catch((error => {
-//             console.error('Error while fetching restaurants:', error);
-//             return [];
-//         })),
-//         {
-//             watch: [
-//                 userId
-//             ]
-//         }
-// );
-
 const selectedRestaurant = ref<Restaurant | null>(null)
 const selectedArticle = ref<Article | null>(null)
 
