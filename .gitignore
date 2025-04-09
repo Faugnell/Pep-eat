@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Documentation générée automatiquement
+docs/
+typedoc/
