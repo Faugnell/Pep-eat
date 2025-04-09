@@ -34,16 +34,15 @@ const formFields: Ref<FormFieldRegistration[]> = ref([
 const isSubmitted: Ref<boolean> = ref(false);
 const errorMessage = ref<string | null>(null);
 
-const handleSubmit = async (): Promise<void> => {
+const handleRegister = async (): Promise<void> => {
     isSubmitted.value = true;
     errorMessage.value = null;
 
-    // Vérifie que tous les champs obligatoires sont remplis
     if (!last_name.value || !first_name.value || !role.value || !city.value || !postal_code.value || !address.value || !email.value || !phone.value || !password.value) {
         return;
     }
 
-    const userData = {
+    const payload = {
         last_name: last_name.value,
         first_name: first_name.value,
         role: role.value,
@@ -53,49 +52,44 @@ const handleSubmit = async (): Promise<void> => {
         email: email.value,
         phone: phone.value,
         password: password.value,
-        referral_link: referral_link.value || null
+        referral_link: referral_link.value || undefined
     };
 
     try {
-        const response = await fetch("http://localhost:3104/registration", {
+        const data = await $fetch<ApiResponse<User>>("/api/authentification/inscription", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(userData)
+            body: payload,
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
-        const data: ApiResponse<User> = await response.json();
-
-        if (response.ok) {
-            // Stockage du token JWT
+        if (data.ok) {
             localStorage.setItem("user", JSON.stringify(data.data));
 
-            setUserInfo(
-                {
-                    id: data.data._id,
-                    firstName: data.data.first_name,
-                    lastName: data.data.last_name,
-                    role: data.data.role,
-                    city: data.data.city,
-                    postalCode: data.data.postal_code,
-                    address: data.data.address,
-                    email: data.data.email,
-                    phone: data.data.phone,
-                    referral_link: data.data.referral_link,
-                    is_suspended: data.data.is_suspended
-                }
-            );
+            setUserInfo({
+                id: data.data._id,
+                firstName: data.data.first_name,
+                lastName: data.data.last_name,
+                role: data.data.role,
+                city: data.data.city,
+                postalCode: data.data.postal_code,
+                address: data.data.address,
+                email: data.data.email,
+                phone: data.data.phone,
+                referral_link: data.data.referral_link,
+                is_suspended: data.data.is_suspended
+            });
+
         } else {
             useToast().add({
                 title: "Erreur lors de l'inscription",
                 description: data.message,
                 color: "error"
             });
-
-            return;
         }
     } catch (error) {
-        console.error(error);
-        errorMessage.value = "Erreur lors de la connexion.";
+        errorMessage.value = "Erreur lors de l'inscription.";
     }
 };
 </script>
@@ -156,6 +150,6 @@ const handleSubmit = async (): Promise<void> => {
 
     <USeparator class="my-4" />
     <div class="w-full flex justify-center">
-        <UButton label="S'inscrire" color="primary" @click="handleSubmit" class="w-1/3 py-2" />
+        <UButton label="S'inscrire" color="primary" @click="handleRegister" class="w-1/3 py-2" />
     </div>
 </template>
