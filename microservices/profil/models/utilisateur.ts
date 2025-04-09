@@ -12,7 +12,8 @@ module.exports = mongoose.model("Utilisateur", new mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ["client", "livreur", "restaurateur"]
+        enum: ["client", "livreur", "restaurateur", "developpeur", "admin"],
+        default: "client"
     },
     city: {
         type: String,
