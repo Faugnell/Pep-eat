@@ -77,37 +77,6 @@ const isSubmitting = ref(false)
 
 const listeRestaurants = ref<Restaurant[]>([]);
 
-// const {
-//     data : listeRestaurants
-// } = await useAsyncData(
-//     'liste-restaurants',
-//     () =>
-//         $fetch<Response<Restaurant[]>>(`/api/restaurants/user/${userId.value}`, {
-//             method: 'GET',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             retry: 3,
-//             retryDelay: 1000
-//         }).then((response: Response<Restaurant[]>) => {
-//             console.log(`/api/restaurants/user/${userId.value}`, response.data);
-
-//             if (response.ok) {
-//                 return response.data;
-//             } else {
-//                 throw new Error('Error while fetching restaurants');
-//             }
-//         }).catch((error => {
-//             console.error('Error while fetching restaurants:', error);
-//             return [];
-//         })),
-//         {
-//             watch: [
-//                 userId
-//             ]
-//         }
-// );
-
 const selectedRestaurant = ref<Restaurant | null>(null)
 const selectedArticle = ref<Article | null>(null)
 
@@ -141,7 +110,7 @@ const itemsRestaurant = computed(() => listeRestaurants.value.map(restaurant => 
 async function fetchArticlesByRestaurant(restaurantId: string) {
   try {
     const response = await $fetch<Article[]>(
-      `http://localhost:3103/articles/restaurant/${restaurantId}`
+      `/api/articles/restaurant/${restaurantId}`
     )
     return response
   } catch (error) {
@@ -160,7 +129,7 @@ async function deleteArticle() {
     const id = selectedArticle.value._id;
 
   try {
-    await $fetch(`http://localhost:3103/articles/${id}`, {
+    await $fetch(`/api/articles/${id}`, {
       method: 'DELETE',
     });
 
@@ -346,7 +315,7 @@ async function updateArticle() {
             },
         });
 
-        console.log('response', response);
+        console.log('Response:', response);
 
         if (response.ok && response.data) {
           const restaurant = listeRestaurants.value.find((resto) => resto._id == selectedArticle.value.restaurant_id);
@@ -355,7 +324,8 @@ async function updateArticle() {
           }
           restaurant.articles = restaurant.articles.filter((article) => article._id != selectedArticle.value._id);
 
-          restaurant.articles.push(updatedArticle);
+          const newArticle = response.data;
+          restaurant.articles.push(newArticle);
 
           useToast().add({
               title: 'Article créé',
@@ -366,17 +336,17 @@ async function updateArticle() {
         } else {
             useToast().add({
                 title: 'Erreur',
-                description: 'Une erreur est survenue lors de la création du restaurant.',
+                description: 'Une erreur est survenue lors de la création de l’article.',
                 color: 'error',
                 icon: 'i-heroicons-x-mark'
             });
         }
     }
   } catch (error) {
-    console.error('Erreur lors de la modification de l’article :', error);
+    console.error('Erreur avec l’article :', error);
     useToast().add({
       title: 'Erreur',
-      description: 'Impossible de modifier cet article',
+      description: 'Erreur avec l’article',
       color: 'error',
       icon: 'i-heroicons-x-mark'
     });
