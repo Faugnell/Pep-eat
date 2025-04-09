@@ -18,4 +18,4 @@ export function buildErrorResponse(error: unknown, code = 500, message = 'Intern
         error: error,
         message: message
     }
-}
+} 
