@@ -19,7 +19,9 @@ type fetchedDataType = {
     "data": Array<Restaurant>
 }
 
-const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaurants/`, { method: "GET" })
+
+const data = await $fetch<fetchedDataType>(`/api/restaurants/`);
+
 
 
 /* -------------------------------------------------------------------------
