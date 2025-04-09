@@ -1,4 +1,4 @@
-import { LogModel } from '../models/log';
+const LogModel = require("../models/log");
 
 export async function logResponse({ service, code, ok, message }:
     {
