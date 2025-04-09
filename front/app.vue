@@ -4,6 +4,7 @@ import { useUserStore } from '~/stores/userStore';
 import { usePanierStore } from '~/stores/panierStore';
 
 const {
+    getId,
     setUserInfo
 } = useUserStore();
 
@@ -12,6 +13,7 @@ const {
 } = usePanierStore();
 
 const appConfig = useAppConfig();
+const userId = computed(() => getId());
 
 onMounted(() => {
     const user = localStorage.getItem("user");
@@ -35,18 +37,25 @@ onMounted(() => {
 
         setUserId(parsedUser._id);
     }
-});
 
-/* Gestion des notifications */
+    /* Gestion des notifications */
+    const { $connectToUserRoom, $disconnectSocket, $socket } = useNuxtApp();
 
-const { $socket } = useNuxtApp();
+    $socket?.on('new-notification', (notification: Notification) => {
+        useToast().add({
+            title: notification.titre,
+            description: notification.description,
+            color: notification.couleur ?? notification.type
+        })
+    });
 
-$socket.on('new-notification', (notification: Notification) => {
-    useToast().add({
-        title: notification.titre,
-        description: notification.description,
-        color: notification.couleur ?? notification.type
-    })
+    watch(userId, (newValue) => {
+        if (newValue) {
+            $connectToUserRoom(newValue);
+        } else {
+            $disconnectSocket();
+        }
+    }, { immediate: true });
 });
 </script>
  
