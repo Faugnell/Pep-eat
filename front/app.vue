@@ -17,25 +17,29 @@ const userId = computed(() => getId());
 
 onMounted(() => {
     const user = localStorage.getItem("user");
+    let parsedUser = null
+    
+    try {
+        parsedUser = JSON.parse(user)
+        if (user) {
+            setUserInfo({
+                id: parsedUser._id,
+                firstName: parsedUser.first_name,
+                lastName: parsedUser.last_name,
+                role: parsedUser.role,
+                city: parsedUser.city,
+                postalCode: parsedUser.postal_code,
+                address: parsedUser.address,
+                email: parsedUser.email,
+                phone: parsedUser.phone,
+                referral_link: parsedUser.referral_link,
+                is_suspended: parsedUser.is_suspended
+            });
 
-    if (user) {
-        const parsedUser = JSON.parse(user);
-
-        setUserInfo({
-            id: parsedUser._id,
-            firstName: parsedUser.first_name,
-            lastName: parsedUser.last_name,
-            role: parsedUser.role,
-            city: parsedUser.city,
-            postalCode: parsedUser.postal_code,
-            address: parsedUser.address,
-            email: parsedUser.email,
-            phone: parsedUser.phone,
-            referral_link: parsedUser.referral_link,
-            is_suspended: parsedUser.is_suspended
-        });
-
-        setUserId(parsedUser._id);
+            setUserId(parsedUser._id);
+        }
+    } catch (err) {
+        console.log(err)
     }
 
     /* Gestion des notifications */
@@ -58,7 +62,7 @@ onMounted(() => {
     }, { immediate: true });
 });
 </script>
- 
+
 <template>
     <UApp :toaster="appConfig.toaster">
         <NuxtRouteAnnouncer />
