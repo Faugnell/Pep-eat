@@ -53,7 +53,7 @@ async function findAll() {
 async function findById(id: string) {
     try {
         const results: LivraisonType | null = await Livraison.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(id) } },
+            { $match: { order_id: new mongoose.Types.ObjectId(id) } },
             {
                 $lookup: {
                     from: "commandes",
