@@ -5,9 +5,8 @@
 
 ## 🧰 Technologies
 
-- **Frontend** : NuxtJS, Vue, Pinia, TailwindCSS
-- **Backend** : Node.js, ExpressJS
-- **Librairies** : dotenv, jwt, moongoose, nuxt ui
+- **Frontend** : Nuxt, NuxtUI, Vue.Js, Pinia, TailwindCSS
+- **Backend** : Node.js, ExpressJS, dotenv, jwt, mongoose
 
 ## 🏗️ Architecture
 
@@ -49,10 +48,10 @@ cd pep-eat
 Si chaque service est dans un dossier séparé :
 
 ```bash
-cd frontend
+cd front
 npm install
 
-cd ../services/restaurant
+cd microservices/restaurant
 npm install
 
 # Répéter pour chaque microservice
@@ -85,21 +84,20 @@ PUBLIC_NOTIFICATION_SERVICE_HOST=localhost
 PUBLIC_NOTIFICATION_SERVICE_PORT=3109
 ```
 
-Chaque microservice nécessite un fichier .env. Voici un exemple type :
+Chaque microservice nécessite un fichier .env à placer à la racine du microservice. Voici un exemple type :
 
 ```bash
-MONGO_CONNECTION_STRING=mongodb://example...
-PORT=3101
-JWT_SECRET=une_clé_ultra_secrète
+MONGO_CONNECTION_STRING="mongodb+srv://doadmin:T047v2J9G1CVP8j3@pepeat-mongo-db-ac667bc3.mongo.ondigitalocean.com/pepeat?tls=true&authSource=admin&replicaSet=pepeat-mongo-db"
+PORT=310x
 ```
-⚠️ Pense à adapter chaque .env au service concerné (nom de la BDD, port, clé JWT, etc.)
+⚠️ Pense à adapter le port réseau de chaque .env au service concerné
 
 ## 🔧 Lancement
 
 ### Frontend (NuxtJS)
 
 ```bash
-cd frontend
+cd front
 npm run dev
 ```
 
@@ -108,6 +106,6 @@ npm run dev
 Chaque microservice est lancé individuellement :
 
 ```bash
-cd services/restaurant
+cd microservices/restaurant
 npm run dev
 ```
