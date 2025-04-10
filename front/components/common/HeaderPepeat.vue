@@ -12,7 +12,9 @@ import { usePanierStore } from '~/stores/panierStore';
 const {
   getFirstName,
   isConnected,
-  disconnectUser
+  disconnectUser,
+  getRole,
+  isAdmin
 } = useUserStore();
 
 const {
@@ -30,8 +32,8 @@ const goHome = async () => {
 
 const searchValue = ref<string | number | null | undefined>("")
 
-const itemsHeader = ref<DropdownMenuItem[][]>([
-  [
+const itemsHeader = computed<DropdownMenuItem[][]>(() => {
+  const items = [[
     {
       label: 'Profil',
       icon: 'i-lucide-user',
@@ -41,28 +43,46 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
       label: 'Mes commandes',
       icon: 'i-material-symbols-light:shopping-bag-speed-outline',
       to: '/utilisateur/commandes'
-    },
-    {
-      label: 'Restaurant',
-      icon: 'i-uil-restaurant',
-      to: '/restaurateurs/restaurants'
-    },
-    {
-      label: 'Coursier',
-      icon: 'i-mdi-bike-fast'
-    },
-  ],
-  [
-    {
-      label: 'Développeur',
-      icon: 'i-ic-baseline-computer'
-    },
-    {
-      label: 'Commercial',
-      icon: 'i-uil-briefcase-alt'
     }
-  ],
-  [
+  ]];
+
+    /*"client", "livreur", "restaurateur", "developpeur", "admin"*/
+
+  if (getRole() === 'livreur' || isAdmin())
+    items.push([
+      {
+        label: 'Coursier',
+        icon: 'i-mdi-bike-fast',
+        to: '/livraisons'
+      }
+    ]);
+  
+  if (getRole() === 'restaurateur' || isAdmin())
+    items.push([
+      {
+        label: 'Restaurant',
+        icon: 'i-uil-restaurant',
+        to: '/restaurateurs/restaurants'
+      }
+    ]);
+
+  if (getRole() === 'developpeur' || isAdmin())
+    items.push([
+      {
+        label: 'Développeur',
+        icon: 'i-ic-baseline-computer'
+      }
+    ]);
+
+  if (getRole() === 'commercial' || isAdmin())
+    items.push([
+      {
+        label: 'Commercial',
+        icon: 'i-uil-briefcase-alt'
+      }
+    ]);
+
+  items.push([
     {
       label: 'Déconnexion',
       icon: 'i-basil-logout-outline',
@@ -75,8 +95,10 @@ const itemsHeader = ref<DropdownMenuItem[][]>([
         goHome();
       }
     }
-  ],
-]);
+  ]);
+
+  return items;
+});
 
 const userConnected = computed<boolean>(() => isConnected());
 const userFirstName = computed<string>(() => getFirstName());
