@@ -63,7 +63,7 @@ async function main() {
             socket.join(`user:${userId}`); // Le socket rejoint une room spécifique
         });
 
-        socket.on('disconnect', () => {
+        socket.on('userDisconnect', () => {
             console.log('Un utilisateur s\'est déconnecté du micro-service de notifications : ' + socket.id);
         });
     });
