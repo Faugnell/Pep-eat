@@ -113,7 +113,7 @@ const listOrderInstruction: { progress: number; instruction: string }[] = [
             <div class="flex justify-center">
                 <UContainer class="p-4">
                     <div class="flex justify-between">
-                        <h1 class="text-3xl font-bold">{{ new Date(LivraisonFetch.data.delivery_estimated_arrival_time).toLocaleTimeString() || '...' }}</h1>
+                        <h1 class="text-3xl font-bold">{{ new Date(LivraisonFetch.data?.delivery_estimated_arrival_time).toLocaleTimeString() || '...' }}</h1>
                         <p class="text-gray-500">Arrivée estimée</p>
                     </div>
 
@@ -124,7 +124,7 @@ const listOrderInstruction: { progress: number; instruction: string }[] = [
                             {{ listOrderInstruction[progressBarValue - 1]?.instruction || 'En attente...' }}
                         </p>
                         <p class="text-gray-500">
-                            Arrivée la plus tardive : <strong>{{ new Date(LivraisonFetch.data.delivery_lastest_arrival_time).toLocaleTimeString() || '...' }}</strong>
+                            Arrivée la plus tardive : <strong>{{ new Date(LivraisonFetch.data?.delivery_lastest_arrival_time).toLocaleTimeString() || '...' }}</strong>
                         </p>
                     </div>
 
