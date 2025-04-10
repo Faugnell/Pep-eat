@@ -45,7 +45,7 @@ cd pep-eat
 
 ### Installer les dépendances
 
-Si chaque service est dans un dossier séparé :
+Chaque microservice est dans un dossier séparé :
 
 ```bash
 cd front
