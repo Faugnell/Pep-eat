@@ -46,47 +46,57 @@ async function updateUtilisateur() {
     }
 
     const profilData = {
+        id: id.value,
         last_name: last_name.value,
         first_name: first_name.value,
         city: city.value,
         postal_code: postal_code.value,
         address: address.value,
         email: email.value,
-        phone: phone.value,
+        phone: phone.value
     };
 
     try {
-        const response = await fetch(`http://localhost:3108/profil/${id.value}`, {
+        await $fetch("/api/profil", {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(profilData)
+            body: profilData,
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
-        await response.json();
-        toast.add({ title: "Profil modifié", description: "Vos changements ont été appliqués !" });
+        toast.add({
+            title: "Profil modifié",
+            description: "Vos changements ont été appliqués !"
+        });
     } catch (error) {
         errorMessage.value = "Erreur lors de la modification.";
+        console.error("Erreur updateUtilisateur:", error);
     }
-};
+}
 
 async function disableAccount() {
     try {
         const newStatus = !is_suspended.value;
 
-        const response = await fetch(`http://localhost:3108/profil/${id.value}`, {
+        await $fetch("/api/profil", {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ is_suspended: newStatus })
+            body: {
+                id: id.value,
+                is_suspended: newStatus
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
-        await response.json();
         is_suspended.value = newStatus;
 
         toast.add({
             title: newStatus ? "Compte désactivé" : "Compte réactivé",
             description: newStatus
                 ? "Votre compte a été suspendu avec succès."
-                : "Votre compte est maintenant actif.",
+                : "Votre compte est maintenant actif."
         });
     } catch (error) {
         errorMessage.value = "Une erreur est survenue lors de la mise à jour du statut.";

@@ -71,13 +71,10 @@ export async function create(req: Request, res: Response) {
 			return res.status(400).send(buildErrorResponse(null, 400, "Erreur lors de la création de l'article"));
 		}
 
-		return res.status(200).send(buildSuccessResponse(article, 200, "Restaurant créé avec succès"));
+		return res.status(200).send(buildSuccessResponse(article, 200, "Article créé avec succès"));
   } catch (error) {
     console.error("Erreur lors de la création de l'article :", error);
-    return res.status(500).json({
-      message: "Erreur serveur lors de la création de l'article",
-      error: (error as Error).message || error,
-    });
+    return res.status(500).send(buildErrorResponse(null, 500, "Erreur serveur lors de la création de l'article"));
   }
 }
 
@@ -108,22 +105,19 @@ export async function remove(req: Request, res: Response) {
   try {
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ message: "Paramètre 'id' manquant." });
+      return res.status(400).send(buildErrorResponse(null, 400, "Paramètre 'id' manquant."));
     }
 
     const deleted = await articlesService.deleteById(id);
     
     if (!deleted) {
-      return res.status(404).json({ message: `Aucun article trouvé avec l'ID ${id}` });
+      return res.status(404).send(buildErrorResponse(null, 404, `Aucun article trouvé avec l'ID ${id}` ));
     }
 
-    return res.status(200).json({ message: "Article supprimé avec succès.", article: deleted });
+    return res.status(200).send(buildSuccessResponse(deleted, 200, "Article supprimé avec succès"));
   } catch (error) {
     console.error("Erreur lors de la suppression de l'article :", error);
-    return res.status(500).json({
-      message: "Erreur lors de la suppression de l'article.",
-      error: (error as Error).message || error,
-    });
+    return res.status(500).send(buildErrorResponse(null, 500, "Erreur serveur lors de la suppression de l'article"));
   }
 }
  

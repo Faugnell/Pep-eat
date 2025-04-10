@@ -1,0 +1,15 @@
+{
+  "name": "pep-eat-ui",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "files": [
+    "components",
+    "index.ts"
+  ],
+  "keywords": ["vue", "nuxt", "component", "header"],
+  "author": "Ton Nom",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  }
+}

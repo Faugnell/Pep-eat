@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import RestaurantRowTile from '~/components/articles/RestaurantRowTile.vue'
+import type { Response } from '~/utils/types/Response'
 import type { Restaurant } from '~/utils/types/Restaurant'
 
 const route = useRoute()
@@ -19,7 +20,9 @@ type fetchedDataType = {
     "data": Array<Restaurant>
 }
 
-const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaurants/filter/${route.params.filter ? route.params.filter : "" }`, { method: "GET" })
+// const { data } = await useFetch<fetchedDataType>(`http://localhost:3101/restaurants/filter/${route.params.filter ? route.params.filter : "" }`, { method: "GET" })
+const data = await $fetch<fetchedDataType>(`/api/restaurants/filter/${route.params.filter ? route.params.filter : "" }`);
+
 
 
 /* -------------------------------------------------------------------------

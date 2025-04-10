@@ -18,8 +18,7 @@ type fetchedDataType = {
     "message": string,
     "data": Array<Restaurant>
 }
-
-const { data: restaurants_ } = await useAsyncData<fetchedDataType>('restaurants-get-apicall', () => $fetch(`http://localhost:3101/restaurants/`))
+const restaurants_ = await $fetch<fetchedDataType>(`/api/restaurants/`);
 
 const categories = [
     '/icons/cat/American.png',
