@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-require('dotenv').config({ path: './secret/.env' })
+require('dotenv').config()
 const db = require("./utils/db")
 
 const express = require('express');
