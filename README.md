@@ -46,10 +46,10 @@ cd pep-eat
 
 ### Installer les dépendances
 
-Si chaque service est dans un dossier séparé :
+Chaque microservice est dans un dossier séparé :
 
 ```bash
-cd frontend
+cd front
 npm install
 
 cd ../services/restaurant
@@ -89,10 +89,10 @@ Chaque microservice nécessite un fichier .env. Voici un exemple type :
 
 ```bash
 MONGO_CONNECTION_STRING=mongodb://example...
-PORT=3101
+PORT=310x
 JWT_SECRET=une_clé_ultra_secrète
 ```
-⚠️ Pense à adapter chaque .env au service concerné (nom de la BDD, port, clé JWT, etc.)
+⚠️ Pense à adapter chaque .env au service concerné (nom de la BDD, port, clé JWT.)
 
 ## 🔧 Lancement
 
