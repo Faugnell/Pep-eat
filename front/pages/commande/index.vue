@@ -13,6 +13,7 @@ const {
     getArticles,
     getNombreArticles,
     getPrixTotal,
+    clearPanier
 } = usePanierStore();
 
 
@@ -140,6 +141,7 @@ const completePayment = async (step: any): Promise<void> => {
                 if (!response.ok && response?.error) {
                     console.error('Erreur côté serveur:', response.error);
                 }
+                clearPanier();
                 step.next()
             } catch (error) {
                 console.error("Erreur lors de l'envoi des données:", error);
