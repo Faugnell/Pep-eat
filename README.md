@@ -6,9 +6,9 @@
 
 ## 🧰 Technologies
 
-- **Frontend** : NuxtJS, Pinia, TailwindCSS (si utilisé)
+- **Frontend** : NuxtJS, Vue, Pinia, TailwindCSS
 - **Backend** : Node.js, ExpressJS
-- **Librairies** : dotenv, axios, etc.
+- **Librairies** : dotenv, jwt, moongoose, nuxt ui
 
 ## 🏗️ Architecture
 
@@ -18,15 +18,15 @@ Le backend est composé de plusieurs microservices indépendants :
 |----------------------|--------|------------------------------------------------------------------|
 | **restaurant**        | 3101   | Gestion des restaurants                                         |
 | **commande**          | 3102   | Prise en charge des commandes clients                           |
-| **article/menu**      | 3103   | Gestion des menus et articles                                   |
+| **article/menu**      | 3103   | Gestion des articles                                            |
 | **authentification**  | 3104   | Authentification, inscription et gestion des sessions           |
 | **livraison**         | 3105   | Suivi et gestion des livraisons                                 |
 | **média**             | 3107   | Gestion des fichiers médias (images, etc.)                      |
 | **profil**            | 3108   | Gestion des profils utilisateurs                                |
-| **notifications**     | 3109   | Envoi de notifications (email, push, etc.)                      |
+| **notifications**     | 3109   | Envoi de notifications                                          |
 | **développeur tier**  | -      | (Service réservé ou non encore défini)                          |
 | **commercial**        | -      | (Service réservé ou non encore défini)                          |
-| **paiement**          | -      | A été fait en front uniquement                                  |
+| **paiement**          | -      | (A été fait en front uniquement)                                |
 
 ---
 
@@ -59,13 +59,38 @@ npm install
 # Répéter pour chaque microservice
 ```
 
-🛠️ Configuration
+## 🛠️ Configuration
 
-Chaque service nécessite un fichier .env. Voici un exemple type :
+Pour le frontend il faut un .env.local avec les données suivantes :
 
 ```bash
+API_RESTAURANT_SERVICE_HOST=localhost
+API_RESTAURANT_SERVICE_PORT=3101
+API_COMMANDE_SERVICE_HOST=localhost
+API_COMMANDE_SERVICE_PORT=3102
+API_ARTICLE_SERVICE_HOST=localhost
+API_ARTICLE_SERVICE_PORT=3103
+API_AUTHENTIFICATION_SERVICE_HOST=localhost
+API_AUTHENTIFICATION_SERVICE_PORT=3104
+API_LIVRAISON_SERVICE_HOST=localhost
+API_LIVRAISON_SERVICE_PORT=3105
+API_PAIEMENT_SERVICE_HOST=localhost
+API_PAIEMENT_SERVICE_PORT=3106
+API_MEDIA_SERVICE_HOST=localhost
+API_MEDIA_SERVICE_PORT=3107
+API_PROFIL_SERVICE_HOST=localhost
+API_PROFIL_SERVICE_PORT=3108
+API_NOTIFICATION_SERVICE_HOST=localhost
+API_NOTIFICATION_SERVICE_PORT=3109
+PUBLIC_NOTIFICATION_SERVICE_HOST=localhost
+PUBLIC_NOTIFICATION_SERVICE_PORT=3109
+```
+
+Chaque microservice nécessite un fichier .env. Voici un exemple type :
+
+```bash
+MONGO_CONNECTION_STRING=mongodb://example...
 PORT=3101
-DB_URI=mongodb://example...
 JWT_SECRET=une_clé_ultra_secrète
 ```
 ⚠️ Pense à adapter chaque .env au service concerné (nom de la BDD, port, clé JWT, etc.)
