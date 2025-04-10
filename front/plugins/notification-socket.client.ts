@@ -13,7 +13,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         if (!userId) return
 
         if (socket.connected) {
-            socket.emit('disconnect', userRoom.value) // quitte l'ancienne room si besoin
+            socket.emit('userDisconnect', userRoom.value) // quitte l'ancienne room si besoin
         }
 
         userRoom.value = userId;
@@ -23,7 +23,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
     const disconnect = () => {
         if (socket.connected) {
-            socket.emit('disconnect', userRoom.value)
+            socket.emit('userDisconnect', userRoom.value)
             socket.disconnect()
         }
         userRoom.value = null

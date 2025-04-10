@@ -50,7 +50,28 @@ onMounted(() => {
             title: notification.titre,
             description: notification.description,
             color: notification.couleur ?? notification.type
-        })
+        });
+
+        const notificationData = {
+            body: notification.description,
+            badge: '/favicons/favicon_64.ico'
+        }
+
+        if (Notification.permission === "granted") {
+            // Check whether notification permissions have already been granted;
+            // if so, create a notification
+            const notif = new Notification(notification.titre, notificationData);
+            // …
+        } else if (Notification.permission !== "denied") {
+            // We need to ask the user for permission
+            Notification.requestPermission().then((permission) => {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                    const notif = new Notification(notification.titre, notificationData);
+                    // …
+                }
+            });
+        }
     });
 
     watch(userId, (newValue) => {
