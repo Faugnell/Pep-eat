@@ -3,6 +3,9 @@
 
 ![pep'eat logo](/livrables/livrable1/src/logo/logo-green.png)
 
+## Hébergement
+L'application est hébergée sur un serveur DigitalOcean. Le frontend est accessible à l'adresse suivante : [http://134.199.188.117/](http://134.199.188.117/).
+
 ## 🧰 Technologies
 
 - **Frontend** : Nuxt, NuxtUI, Vue.Js, Pinia, TailwindCSS
